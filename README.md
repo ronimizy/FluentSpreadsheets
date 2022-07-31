@@ -65,7 +65,7 @@ class `ComponentFactory`.
     ```
 
   The result will be something like this:\
-  ![Stacks](Docs/hello-stacks.png)
+  ![Stacks](Docs/Media/hello-stacks.png)
 
   Stacks will automatically scale their children so they all will have an equal width/height and fill a rectangle.
 
@@ -87,7 +87,7 @@ class `ComponentFactory`.
   ).WithBottomBorder(BorderType.Thin, Color.Black).WithTrailingBorder(BorderType.Thin, Color.Black);
   ```
   The result will be something like this:\
-  ![Styles](Docs/hello-styles.png)
+  ![Styles](Docs/Media/hello-styles.png)
 
 ### Output
 Code above will only produce component composition stored as objects in memory. To render it on the sheet, 
