@@ -1,5 +1,11 @@
 # FluentSpreadsheets
 
+### FluentSpreadsheets 
+[![badge](https://img.shields.io/nuget/vpre/FluentSpreadsheets?style=flat-square)](https://www.nuget.org/packages/FluentSpreadsheets/)
+
+### FluentSpreadsheets.ClosedXML
+[![badge](https://img.shields.io/nuget/vpre/FluentSpreadsheets.ClosedXML?style=flat-square)](https://www.nuget.org/packages/FluentSpreadsheets.ClosedXML/)
+
 ## Overview
 
 ### FluentSpreadsheets library consists of two APIs:
