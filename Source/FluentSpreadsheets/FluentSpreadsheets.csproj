@@ -6,5 +6,27 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
+    
+    <PropertyGroup>
+        <Title>FluentSpreadsheets</Title>
+        <Authors>ronimiy</Authors>
+        <Description>A library for defining and drawing spreadsheet layouts in abstract fluent way.</Description>
+        <PackageProjectUrl>https://github.com/ronimizy/FluentSpreadsheets</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/ronimizy/FluentSpreadsheets</RepositoryUrl>
+        <RepositoryType>github</RepositoryType>
+        <PackageTags>spreadsheet;layout</PackageTags>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    </PropertyGroup>
+    
+    <PropertyGroup>
+        <PackageVersion>0.0.1-alpha</PackageVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+        <None Include="..\..\LICENSE.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
 
 </Project>
