@@ -1,4 +1,4 @@
-using FluentSpreadsheets.ClosedXML.Visitors;
+using FluentSpreadsheets.ClosedXML.Handlers;
 using FluentSpreadsheets.Rendering;
 using FluentSpreadsheets.Visitors;
 

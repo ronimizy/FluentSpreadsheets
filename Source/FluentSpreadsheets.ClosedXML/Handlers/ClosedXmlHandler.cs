@@ -2,7 +2,7 @@ using ClosedXML.Excel;
 using FluentSpreadsheets.ClosedXML.Extensions;
 using FluentSpreadsheets.Visitors;
 
-namespace FluentSpreadsheets.ClosedXML.Visitors;
+namespace FluentSpreadsheets.ClosedXML.Handlers;
 
 internal readonly struct ClosedXmlHandler : IComponentVisitorHandler
 {
