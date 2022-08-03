@@ -47,6 +47,6 @@ internal class HStackComponent : IHStackComponent
 
     public IReadOnlyCollection<IComponent> Components { get; }
 
-    public Task AcceptAsync(IComponentVisitor visitor, CancellationToken cancellationToken)
-        => visitor.VisitAsync(this, cancellationToken);
+    public void Accept(IComponentVisitor visitor)
+        => visitor.Visit(this);
 }

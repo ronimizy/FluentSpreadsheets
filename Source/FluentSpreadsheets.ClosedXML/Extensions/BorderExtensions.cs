@@ -9,13 +9,13 @@ internal static class BorderExtensions
     {
         border.TopBorder = style.Top.Type.ToXlBorderStyle();
         border.TopBorderColor = style.Top.Color.ToXlColor();
-        
+
         border.BottomBorder = style.Bottom.Type.ToXlBorderStyle();
         border.BottomBorderColor = style.Bottom.Color.ToXlColor();
-        
+
         border.LeftBorder = style.Leading.Type.ToXlBorderStyle();
         border.LeftBorderColor = style.Leading.Color.ToXlColor();
-        
+
         border.RightBorder = style.Trailing.Type.ToXlBorderStyle();
         border.RightBorderColor = style.Trailing.Color.ToXlColor();
     }

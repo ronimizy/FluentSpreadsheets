@@ -10,5 +10,5 @@ public enum BorderType
     Double,
     Medium,
     Thick,
-    Thin
+    Thin,
 }

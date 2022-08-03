@@ -15,7 +15,7 @@ internal static class AlignmentExtensions
             _ => XLAlignmentVerticalValues.Bottom,
         };
     }
-    
+
     public static XLAlignmentHorizontalValues ToXlAlignment(this HorizontalAlignment alignment)
     {
         return alignment switch

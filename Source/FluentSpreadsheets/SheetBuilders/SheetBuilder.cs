@@ -27,10 +27,8 @@ public class SheetBuilder : ISheetBuilder
             rows.Add(row);
 
             if (!rows[i].Length.Equals(headerCount))
-            {
                 // TODO: Proper exception
                 throw new Exception();
-            }
 
             i++;
         }
@@ -42,15 +40,11 @@ public class SheetBuilder : ISheetBuilder
             .ToArray();
 
         if (!footers.Length.Equals(headerCount))
-        {
             // TODO: Proper exception
             throw new Exception();
-        }
 
         ScaleColumns(headerCount, rows, headers, footers);
         var headerHeight = ScaleHeaderRow(headers);
-        
-        
         var footerHeight = ScaleFooterRow(footers);
 
         var width = headers.Sum(x => x.Size.Width);
@@ -64,7 +58,7 @@ public class SheetBuilder : ISheetBuilder
         {
             headerStack,
             rowStack,
-            footerStack
+            footerStack,
         };
 
         return new VStackComponent(stacks, width);

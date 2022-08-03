@@ -38,17 +38,15 @@ internal class VStackComponent : IVStackComponent
     public VStackComponent(IReadOnlyCollection<IComponent> components, int width)
     {
         var height = components.Sum(x => x.Size.Height);
-        
+
         Size = new Size(width, height);
         Components = components;
     }
 
     public Size Size { get; }
-    
+
     public IReadOnlyCollection<IComponent> Components { get; }
 
-    public Task AcceptAsync(IComponentVisitor visitor, CancellationToken cancellationToken)
-    {
-        return visitor.VisitAsync(this, cancellationToken);
-    }
+    public void Accept(IComponentVisitor visitor)
+        => visitor.Visit(this);
 }

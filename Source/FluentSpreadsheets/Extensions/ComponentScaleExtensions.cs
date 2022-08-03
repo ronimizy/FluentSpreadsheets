@@ -11,7 +11,7 @@ public static class ComponentScaleExtensions
 
         if (axis.HasFlag(Axis.Vertical))
             verticalFactor *= factor;
-        
+
         if (axis.HasFlag(Axis.Horizontal))
             horizontalFactor *= factor;
 
