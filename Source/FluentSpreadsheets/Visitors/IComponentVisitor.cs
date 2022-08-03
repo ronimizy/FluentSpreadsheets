@@ -21,6 +21,4 @@ public interface IComponentVisitor
     void Visit(IRowHeightComponent component);
 
     void Visit(IColumnWidthComponent component);
-
-    Task FlushAsync(CancellationToken cancellationToken = default);
 }

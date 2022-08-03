@@ -4,20 +4,16 @@ using FluentSpreadsheets.Visitors;
 
 namespace FluentSpreadsheets.ClosedXML.Visitors;
 
-internal class ClosedXmlVisitor : ComponentVisitorBase
+internal readonly struct ClosedXmlHandler : IComponentVisitorHandler
 {
     private readonly IXLWorksheet _worksheet;
 
-    public ClosedXmlVisitor(IXLWorksheet worksheet, Index index, Style style = default)
-        : base(index, style)
+    public ClosedXmlHandler(IXLWorksheet worksheet)
     {
         _worksheet = worksheet;
     }
 
-    public override Task FlushAsync(CancellationToken cancellationToken = default)
-        => Task.CompletedTask;
-
-    protected override void StyleRange(Style style, IndexRange range)
+    public void StyleRange(Style style, IndexRange range)
     {
         var worksheetRange = _worksheet.Range(range);
 
@@ -27,34 +23,34 @@ internal class ClosedXmlVisitor : ComponentVisitorBase
         worksheetRange.Style.Border.ApplyBorderStyle(style.Border);
     }
 
-    protected override void MergeRange(IndexRange range)
+    public void MergeRange(IndexRange range)
     {
         var worksheetRange = _worksheet.Range(range);
         worksheetRange.Merge();
     }
 
-    protected override void WriteString(Index index, string value)
+    public void WriteString(Index index, string value)
     {
         var worksheetCell = _worksheet.Cell(index);
         worksheetCell.Value = value;
     }
 
-    protected override void AdjustRows(int from, int upTo)
+    public void AdjustRows(int from, int upTo)
     {
         _worksheet.Rows(from, upTo).AdjustToContents();
     }
 
-    protected override void AdjustColumns(int from, int upTo)
+    public void AdjustColumns(int from, int upTo)
     {
         _worksheet.Columns(from, upTo).AdjustToContents();
     }
 
-    protected override void SetRowHeight(int from, int upTo, int height)
+    public void SetRowHeight(int from, int upTo, int height)
     {
         _worksheet.Rows(from, upTo - 1).Height = height;
     }
 
-    protected override void SetColumnWidth(int from, int upTo, int width)
+    public void SetColumnWidth(int from, int upTo, int width)
     {
         _worksheet.Columns(from, upTo - 1).Width = width;
     }
