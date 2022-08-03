@@ -33,7 +33,6 @@ public class GoogleSheetEditor
 
     public async Task ExecuteBatchUpdateAsync(IList<Request> requests, CancellationToken cancellationToken)
     {
-        Thread.Sleep(500);
         var batchUpdateRequest = new BatchUpdateSpreadsheetRequest
         {
             Requests = requests
