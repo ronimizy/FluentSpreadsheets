@@ -13,8 +13,8 @@ public abstract class ComponentBase : IComponent
 
     public Size Size => _component.Value.Size;
 
-    public Task AcceptAsync(IComponentVisitor visitor, CancellationToken cancellationToken = default)
-        => _component.Value.AcceptAsync(visitor, cancellationToken);
+    public void Accept(IComponentVisitor visitor)
+        => _component.Value.Accept(visitor);
 
     protected abstract IComponent BuildBody();
 }

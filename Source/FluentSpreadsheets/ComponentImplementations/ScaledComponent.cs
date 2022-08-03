@@ -16,9 +16,9 @@ internal class ScaledComponent : IScaledComponent
 
     public Scale Scale { get; }
 
-    public async Task AcceptAsync(IComponentVisitor visitor, CancellationToken cancellationToken)
+    public  void Accept(IComponentVisitor visitor)
     {
-        await visitor.VisitAsync(this, cancellationToken);
-        await _component.AcceptAsync(visitor, cancellationToken);
+        visitor.Visit(this);
+        _component.Accept(visitor);
     }
 }

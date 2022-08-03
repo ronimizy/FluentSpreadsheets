@@ -2,23 +2,25 @@ namespace FluentSpreadsheets.Visitors;
 
 public interface IComponentVisitor
 {
-    Task VisitAsync(IComponent component, CancellationToken cancellationToken = default);
+    void Visit(IComponent component);
     
-    Task VisitAsync(IVStackComponent component, CancellationToken cancellationToken = default);
+    void Visit(IVStackComponent component);
 
-    Task VisitAsync(IHStackComponent component, CancellationToken cancellationToken = default);
+    void Visit(IHStackComponent component);
 
-    Task VisitAsync(ILabelComponent component, CancellationToken cancellationToken = default);
+    void Visit(ILabelComponent component);
 
-    Task VisitAsync(IScaledComponent component, CancellationToken cancellationToken = default);
+    void Visit(IScaledComponent component);
 
-    Task VisitAsync(IStylingComponent component, CancellationToken cancellationToken = default);
+    void Visit(IStylingComponent component);
 
-    Task VisitAsync(IRowAdjustedComponent component, CancellationToken cancellationToken = default);
+    void Visit(IRowAdjustedComponent component);
 
-    Task VisitAsync(IColumnAdjustedComponent component, CancellationToken cancellationToken = default);
+    void Visit(IColumnAdjustedComponent component);
 
-    Task VisitAsync(IRowHeightComponent component, CancellationToken cancellationToken = default);
+    void Visit(IRowHeightComponent component);
 
-    Task VisitAsync(IColumnWidthComponent component, CancellationToken cancellationToken = default);
+    void Visit(IColumnWidthComponent component);
+
+    Task ApplyChangesAsync(CancellationToken cancellationToken = default);
 }

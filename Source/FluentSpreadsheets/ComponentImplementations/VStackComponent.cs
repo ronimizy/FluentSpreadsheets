@@ -47,8 +47,8 @@ internal class VStackComponent : IVStackComponent
     
     public IReadOnlyCollection<IComponent> Components { get; }
 
-    public Task AcceptAsync(IComponentVisitor visitor, CancellationToken cancellationToken)
+    public void Accept(IComponentVisitor visitor)
     {
-        return visitor.VisitAsync(this, cancellationToken);
+         visitor.Visit(this);
     }
 }

@@ -31,7 +31,7 @@ public interface IComponent
 {
     Size Size { get; }
 
-    Task AcceptAsync(IComponentVisitor visitor, CancellationToken cancellationToken);
+    void Accept(IComponentVisitor visitor);
 }
 ```
 
@@ -122,7 +122,8 @@ you need to use `IComponentVisitor`.
               .WithRowHeight(20)
       ).WithBottomBorder(BorderType.Thin, Color.Black).WithTrailingBorder(BorderType.Thin, Color.Black);
   
-  await helloComponent.AcceptAsync(xlVisitor);
+  helloComponent.Accept(xlVisitor);
+  await xlVisitor.ApplyChangesAsync();
   
   workbook.SaveAs("sample.xlsx");
   ```

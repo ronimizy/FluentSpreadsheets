@@ -71,7 +71,7 @@ var helloComponent =
             .WithRowHeight(20)
     ).WithBottomBorder(BorderType.Thin, Color.Black).WithTrailingBorder(BorderType.Thin, Color.Black);
 
-await helloComponent.AcceptAsync(xlVisitor);
+helloComponent.Accept(xlVisitor);
 
 // await sheet.AcceptAsync(xlVisitor);
 

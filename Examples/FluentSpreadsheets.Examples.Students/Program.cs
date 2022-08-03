@@ -55,7 +55,8 @@ var workbook = new XLWorkbook();
 var worksheet = workbook.AddWorksheet("Students");
 var xlVisitor = new ClosedXmlVisitor(worksheet, new Index(1, 1));
 
-await sheet.AcceptAsync(xlVisitor);
+sheet.Accept(xlVisitor);
+await xlVisitor.ApplyChangesAsync();
 
 workbook.SaveAs("students.xlsx");
 

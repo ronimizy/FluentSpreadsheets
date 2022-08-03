@@ -14,7 +14,10 @@ public class ClosedXmlVisitor : ComponentVisitorBase
         _worksheet = worksheet;
     }
 
-    protected override Task StyleRangeAsync(Style style, IndexRange range, CancellationToken cancellationToken)
+    public override Task ApplyChangesAsync(CancellationToken cancellationToken = default)
+        => Task.CompletedTask;
+
+    protected override void StyleRange(Style style, IndexRange range)
     {
         var worksheetRange = _worksheet.Range(range);
 
@@ -22,45 +25,37 @@ public class ClosedXmlVisitor : ComponentVisitorBase
         worksheetRange.Style.Alignment.Horizontal = style.Alignment.Horizontal.ToXlAlignment();
 
         worksheetRange.Style.Border.ApplyBorderStyle(style.Border);
-        
-        return Task.CompletedTask;
     }
 
-    protected override Task MergeRangeAsync(IndexRange range, CancellationToken cancellationToken)
+    protected override void MergeRange(IndexRange range)
     {
         var worksheetRange = _worksheet.Range(range);
         worksheetRange.Merge();
-        return Task.CompletedTask;
     }
 
-    protected override Task WriteStringAsync(Index index, string value, CancellationToken cancellationToken)
+    protected override void WriteString(Index index, string value)
     {
         var worksheetCell = _worksheet.Cell(index);
         worksheetCell.Value = value;
-        return Task.CompletedTask;
     }
 
-    protected override Task AdjustRowsAsync(int from, int upTo, CancellationToken cancellationToken)
+    protected override void AdjustRows(int from, int upTo)
     {
         _worksheet.Rows(from, upTo).AdjustToContents();
-        return Task.CompletedTask;
     }
 
-    protected override Task AdjustColumnsAsync(int from, int upTo, CancellationToken cancellationToken)
+    protected override void AdjustColumns(int from, int upTo)
     {
         _worksheet.Columns(from, upTo).AdjustToContents();
-        return Task.CompletedTask;
     }
 
-    protected override Task SetRowHeightAsync(int from, int upTo, int height, CancellationToken cancellationToken)
+    protected override void SetRowHeight(int from, int upTo, int height)
     {
         _worksheet.Rows(from, upTo - 1).Height = height;
-        return Task.CompletedTask;
     }
 
-    protected override Task SetColumnWidthAsync(int from, int upTo, int width, CancellationToken cancellationToken)
+    protected override void SetColumnWidth(int from, int upTo, int width)
     {
         _worksheet.Columns(from, upTo - 1).Width = width;
-        return Task.CompletedTask;
     }
 }

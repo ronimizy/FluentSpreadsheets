@@ -6,5 +6,5 @@ public interface IComponent
 {
     Size Size { get; }
 
-    Task AcceptAsync(IComponentVisitor visitor, CancellationToken cancellationToken = default);
+    void Accept(IComponentVisitor visitor);
 }

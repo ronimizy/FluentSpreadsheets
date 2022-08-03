@@ -15,21 +15,21 @@ public abstract class ComponentVisitorBase : IComponentVisitor
         Scale = Scale.None;
     }
 
-    public async Task VisitAsync(IComponent component, CancellationToken cancellationToken = default)
+    public void Visit(IComponent component)
     {
         var size = component.Size * Scale;
         var end = new Index(Index.Row + size.Height, Index.Column + size.Width);
         var range = new IndexRange(Index, end);
-        
+
         if (!Scale.IsNone)
         {
-            await MergeRangeAsync(range, cancellationToken);
+            MergeRange(range);
         }
 
-        await StyleRangeAsync(Style, range, cancellationToken);
+        StyleRange(Style, range);
     }
 
-    public async Task VisitAsync(IVStackComponent component, CancellationToken cancellationToken)
+    public void Visit(IVStackComponent component)
     {
         var size = component.Size;
 
@@ -40,13 +40,13 @@ public abstract class ComponentVisitorBase : IComponentVisitor
         var end = new Index(index.Row + size.Height, index.Column + size.Width);
         var range = new IndexRange(Index, end);
 
-        await StyleRangeAsync(style, range, cancellationToken);
+        StyleRange(style, range);
 
         foreach (var subComponent in component.Components)
         {
             var subcomponentSize = subComponent.Size * Scale;
 
-            await subComponent.AcceptAsync(this, cancellationToken);
+            subComponent.Accept(this);
 
             Index = index with
             {
@@ -58,7 +58,7 @@ public abstract class ComponentVisitorBase : IComponentVisitor
         }
     }
 
-    public async Task VisitAsync(IHStackComponent component, CancellationToken cancellationToken)
+    public void Visit(IHStackComponent component)
     {
         var size = component.Size;
 
@@ -69,12 +69,12 @@ public abstract class ComponentVisitorBase : IComponentVisitor
         var end = new Index(index.Row + size.Height, index.Column + size.Width);
         var range = new IndexRange(Index, end);
 
-        await StyleRangeAsync(style, range, cancellationToken);
+        StyleRange(style, range);
 
         foreach (var subComponent in component.Components)
         {
             var subcomponentSize = subComponent.Size * Scale;
-            await subComponent.AcceptAsync(this, cancellationToken);
+            subComponent.Accept(this);
 
             index = index with
             {
@@ -87,7 +87,7 @@ public abstract class ComponentVisitorBase : IComponentVisitor
         }
     }
 
-    public async Task VisitAsync(ILabelComponent component, CancellationToken cancellationToken)
+    public void Visit(ILabelComponent component)
     {
         var size = component.Size * Scale;
         var end = new Index(Index.Row + size.Height, Index.Column + size.Width);
@@ -95,62 +95,60 @@ public abstract class ComponentVisitorBase : IComponentVisitor
 
         if (!Scale.IsNone)
         {
-            await MergeRangeAsync(range, cancellationToken);
+            MergeRange(range);
         }
 
-        await StyleRangeAsync(Style, range, cancellationToken);
-        await WriteStringAsync(Index, component.Text, cancellationToken);
+        StyleRange(Style, range);
+        WriteString(Index, component.Text);
     }
 
-    public Task VisitAsync(IScaledComponent component, CancellationToken cancellationToken)
+    public void Visit(IScaledComponent component)
     {
         Scale *= component.Scale;
-        return Task.CompletedTask;
     }
 
-    public Task VisitAsync(IStylingComponent component, CancellationToken cancellationToken)
+    public void Visit(IStylingComponent component)
     {
         Style = component.TryApply(Style);
-        return Task.CompletedTask;
     }
 
-    public Task VisitAsync(IRowAdjustedComponent component, CancellationToken cancellationToken)
+    public void Visit(IRowAdjustedComponent component)
     {
         var size = component.Size * Scale;
-        AdjustRowsAsync(Index.Row, Index.Row + size.Height, cancellationToken);
-        return Task.CompletedTask;
+        AdjustRows(Index.Row, Index.Row + size.Height);
     }
 
-    public Task VisitAsync(IColumnAdjustedComponent component, CancellationToken cancellationToken)
+    public void Visit(IColumnAdjustedComponent component)
     {
         var size = component.Size * Scale;
-        AdjustColumnsAsync(Index.Column, Index.Column + size.Width, cancellationToken);
-        return Task.CompletedTask;
+        AdjustColumns(Index.Column, Index.Column + size.Width);
     }
 
-    public async Task VisitAsync(IRowHeightComponent component, CancellationToken cancellationToken)
+    public void Visit(IRowHeightComponent component)
     {
         var size = component.Size * Scale;
-        await SetRowHeightAsync(Index.Row, Index.Row + size.Height, component.Height, cancellationToken);
+        SetRowHeight(Index.Row, Index.Row + size.Height, component.Height);
     }
 
-    public Task VisitAsync(IColumnWidthComponent component, CancellationToken cancellationToken)
+    public void Visit(IColumnWidthComponent component)
     {
         var size = component.Size * Scale;
-        return SetColumnWidthAsync(Index.Column, Index.Column + size.Width, component.Width, cancellationToken);
+        SetColumnWidth(Index.Column, Index.Column + size.Width, component.Width);
     }
 
-    protected abstract Task StyleRangeAsync(Style style, IndexRange range, CancellationToken cancellationToken);
+    public abstract Task ApplyChangesAsync(CancellationToken cancellationToken = default);
 
-    protected abstract Task MergeRangeAsync(IndexRange range, CancellationToken cancellationToken);
+    protected abstract void StyleRange(Style style, IndexRange range);
 
-    protected abstract Task WriteStringAsync(Index index, string value, CancellationToken cancellationToken);
+    protected abstract void MergeRange(IndexRange range);
 
-    protected abstract Task AdjustRowsAsync(int from, int upTo, CancellationToken cancellationToken);
+    protected abstract void WriteString(Index index, string value);
 
-    protected abstract Task AdjustColumnsAsync(int from, int upTo, CancellationToken cancellationToken);
+    protected abstract void AdjustRows(int from, int upTo);
 
-    protected abstract Task SetRowHeightAsync(int from, int upTo, int height, CancellationToken cancellationToken);
+    protected abstract void AdjustColumns(int from, int upTo);
 
-    protected abstract Task SetColumnWidthAsync(int from, int upTo, int width, CancellationToken cancellationToken);
+    protected abstract void SetRowHeight(int from, int upTo, int height);
+
+    protected abstract void SetColumnWidth(int from, int upTo, int width);
 }
