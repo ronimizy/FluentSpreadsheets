@@ -2,7 +2,7 @@ namespace FluentSpreadsheets.Visitors;
 
 public class ComponentVisitor<THandler> : IComponentVisitor where THandler : IComponentVisitorHandler
 {
-    public readonly THandler Handler;
+    private readonly THandler _handler;
     private Index _index;
     private Scale _scale;
     private Style _style;
@@ -11,7 +11,7 @@ public class ComponentVisitor<THandler> : IComponentVisitor where THandler : ICo
     {
         _index = index;
         _style = style;
-        Handler = handler;
+        _handler = handler;
         _scale = Scale.None;
     }
 
@@ -22,9 +22,9 @@ public class ComponentVisitor<THandler> : IComponentVisitor where THandler : ICo
         var range = new IndexRange(_index, end);
 
         if (!_scale.IsNone)
-            Handler.MergeRange(range);
+            _handler.MergeRange(range);
 
-        Handler.StyleRange(_style, range);
+        _handler.StyleRange(_style, range);
     }
 
     public void Visit(IVStackComponent component)
@@ -38,7 +38,7 @@ public class ComponentVisitor<THandler> : IComponentVisitor where THandler : ICo
         var end = new Index(index.Row + size.Height, index.Column + size.Width);
         var range = new IndexRange(_index, end);
 
-        Handler.StyleRange(style, range);
+        _handler.StyleRange(style, range);
 
         foreach (var subComponent in component.Components)
         {
@@ -67,7 +67,7 @@ public class ComponentVisitor<THandler> : IComponentVisitor where THandler : ICo
         var end = new Index(index.Row + size.Height, index.Column + size.Width);
         var range = new IndexRange(_index, end);
 
-        Handler.StyleRange(style, range);
+        _handler.StyleRange(style, range);
 
         foreach (var subComponent in component.Components)
         {
@@ -92,10 +92,10 @@ public class ComponentVisitor<THandler> : IComponentVisitor where THandler : ICo
         var range = new IndexRange(_index, end);
 
         if (!_scale.IsNone)
-            Handler.MergeRange(range);
+            _handler.MergeRange(range);
 
-        Handler.StyleRange(_style, range);
-        Handler.WriteString(_index, component.Text);
+        _handler.StyleRange(_style, range);
+        _handler.WriteString(_index, component.Text);
     }
 
     public void Visit(IScaledComponent component)
@@ -111,24 +111,24 @@ public class ComponentVisitor<THandler> : IComponentVisitor where THandler : ICo
     public void Visit(IRowAdjustedComponent component)
     {
         var size = component.Size * _scale;
-        Handler.AdjustRows(_index.Row, _index.Row + size.Height);
+        _handler.AdjustRows(_index.Row, _index.Row + size.Height);
     }
 
     public void Visit(IColumnAdjustedComponent component)
     {
         var size = component.Size * _scale;
-        Handler.AdjustColumns(_index.Column, _index.Column + size.Width);
+        _handler.AdjustColumns(_index.Column, _index.Column + size.Width);
     }
 
     public void Visit(IRowHeightComponent component)
     {
         var size = component.Size * _scale;
-        Handler.SetRowHeight(_index.Row, _index.Row + size.Height, component.Height);
+        _handler.SetRowHeight(_index.Row, _index.Row + size.Height, component.Height);
     }
 
     public void Visit(IColumnWidthComponent component)
     {
         var size = component.Size * _scale;
-        Handler.SetColumnWidth(_index.Column, _index.Column + size.Width, component.Width);
+        _handler.SetColumnWidth(_index.Column, _index.Column + size.Width, component.Width);
     }
 }
