@@ -2,18 +2,18 @@ namespace FluentSpreadsheets.Visitors;
 
 public abstract class ComponentVisitorBase : IComponentVisitor
 {
-    protected Index Index { get; private set; }
-
-    protected Scale Scale { get; private set; }
-
-    protected Style Style { get; private set; }
-
     protected ComponentVisitorBase(Index index, Style style)
     {
         Index = index;
         Style = style;
         Scale = Scale.None;
     }
+
+    protected Index Index { get; private set; }
+
+    protected Scale Scale { get; private set; }
+
+    protected Style Style { get; private set; }
 
     public void Visit(IComponent component)
     {
@@ -22,9 +22,7 @@ public abstract class ComponentVisitorBase : IComponentVisitor
         var range = new IndexRange(Index, end);
 
         if (!Scale.IsNone)
-        {
             MergeRange(range);
-        }
 
         StyleRange(Style, range);
     }
@@ -94,9 +92,7 @@ public abstract class ComponentVisitorBase : IComponentVisitor
         var range = new IndexRange(Index, end);
 
         if (!Scale.IsNone)
-        {
             MergeRange(range);
-        }
 
         StyleRange(Style, range);
         WriteString(Index, component.Text);

@@ -15,7 +15,7 @@ internal abstract class StylingComponentBase : IStylingComponent
 
     public abstract Style TryApply(Style style);
 
-    public  void Accept(IComponentVisitor visitor)
+    public void Accept(IComponentVisitor visitor)
     {
         visitor.Visit(this);
         Component.Accept(visitor);

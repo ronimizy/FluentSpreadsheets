@@ -16,7 +16,7 @@ internal class ScaledComponent : IScaledComponent
 
     public Scale Scale { get; }
 
-    public  void Accept(IComponentVisitor visitor)
+    public void Accept(IComponentVisitor visitor)
     {
         visitor.Visit(this);
         _component.Accept(visitor);

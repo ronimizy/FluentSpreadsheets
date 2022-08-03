@@ -16,7 +16,7 @@ internal class RowHeightComponent : IRowHeightComponent
 
     public int Height { get; }
 
-    public  void Accept(IComponentVisitor visitor)
+    public void Accept(IComponentVisitor visitor)
     {
         visitor.Visit(this);
         _component.Accept(visitor);

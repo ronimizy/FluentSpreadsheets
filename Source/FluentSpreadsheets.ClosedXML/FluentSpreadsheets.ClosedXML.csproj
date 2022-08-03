@@ -22,7 +22,7 @@
     <PropertyGroup>
         <PackageVersion>0.0.1-alpha</PackageVersion>
     </PropertyGroup>
-    
+
     <ItemGroup>
         <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
         <None Include="..\..\LICENSE.md" Pack="true" PackagePath="\"/>

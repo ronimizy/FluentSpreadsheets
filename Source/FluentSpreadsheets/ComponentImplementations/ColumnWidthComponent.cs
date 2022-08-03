@@ -16,7 +16,7 @@ internal class ColumnWidthComponent : IColumnWidthComponent
 
     public int Width { get; }
 
-    public  void Accept(IComponentVisitor visitor)
+    public void Accept(IComponentVisitor visitor)
     {
         visitor.Visit(this);
         _component.Accept(visitor);

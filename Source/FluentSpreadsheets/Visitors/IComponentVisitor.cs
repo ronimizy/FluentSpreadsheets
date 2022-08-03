@@ -3,7 +3,7 @@ namespace FluentSpreadsheets.Visitors;
 public interface IComponentVisitor
 {
     void Visit(IComponent component);
-    
+
     void Visit(IVStackComponent component);
 
     void Visit(IHStackComponent component);
