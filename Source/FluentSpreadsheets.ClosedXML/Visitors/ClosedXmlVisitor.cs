@@ -4,7 +4,7 @@ using FluentSpreadsheets.Visitors;
 
 namespace FluentSpreadsheets.ClosedXML.Visitors;
 
-public class ClosedXmlVisitor : ComponentVisitorBase
+internal class ClosedXmlVisitor : ComponentVisitorBase
 {
     private readonly IXLWorksheet _worksheet;
 
@@ -14,7 +14,7 @@ public class ClosedXmlVisitor : ComponentVisitorBase
         _worksheet = worksheet;
     }
 
-    public override Task ApplyChangesAsync(CancellationToken cancellationToken = default)
+    public override Task FlushAsync(CancellationToken cancellationToken = default)
         => Task.CompletedTask;
 
     protected override void StyleRange(Style style, IndexRange range)

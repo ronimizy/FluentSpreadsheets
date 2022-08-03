@@ -132,7 +132,7 @@ public abstract class ComponentVisitorBase : IComponentVisitor
         SetColumnWidth(Index.Column, Index.Column + size.Width, component.Width);
     }
 
-    public abstract Task ApplyChangesAsync(CancellationToken cancellationToken = default);
+    public abstract Task FlushAsync(CancellationToken cancellationToken = default);
 
     protected abstract void StyleRange(Style style, IndexRange range);
 

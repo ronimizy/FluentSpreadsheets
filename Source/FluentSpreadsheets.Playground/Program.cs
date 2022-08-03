@@ -2,11 +2,10 @@
 using System.Globalization;
 using ClosedXML.Excel;
 using FluentSpreadsheets;
-using FluentSpreadsheets.ClosedXML.Visitors;
+using FluentSpreadsheets.ClosedXML.Rendering;
 using FluentSpreadsheets.SheetBuilders;
 using FluentSpreadsheets.SheetSegments;
 using static FluentSpreadsheets.ComponentFactory;
-using Index = FluentSpreadsheets.Index;
 
 var studentA = new Student("Aboba 1");
 var studentB = new Student("Aboba 2");
@@ -53,27 +52,11 @@ var sheet = sheetBuilder.Build(segments, sheetData);
 
 var workbook = new XLWorkbook();
 var worksheet = workbook.AddWorksheet("Student Progress");
-var xlVisitor = new ClosedXmlVisitor(worksheet, new Index(1, 1));
 
-var helloComponent =
-    VStack
-    (
-        HStack
-        (
-            Label("Hello")
-                .WithContentAlignment(HorizontalAlignment.Trailing)
-                .WithTrailingBorder(BorderType.Thin, Color.Black),
-            Label(",")
-        ),
-        Label("Styles!")
-            .WithContentAlignment(HorizontalAlignment.Center, VerticalAlignment.Top)
-            .WithTopBorder(BorderType.Thin, Color.Black)
-            .WithRowHeight(20)
-    ).WithBottomBorder(BorderType.Thin, Color.Black).WithTrailingBorder(BorderType.Thin, Color.Black);
+var renderer = new ClosedXmlComponentRenderer();
+var renderCommand = new ClosedXmlRenderCommand(worksheet, sheet);
 
-helloComponent.Accept(xlVisitor);
-
-// await sheet.AcceptAsync(xlVisitor);
+await renderer.RenderAsync(renderCommand);
 
 workbook.SaveAs("student-progress.xlsx");
 

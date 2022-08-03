@@ -24,16 +24,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
-        <None Include="..\..\LICENSE.md" Pack="true" PackagePath="\"/>
+        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+        <None Include="..\..\LICENSE.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\FluentSpreadsheets\FluentSpreadsheets.csproj"/>
+        <ProjectReference Include="..\FluentSpreadsheets\FluentSpreadsheets.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="ClosedXML" Version="0.96.0"/>
+        <PackageReference Include="ClosedXML" Version="0.96.0" />
     </ItemGroup>
 
 </Project>

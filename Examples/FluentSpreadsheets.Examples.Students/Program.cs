@@ -2,6 +2,7 @@
 using System.Globalization;
 using ClosedXML.Excel;
 using FluentSpreadsheets;
+using FluentSpreadsheets.ClosedXML.Rendering;
 using FluentSpreadsheets.ClosedXML.Visitors;
 using FluentSpreadsheets.SheetBuilders;
 using FluentSpreadsheets.SheetSegments;
@@ -52,13 +53,14 @@ var sheetBuilder = new SheetBuilder();
 var sheet = sheetBuilder.Build(segments, sheetData);
 
 var workbook = new XLWorkbook();
-var worksheet = workbook.AddWorksheet("Students");
-var xlVisitor = new ClosedXmlVisitor(worksheet, new Index(1, 1));
+var worksheet = workbook.AddWorksheet("Student Progress");
 
-sheet.Accept(xlVisitor);
-await xlVisitor.ApplyChangesAsync();
+var renderer = new ClosedXmlComponentRenderer();
+var renderCommand = new ClosedXmlRenderCommand(worksheet, sheet);
 
-workbook.SaveAs("students.xlsx");
+await renderer.RenderAsync(renderCommand);
+
+workbook.SaveAs("student-progress.xlsx");
 
 public readonly record struct Student(string Name);
 
