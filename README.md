@@ -127,9 +127,11 @@ you need to use `IComponentVisitor`.
               .WithTopBorder(BorderType.Thin, Color.Black)
               .WithRowHeight(20)
       ).WithBottomBorder(BorderType.Thin, Color.Black).WithTrailingBorder(BorderType.Thin, Color.Black);
+
+  var renderer = new ClosedXmlComponentRenderer();
+  var renderCommand = new ClosedXmlRenderCommand(worksheet, helloComponent);
   
-  helloComponent.Accept(xlVisitor);
-  await xlVisitor.ApplyChangesAsync();
+  await renderer.RenderAsync(renderCommand);
   
   workbook.SaveAs("sample.xlsx");
   ```
