@@ -3,7 +3,7 @@ using System.Globalization;
 using ClosedXML.Excel;
 using FluentSpreadsheets;
 using FluentSpreadsheets.ClosedXML.Rendering;
-using FluentSpreadsheets.ClosedXML.Visitors;
+using FluentSpreadsheets.ClosedXML.Handlers;
 using FluentSpreadsheets.SheetBuilders;
 using FluentSpreadsheets.SheetSegments;
 using static FluentSpreadsheets.ComponentFactory;
