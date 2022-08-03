@@ -1,5 +1,4 @@
 using ClosedXML.Excel;
-using Index = FluentSpreadsheets.Index;
 
 namespace FluentSpreadsheets.ClosedXML.Extensions;
 

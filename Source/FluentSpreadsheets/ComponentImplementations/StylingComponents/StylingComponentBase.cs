@@ -15,9 +15,9 @@ internal abstract class StylingComponentBase : IStylingComponent
 
     public abstract Style TryApply(Style style);
 
-    public async Task AcceptAsync(IComponentVisitor visitor, CancellationToken cancellationToken)
+    public void Accept(IComponentVisitor visitor)
     {
-        await visitor.VisitAsync(this);
-        await Component.AcceptAsync(visitor, cancellationToken);
+        visitor.Visit(this);
+        Component.Accept(visitor);
     }
 }

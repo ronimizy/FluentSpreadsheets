@@ -2,7 +2,7 @@ namespace FluentSpreadsheets.ComponentImplementations.StylingComponents.Border;
 
 internal class TopBorderStyleComponent : BorderStyleComponent
 {
-    public TopBorderStyleComponent(IComponent component, BorderStyle borderStyle) 
+    public TopBorderStyleComponent(IComponent component, BorderStyle borderStyle)
         : base(component, borderStyle) { }
 
     protected override BorderStyle BorderStyleSelector(FrameBorderStyle frameBorderStyle)

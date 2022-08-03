@@ -1,9 +1,11 @@
 # FluentSpreadsheets
 
-### FluentSpreadsheets 
+### FluentSpreadsheets
+
 [![badge](https://img.shields.io/nuget/vpre/FluentSpreadsheets?style=flat-square)](https://www.nuget.org/packages/FluentSpreadsheets/)
 
 ### FluentSpreadsheets.ClosedXML
+
 [![badge](https://img.shields.io/nuget/vpre/FluentSpreadsheets.ClosedXML?style=flat-square)](https://www.nuget.org/packages/FluentSpreadsheets.ClosedXML/)
 
 ## Overview
@@ -16,10 +18,12 @@
   as well as base logic for drawing defined component composition on the sheet.
 - Sheets API\
   An API that provides a set of abstractions to define `sheet segments` that will dynamically build components,
-  providing a way to build dynamic UI based on given data, as well as a way to combine an output from sheet segments into a single component
+  providing a way to build dynamic UI based on given data, as well as a way to combine an output from sheet segments
+  into a single component
   representing a built table.
 
 ## Examples
+
 - [Student table](Examples/FluentSpreadsheets.Examples.Students)
 
 ## Component API
@@ -31,7 +35,7 @@ public interface IComponent
 {
     Size Size { get; }
 
-    Task AcceptAsync(IComponentVisitor visitor, CancellationToken cancellationToken);
+    void Accept(IComponentVisitor visitor);
 }
 ```
 
@@ -96,10 +100,12 @@ class `ComponentFactory`.
   ![Styles](Docs/Media/hello-styles.png)
 
 ### Output
-Code above will only produce component composition stored as objects in memory. To render it on the sheet, 
+
+Code above will only produce component composition stored as objects in memory. To render it on the sheet,
 you need to use `IComponentVisitor`.
 
 #### Now supported:
+
 - Excel output via "ClosedXML" library. (You will need to reference a `FluentSpreadsheets.ClosedXML` NuGet package)
   ```csharp
   var workbook = new XLWorkbook();
@@ -121,15 +127,18 @@ you need to use `IComponentVisitor`.
               .WithTopBorder(BorderType.Thin, Color.Black)
               .WithRowHeight(20)
       ).WithBottomBorder(BorderType.Thin, Color.Black).WithTrailingBorder(BorderType.Thin, Color.Black);
+
+  var renderer = new ClosedXmlComponentRenderer();
+  var renderCommand = new ClosedXmlRenderCommand(worksheet, helloComponent);
   
-  await helloComponent.AcceptAsync(xlVisitor);
+  await renderer.RenderAsync(renderCommand);
   
   workbook.SaveAs("sample.xlsx");
   ```
-  
+
 ## Sheets API
 
-The base unit of sheets API is `ISheetSegment` interface, it provides an interface to get components for different 
+The base unit of sheets API is `ISheetSegment` interface, it provides an interface to get components for different
 sheet section parts (header, rows, footer).
 
 ```csharp
@@ -151,30 +160,38 @@ There are two main kinds of sheet segments:
   A segment that can represent a collection of data columns.\
 
 ### SheetSegmentBase
+
 - Requires you to implement 2 methods
-  - `IComponent BuildHeader(THeaderData data)`
-  - `IComponent BuildRow(HeaderRowData<THeaderData, TRowData> data, int rowIndex)`
+    - `IComponent BuildHeader(THeaderData data)`
+    - `IComponent BuildRow(HeaderRowData<THeaderData, TRowData> data, int rowIndex)`
 - With an option to overload
-  - `IComponent BuildFooter(HeaderFooterData<THeaderData, TFooterData> data)`
+    - `IComponent BuildFooter(HeaderFooterData<THeaderData, TFooterData> data)`
 
 ### PrototypeSheetSegmentBase
 
-Prototype sheet segments are useful when you table may have a dynamic amount of columns depending on the data that has been provided.
+Prototype sheet segments are useful when you table may have a dynamic amount of columns depending on the data that has
+been provided.
 
-To be a part of a sheet segment collection, prototype must implement `ISheetSegment<THeaderData, TRowData, TFooterData>` interface,
-just like any other static sheet segment. But prototype segment must have a collection of header data to create multiple segments, so
-you must implement `IEnumerable<TPrototypeHeaderData> SelectHeaderData(THeaderData data)` method to extract collection of header data 
-that prototypes will use from general header data. 
+To be a part of a sheet segment collection, prototype must implement `ISheetSegment<THeaderData, TRowData, TFooterData>`
+interface,
+just like any other static sheet segment. But prototype segment must have a collection of header data to create multiple
+segments, so
+you must implement `IEnumerable<TPrototypeHeaderData> SelectHeaderData(THeaderData data)` method to extract collection
+of header data
+that prototypes will use from general header data.
 
 ``PrototypeSheetSegmentBase`6`` also requires you to implement:
+
 - `TPrototypeRowData SelectRowData(HeaderRowData<TPrototypeHeaderData, TRowData> data)`
 - `TPrototypeFooterData SelectFooterData(HeaderFooterData<TPrototypeHeaderData, TFooterData> data)`
 
-But there are overloads ``PrototypeSheetSegmentBase`4`` and ``PrototypeSheetSegmentBase`5`` that only 
+But there are overloads ``PrototypeSheetSegmentBase`4`` and ``PrototypeSheetSegmentBase`5`` that only
 require `SelectHeaderData` and `SelectHeaderData` + `SelectRowData` methods respectively.
 
-### SheetBuilder 
-The type `SheetBuilder` that conforms to `ISheetBuilder` interface is used to build a sheet from collection of sheet segments and 
+### SheetBuilder
+
+The type `SheetBuilder` that conforms to `ISheetBuilder` interface is used to build a sheet from collection of sheet
+segments and
 corresponding sheet data.
 
 ```csharp

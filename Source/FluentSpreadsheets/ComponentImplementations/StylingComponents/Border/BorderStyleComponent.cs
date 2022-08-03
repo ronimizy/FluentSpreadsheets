@@ -8,11 +8,11 @@ internal abstract class BorderStyleComponent : StylingComponentBase
     {
         _borderStyle = borderStyle;
     }
-    
+
     public override Style TryApply(Style style)
     {
         var selectedStyle = BorderStyleSelector(style.Border);
-        
+
         if (selectedStyle.Type is BorderType.Unspecified)
         {
             selectedStyle = selectedStyle with
@@ -22,7 +22,7 @@ internal abstract class BorderStyleComponent : StylingComponentBase
 
             style = style with
             {
-                Border = BorderStyleApplier(style.Border, selectedStyle)
+                Border = BorderStyleApplier(style.Border, selectedStyle),
             };
         }
 
@@ -32,13 +32,13 @@ internal abstract class BorderStyleComponent : StylingComponentBase
             {
                 Color = _borderStyle.Color,
             };
-            
+
             style = style with
             {
-                Border = BorderStyleApplier(style.Border, selectedStyle)
+                Border = BorderStyleApplier(style.Border, selectedStyle),
             };
         }
-        
+
         return style;
     }
 

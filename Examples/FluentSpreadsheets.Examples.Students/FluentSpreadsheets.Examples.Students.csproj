@@ -8,8 +8,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Source\FluentSpreadsheets.ClosedXML\FluentSpreadsheets.ClosedXML.csproj" />
-      <ProjectReference Include="..\..\Source\FluentSpreadsheets\FluentSpreadsheets.csproj" />
+        <ProjectReference Include="..\..\Source\FluentSpreadsheets.ClosedXML\FluentSpreadsheets.ClosedXML.csproj"/>
+        <ProjectReference Include="..\..\Source\FluentSpreadsheets\FluentSpreadsheets.csproj"/>
     </ItemGroup>
 
 </Project>

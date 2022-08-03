@@ -4,8 +4,8 @@ namespace FluentSpreadsheets.ComponentImplementations;
 
 internal class AdjustedComponent : IRowAdjustedComponent, IColumnAdjustedComponent
 {
-    private readonly bool _adjustRow;
     private readonly bool _adjustColumn;
+    private readonly bool _adjustRow;
     private readonly IComponent _component;
 
     public AdjustedComponent(IComponent component, bool adjustRow, bool adjustColumn)
@@ -17,18 +17,14 @@ internal class AdjustedComponent : IRowAdjustedComponent, IColumnAdjustedCompone
 
     public Size Size => _component.Size;
 
-    public async Task AcceptAsync(IComponentVisitor visitor, CancellationToken cancellationToken)
+    public void Accept(IComponentVisitor visitor)
     {
-        await _component.AcceptAsync(visitor, cancellationToken);
+        _component.Accept(visitor);
 
         if (_adjustRow)
-        {
-            await visitor.VisitAsync((IRowAdjustedComponent)this, cancellationToken);
-        }
+            visitor.Visit((IRowAdjustedComponent)this);
 
         if (_adjustColumn)
-        {
-            await visitor.VisitAsync((IColumnAdjustedComponent)this, cancellationToken);
-        }
+            visitor.Visit((IColumnAdjustedComponent)this);
     }
 }
