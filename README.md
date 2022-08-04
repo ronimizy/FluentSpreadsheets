@@ -135,7 +135,42 @@ you need to use `IComponentVisitor`.
   
   workbook.SaveAs("sample.xlsx");
   ```
+- Google Sheets output via "Google Sheets API v4" library. (You will need to reference a `FluentSpreadsheets.GoogleSheets` NuGet package)
+  ```csharp
+  var credential = GoogleCredential.FromFile("credentials.json");
 
+  var initializer = new BaseClientService.Initializer
+  {
+    HttpClientInitializer = credential
+  };
+
+  var service = new SheetsService(initializer);
+  var renderer = new GoogleSheetComponentRenderer(service);  
+  
+  var helloComponent =
+      VStack
+      (
+          HStack
+          (
+              Label("Hello")
+                  .WithContentAlignment(HorizontalAlignment.Trailing)
+                  .WithTrailingBorder(BorderType.Thin, Color.Black),
+              Label(",")
+          ),
+          Label("Styles!")
+              .WithContentAlignment(HorizontalAlignment.Center, VerticalAlignment.Top)
+              .WithTopBorder(BorderType.Thin, Color.Black)
+              .WithRowHeight(20)
+      ).WithBottomBorder(BorderType.Thin, Color.Black).WithTrailingBorder(BorderType.Thin, Color.Black);
+
+  const string spreadsheetId = "SampleSpreadsheetId";
+  const string title = "SampleTitle";
+  const int id = 103232323;
+
+  var renderCommand = new GoogleSheetRenderCommand(spreadsheetId, id, title, helloComponent);
+
+  await renderer.RenderAsync(renderCommand);
+  ```
 ## Sheets API
 
 The base unit of sheets API is `ISheetSegment` interface, it provides an interface to get components for different
