@@ -10,27 +10,28 @@ namespace FluentSpreadsheets.GoogleSheets.Rendering;
 public class GoogleSheetComponentRenderer : IComponentRenderer<GoogleSheetRenderCommand>
 {
     private readonly SheetsService _sheetsService;
-    private readonly string _spreadsheetId;
 
-    public GoogleSheetComponentRenderer(SheetsService sheetsService, string spreadsheetId)
+    public GoogleSheetComponentRenderer(SheetsService sheetsService)
     {
         _sheetsService = sheetsService;
-        _spreadsheetId = spreadsheetId;
     }
 
     public async Task RenderAsync(GoogleSheetRenderCommand command, CancellationToken cancellationToken = default)
     {
-        (int id, string title, IComponent component) = command;
+        (string spreadsheetId, int id, string title, IComponent component) = command;
 
         var handler = new GoogleSheetHandler(id, title);
         var visitor = new ComponentVisitor<GoogleSheetHandler>(new Index(1, 1), handler);
         component.Accept(visitor);
 
-        await UpdateValueRangesAsync(handler.ValueRanges, cancellationToken);
-        await UpdateStylesAsync(handler.StyleRequests, cancellationToken);
+        await UpdateValueRangesAsync(spreadsheetId, handler.ValueRanges, cancellationToken);
+        await UpdateStylesAsync(spreadsheetId, handler.StyleRequests, cancellationToken);
     }
 
-    private async Task UpdateValueRangesAsync(IList<ValueRange> valueRanges, CancellationToken cancellationToken)
+    private async Task UpdateValueRangesAsync(
+        string spreadsheetId,
+        IList<ValueRange> valueRanges,
+        CancellationToken cancellationToken)
     {
         var updateRequest = new BatchUpdateValuesRequest
         {
@@ -39,11 +40,14 @@ public class GoogleSheetComponentRenderer : IComponentRenderer<GoogleSheetRender
         };
 
         await _sheetsService.Spreadsheets.Values
-            .BatchUpdate(updateRequest, _spreadsheetId)
+            .BatchUpdate(updateRequest, spreadsheetId)
             .ExecuteAsync(cancellationToken);
     }
 
-    private async Task UpdateStylesAsync(IList<Request> updateRequests, CancellationToken cancellationToken)
+    private async Task UpdateStylesAsync(
+        string spreadsheetId,
+        IList<Request> updateRequests,
+        CancellationToken cancellationToken)
     {
         var batchUpdateRequest = new BatchUpdateSpreadsheetRequest
         {
@@ -51,7 +55,7 @@ public class GoogleSheetComponentRenderer : IComponentRenderer<GoogleSheetRender
         };
 
         await _sheetsService.Spreadsheets
-            .BatchUpdate(batchUpdateRequest, _spreadsheetId)
+            .BatchUpdate(batchUpdateRequest, spreadsheetId)
             .ExecuteAsync(cancellationToken);
     }
 }

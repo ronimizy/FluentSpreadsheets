@@ -71,12 +71,12 @@ async Task RenderGoogleSheets()
     var service = new SheetsService(initializer);
     const string spreadsheetId = "";
 
-    var renderer = new GoogleSheetComponentRenderer(service, spreadsheetId);
+    var renderer = new GoogleSheetComponentRenderer(service);
     
     const string title = "";
     int id = await GetSheetId(service, spreadsheetId, title);
 
-    var renderCommand = new GoogleSheetRenderCommand(id, title, sheet);
+    var renderCommand = new GoogleSheetRenderCommand(spreadsheetId, id, title, sheet);
 
     await renderer.RenderAsync(renderCommand);
 }
