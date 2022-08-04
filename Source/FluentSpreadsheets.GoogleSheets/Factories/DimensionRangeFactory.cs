@@ -3,7 +3,7 @@ using Google.Apis.Sheets.v4.Data;
 
 namespace FluentSpreadsheets.GoogleSheets.Factories;
 
-public static class DimensionRangeFactory
+internal static class DimensionRangeFactory
 {
     public static DimensionRange Create(Dimension dimension, int startIndex, int endIndex, int sheetId)
     {
