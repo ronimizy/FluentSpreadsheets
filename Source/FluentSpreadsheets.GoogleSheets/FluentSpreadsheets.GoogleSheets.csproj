@@ -1,17 +1,39 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<LangVersion>10</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\FluentSpreadsheets\FluentSpreadsheets.csproj" />
-  </ItemGroup>
+	<PropertyGroup>
+		<Title>FluentSpreadsheets.GoogleSheets</Title>
+		<Authors>ronimizy</Authors>
+		<Description>An integration library for FluentSpreadsheets that provides an ability to render components using Google Sheets API v4</Description>
+		<RepositoryUrl>https://github.com/ronimizy/FluentSpreadsheets</RepositoryUrl>
+		<RepositoryType>github</RepositoryType>
+		<PackageTags>spreadsheet;layout;google;</PackageTags>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Google.Apis.Sheets.v4" Version="1.57.0.2727" />
-  </ItemGroup>
+	<PropertyGroup>
+		<PackageVersion>0.0.1-alpha</PackageVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
+		<None Include="..\..\LICENSE.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\FluentSpreadsheets\FluentSpreadsheets.csproj" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="Google.Apis.Sheets.v4" Version="1.57.0.2727" />
+	</ItemGroup>
 
 </Project>
