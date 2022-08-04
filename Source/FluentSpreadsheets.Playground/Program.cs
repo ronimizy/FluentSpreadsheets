@@ -2,6 +2,7 @@
 using ClosedXML.Excel;
 using FluentSpreadsheets;
 using FluentSpreadsheets.ClosedXML.Rendering;
+using FluentSpreadsheets.GoogleSheets.Factories;
 using FluentSpreadsheets.GoogleSheets.Rendering;
 using FluentSpreadsheets.SheetBuilders;
 using FluentSpreadsheets.SheetSegments;
@@ -74,23 +75,12 @@ async Task RenderGoogleSheets()
     var renderer = new GoogleSheetComponentRenderer(service);
     
     const string title = "";
-    int id = await GetSheetId(service, spreadsheetId, title);
 
-    var renderCommand = new GoogleSheetRenderCommand(spreadsheetId, id, title, sheet);
+    var renderCommandFactory = new RenderCommandFactory(service);
+
+    var renderCommand = await renderCommandFactory.CreateAsync(spreadsheetId, title, sheet);
 
     await renderer.RenderAsync(renderCommand);
-}
-
-async Task<int> GetSheetId(SheetsService service, string spreadsheetId, string title)
-{
-    Spreadsheet spreadSheet = await service.Spreadsheets
-        .Get(spreadsheetId)
-        .ExecuteAsync();
-
-    Sheet googleSheet = spreadSheet.Sheets.FirstOrDefault(s => s.Properties.Title == title)
-                         ?? throw new Exception("Sheet does not exist");
-    
-    return googleSheet.Properties.SheetId!.Value;
 }
 
 async Task RenderXlsx()

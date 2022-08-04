@@ -1,0 +1,59 @@
+﻿using FluentSpreadsheets.GoogleSheets.Exceptions;
+using FluentSpreadsheets.GoogleSheets.Rendering;
+using Google.Apis.Sheets.v4;
+using Google.Apis.Sheets.v4.Data;
+
+namespace FluentSpreadsheets.GoogleSheets.Factories;
+
+public class RenderCommandFactory : IRenderCommandFactory
+{
+    private readonly SheetsService _sheetsService;
+
+    public RenderCommandFactory(SheetsService sheetsService)
+    {
+        _sheetsService = sheetsService;
+    }
+
+    public async Task<GoogleSheetRenderCommand> CreateAsync(string spreadsheetId, string title, IComponent component)
+    {
+        int id = await GetSheetId(spreadsheetId, title);
+        return new GoogleSheetRenderCommand(spreadsheetId, id, title, component);
+    }
+
+    public async Task<GoogleSheetRenderCommand> CreateAsync(string spreadsheetId, int id, IComponent component)
+    {
+        string title = await GetSheetTitle(spreadsheetId, id);
+        return new GoogleSheetRenderCommand(spreadsheetId, id, title, component);
+    }
+
+    private async Task<int> GetSheetId(string spreadsheetId, string title)
+    {
+        Spreadsheet spreadSheet = await _sheetsService.Spreadsheets
+            .Get(spreadsheetId)
+            .ExecuteAsync();
+
+        Sheet googleSheet = spreadSheet.Sheets.FirstOrDefault(s => s.Properties.Title == title)
+                            ?? throw new GoogleSheetException($"Sheet with title {title} does not exist");
+
+        int? sheetId = googleSheet.Properties.SheetId;
+
+        if (sheetId is null)
+        {
+            throw new GoogleSheetException("Sheet id does not exist");
+        }
+
+        return sheetId.Value;
+    }
+
+    private async Task<string> GetSheetTitle(string spreadsheetId, int id)
+    {
+        Spreadsheet spreadSheet = await _sheetsService.Spreadsheets
+            .Get(spreadsheetId)
+            .ExecuteAsync();
+
+        Sheet googleSheet = spreadSheet.Sheets.FirstOrDefault(s => s.Properties.SheetId == id)
+                            ?? throw new GoogleSheetException($"Sheet with id {id} does not exist");
+
+        return googleSheet.Properties.Title;
+    }
+}
