@@ -2,7 +2,7 @@
 
 namespace FluentSpreadsheets.GoogleSheets.Factories;
 
-public class SheetNameFactory
+internal class SheetNameFactory
 {
     private static readonly Regex AlphabeticRegex = new("^[a-zA-Z0-9]*$", RegexOptions.Compiled);
 
