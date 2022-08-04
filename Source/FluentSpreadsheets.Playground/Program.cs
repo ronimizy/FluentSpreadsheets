@@ -56,7 +56,7 @@ var sheetBuilder = new SheetBuilder();
 IComponent sheet = sheetBuilder.Build(segments, sheetData);
 
 await RenderGoogleSheets();
-//await RenderXlm();
+//await RenderXlsx();
 
 async Task RenderGoogleSheets()
 {
@@ -93,7 +93,7 @@ async Task<int> GetSheetId(SheetsService service, string spreadsheetId, string t
     return googleSheet.Properties.SheetId!.Value;
 }
 
-async Task RenderXlm()
+async Task RenderXlsx()
 {
     var workbook = new XLWorkbook();
     var worksheet = workbook.AddWorksheet("Student Progress");
@@ -194,7 +194,7 @@ public class LabPointsSegment : PrototypeSheetSegmentBase<HeaderData, StudentPoi
         component = VStack
         (
             component,
-            Label("Хуй :)")
+            Label("UnderPoints")
         );
 
         component = HStack(component, Label("Peq").ScaledBy(3, Axis.Vertical));
