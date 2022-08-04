@@ -1,11 +1,16 @@
-﻿using System.Drawing;
-using System.Globalization;
+﻿using System.Globalization;
 using ClosedXML.Excel;
 using FluentSpreadsheets;
 using FluentSpreadsheets.ClosedXML.Rendering;
+using FluentSpreadsheets.GoogleSheets.Rendering;
 using FluentSpreadsheets.SheetBuilders;
 using FluentSpreadsheets.SheetSegments;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Services;
+using Google.Apis.Sheets.v4;
+using Google.Apis.Sheets.v4.Data;
 using static FluentSpreadsheets.ComponentFactory;
+using Color = System.Drawing.Color;
 
 var studentA = new Student("Aboba 1");
 var studentB = new Student("Aboba 2");
@@ -48,17 +53,58 @@ ISheetSegment<HeaderData, StudentPoints, HeaderData>[] segments =
 var sheetData = new SheetData<HeaderData, StudentPoints, HeaderData>(headerData, studentPoints, headerData);
 var sheetBuilder = new SheetBuilder();
 
-var sheet = sheetBuilder.Build(segments, sheetData);
+IComponent sheet = sheetBuilder.Build(segments, sheetData);
 
-var workbook = new XLWorkbook();
-var worksheet = workbook.AddWorksheet("Student Progress");
+await RenderGoogleSheets();
+//await RenderXlsx();
 
-var renderer = new ClosedXmlComponentRenderer();
-var renderCommand = new ClosedXmlRenderCommand(worksheet, sheet);
+async Task RenderGoogleSheets()
+{
+    const string jsonCredentials = "";
+    var credential = GoogleCredential.FromJson(jsonCredentials);
 
-await renderer.RenderAsync(renderCommand);
+    var initializer = new BaseClientService.Initializer
+    {
+        HttpClientInitializer = credential
+    };
 
-workbook.SaveAs("student-progress.xlsx");
+    var service = new SheetsService(initializer);
+    const string spreadsheetId = "";
+
+    var renderer = new GoogleSheetComponentRenderer(service);
+    
+    const string title = "";
+    int id = await GetSheetId(service, spreadsheetId, title);
+
+    var renderCommand = new GoogleSheetRenderCommand(spreadsheetId, id, title, sheet);
+
+    await renderer.RenderAsync(renderCommand);
+}
+
+async Task<int> GetSheetId(SheetsService service, string spreadsheetId, string title)
+{
+    Spreadsheet spreadSheet = await service.Spreadsheets
+        .Get(spreadsheetId)
+        .ExecuteAsync();
+
+    Sheet googleSheet = spreadSheet.Sheets.FirstOrDefault(s => s.Properties.Title == title)
+                         ?? throw new Exception("Sheet does not exist");
+    
+    return googleSheet.Properties.SheetId!.Value;
+}
+
+async Task RenderXlsx()
+{
+    var workbook = new XLWorkbook();
+    var worksheet = workbook.AddWorksheet("Student Progress");
+
+    var renderer = new ClosedXmlComponentRenderer();
+    var renderCommand = new ClosedXmlRenderCommand(worksheet, sheet);
+
+    await renderer.RenderAsync(renderCommand);
+
+    workbook.SaveAs("student-progress.xlsx");
+}
 
 public readonly record struct Student(string Name);
 
@@ -148,7 +194,7 @@ public class LabPointsSegment : PrototypeSheetSegmentBase<HeaderData, StudentPoi
         component = VStack
         (
             component,
-            Label("Хуй")
+            Label("UnderPoints")
         );
 
         component = HStack(component, Label("Peq").ScaledBy(3, Axis.Vertical));
