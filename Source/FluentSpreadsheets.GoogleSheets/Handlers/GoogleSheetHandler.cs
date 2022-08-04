@@ -6,7 +6,7 @@ using Google.Apis.Sheets.v4.Data;
 
 namespace FluentSpreadsheets.GoogleSheets.Handlers;
 
-internal class GoogleSheetHandler : IComponentVisitorHandler
+internal readonly struct GoogleSheetHandler : IComponentVisitorHandler
 {
     private const string UpdateFieldsAll = "*";
     private const string UpdateAlignment = "userEnteredFormat(horizontalAlignment, verticalAlignment)";
