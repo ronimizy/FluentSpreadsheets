@@ -1,5 +1,4 @@
-﻿using FluentSpreadsheets.GoogleSheets.Exceptions;
-using FluentSpreadsheets.GoogleSheets.Rendering;
+﻿using FluentSpreadsheets.GoogleSheets.Rendering;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
 
@@ -20,7 +19,7 @@ public class RenderCommandFactory : IRenderCommandFactory
         IComponent component,
         CancellationToken cancellationToken = default)
     {
-        int id = await GetSheetId(spreadsheetId, title, cancellationToken);
+        var id = await GetSheetId(spreadsheetId, title, cancellationToken);
         return new GoogleSheetRenderCommand(spreadsheetId, id, title, component);
     }
 
@@ -30,7 +29,7 @@ public class RenderCommandFactory : IRenderCommandFactory
         IComponent component,
         CancellationToken cancellationToken = default)
     {
-        string title = await GetSheetTitle(spreadsheetId, id, cancellationToken);
+        var title = await GetSheetTitle(spreadsheetId, id, cancellationToken);
         return new GoogleSheetRenderCommand(spreadsheetId, id, title, component);
     }
 
@@ -38,15 +37,15 @@ public class RenderCommandFactory : IRenderCommandFactory
     {
         IList<Sheet> sheets = await GetSheetsAsync(spreadsheetId, cancellationToken);
 
-        Sheet? sheet = sheets.FirstOrDefault(s => s.Properties.Title == title);
+        var sheet = sheets.FirstOrDefault(s => s.Properties.Title == title);
 
         if (sheet is null)
-            throw new GoogleSheetException($"Sheet with title {title} does not exist");
+            throw new GoogleSheetsException($"Sheet with title {title} does not exist");
 
-        int? sheetId = sheet.Properties.SheetId;
+        var sheetId = sheet.Properties.SheetId;
 
         if (sheetId is null)
-            throw new GoogleSheetException("Sheet id does not exist");
+            throw new GoogleSheetsException("Sheet id does not exist");
 
         return sheetId.Value;
     }
@@ -55,17 +54,17 @@ public class RenderCommandFactory : IRenderCommandFactory
     {
         IList<Sheet> sheets = await GetSheetsAsync(spreadsheetId, cancellationToken);
 
-        Sheet? sheet = sheets.FirstOrDefault(s => s.Properties.SheetId == id);
+        var sheet = sheets.FirstOrDefault(s => s.Properties.SheetId == id);
 
         if (sheet is null)
-            throw new GoogleSheetException($"Sheet with id {id} does not exist");
+            throw new GoogleSheetsException($"Sheet with id {id} does not exist");
 
-        return sheet.Properties.Title; 
+        return sheet.Properties.Title;
     }
 
     private async Task<IList<Sheet>> GetSheetsAsync(string spreadsheetId, CancellationToken cancellationToken)
     {
-        Spreadsheet spreadSheet =  await _sheetsService.Spreadsheets
+        var spreadSheet = await _sheetsService.Spreadsheets
             .Get(spreadsheetId)
             .ExecuteAsync(cancellationToken);
 

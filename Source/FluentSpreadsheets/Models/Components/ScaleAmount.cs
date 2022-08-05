@@ -11,7 +11,12 @@ public readonly struct ScaleAmount
 
     public ScaleAmount(int value)
     {
-        // TODO: Validation
+        if (value <= 0)
+        {
+            const string message = "Scale factor must be positive.";
+            throw new ValidationException(message);
+        }
+
         _value = value;
     }
 
