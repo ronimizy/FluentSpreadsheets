@@ -8,10 +8,9 @@ internal static class BorderExtensions
     public static Border? ToGoogleSheetsBorder(this BorderStyle borderStyle)
     {
         string? sheetsBorderStyle = GetGoogleSheetsBorderStyle(borderStyle.Type);
+
         if (sheetsBorderStyle is null)
-        {
             return null;
-        }
 
         return new Border
         {
@@ -41,9 +40,7 @@ internal static class BorderExtensions
     private static Color GetGoogleSheetsColor(SystemColor? color)
     {
         if (!color.HasValue)
-        {
             return new Color();
-        }
 
         return new Color
         {
