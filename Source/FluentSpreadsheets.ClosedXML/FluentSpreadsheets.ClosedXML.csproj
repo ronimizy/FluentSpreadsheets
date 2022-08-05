@@ -11,6 +11,7 @@
         <Title>FluentSpreadsheets.ClosedXML</Title>
         <Authors>ronimizy</Authors>
         <Description>An integration library for FluentSpreadsheets that provides an ability to render components using ClosedXML</Description>
+        <PackageProjectUrl>https://github.com/ronimizy/FluentSpreadsheets</PackageProjectUrl>
         <RepositoryUrl>https://github.com/ronimizy/FluentSpreadsheets</RepositoryUrl>
         <RepositoryType>github</RepositoryType>
         <PackageTags>spreadsheet;layout;closedxml;</PackageTags>
@@ -20,7 +21,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <PackageVersion>0.0.1-alpha</PackageVersion>
+        <PackageVersion>0.0.2-alpha</PackageVersion>
     </PropertyGroup>
 
     <ItemGroup>
