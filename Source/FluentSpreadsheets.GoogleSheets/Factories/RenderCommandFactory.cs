@@ -38,11 +38,13 @@ public class RenderCommandFactory : IRenderCommandFactory
     {
         IList<Sheet> sheets = await GetSheetsAsync(spreadsheetId, cancellationToken);
 
-        Sheet sheet = sheets.FirstOrDefault(s => s.Properties.Title == title)
-                            ?? throw new GoogleSheetException($"Sheet with title {title} does not exist");
+        Sheet? sheet = sheets.FirstOrDefault(s => s.Properties.Title == title);
+        if (sheet is null)
+        {
+            throw new GoogleSheetException($"Sheet with title {title} does not exist");
+        }
 
         int? sheetId = sheet.Properties.SheetId;
-
         if (sheetId is null)
         {
             throw new GoogleSheetException("Sheet id does not exist");
@@ -55,8 +57,11 @@ public class RenderCommandFactory : IRenderCommandFactory
     {
         IList<Sheet> sheets = await GetSheetsAsync(spreadsheetId, cancellationToken);
 
-        Sheet sheet = sheets.FirstOrDefault(s => s.Properties.SheetId == id)
-                      ?? throw new GoogleSheetException($"Sheet with id {id} does not exist");
+        Sheet? sheet = sheets.FirstOrDefault(s => s.Properties.SheetId == id);
+        if (sheet is null)
+        {
+            throw new GoogleSheetException($"Sheet with id {id} does not exist");
+        }
 
         return sheet.Properties.Title;
     }
