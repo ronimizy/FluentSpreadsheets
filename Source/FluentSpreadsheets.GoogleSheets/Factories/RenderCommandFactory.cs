@@ -56,12 +56,11 @@ public class RenderCommandFactory : IRenderCommandFactory
         IList<Sheet> sheets = await GetSheetsAsync(spreadsheetId, cancellationToken);
 
         Sheet? sheet = sheets.FirstOrDefault(s => s.Properties.SheetId == id);
-        if (sheet is null)
-        {
-            throw new GoogleSheetException($"Sheet with id {id} does not exist");
-        }
 
-        return sheet.Properties.Title;
+        if (sheet is null)
+            throw new GoogleSheetException($"Sheet with id {id} does not exist");
+
+        return sheet.Properties.Title; 
     }
 
     private async Task<IList<Sheet>> GetSheetsAsync(string spreadsheetId, CancellationToken cancellationToken)
