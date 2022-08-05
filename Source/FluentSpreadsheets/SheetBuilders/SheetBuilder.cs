@@ -27,8 +27,10 @@ public class SheetBuilder : ISheetBuilder
             rows.Add(row);
 
             if (!rows[i].Length.Equals(headerCount))
-                // TODO: Proper exception
-                throw new Exception();
+            {
+                const string message = "Row component amount must be equal to header component amount.";
+                throw new InvalidStructureException(message);
+            }
 
             i++;
         }
@@ -40,8 +42,10 @@ public class SheetBuilder : ISheetBuilder
             .ToArray();
 
         if (!footers.Length.Equals(headerCount))
-            // TODO: Proper exception
-            throw new Exception();
+        {
+            const string message = "Footer component amount must be equal to header component amount.";
+            throw new InvalidStructureException(message);
+        }
 
         ScaleColumns(headerCount, rows, headers, footers);
         var headerHeight = ScaleHeaderRow(headers);
