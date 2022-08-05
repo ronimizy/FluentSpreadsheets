@@ -165,9 +165,9 @@ you need to use `IComponentVisitor`.
 
   const string spreadsheetId = "SampleSpreadsheetId";
   const string title = "SampleTitle";
-  const int id = 103232323;
 
-  var renderCommand = new GoogleSheetRenderCommand(spreadsheetId, id, title, helloComponent);
+  var renderCommandFactory = new RenderCommandFactory(service);
+  var renderCommand = await renderCommandFactory.CreateAsync(spreadsheetId, title, helloComponent);
 
   await renderer.RenderAsync(renderCommand);
   ```
