@@ -38,10 +38,10 @@ public class RenderCommandFactory : IRenderCommandFactory
     {
         IList<Sheet> sheets = await GetSheetsAsync(spreadsheetId, cancellationToken);
 
-        Sheet googleSheet = sheets.FirstOrDefault(s => s.Properties.Title == title)
+        Sheet sheet = sheets.FirstOrDefault(s => s.Properties.Title == title)
                             ?? throw new GoogleSheetException($"Sheet with title {title} does not exist");
 
-        int? sheetId = googleSheet.Properties.SheetId;
+        int? sheetId = sheet.Properties.SheetId;
 
         if (sheetId is null)
         {
@@ -55,10 +55,10 @@ public class RenderCommandFactory : IRenderCommandFactory
     {
         IList<Sheet> sheets = await GetSheetsAsync(spreadsheetId, cancellationToken);
 
-        Sheet googleSheet = sheets.FirstOrDefault(s => s.Properties.SheetId == id)
-                            ?? throw new GoogleSheetException($"Sheet with id {id} does not exist");
+        Sheet sheet = sheets.FirstOrDefault(s => s.Properties.SheetId == id)
+                      ?? throw new GoogleSheetException($"Sheet with id {id} does not exist");
 
-        return googleSheet.Properties.Title;
+        return sheet.Properties.Title;
     }
 
     private async Task<IList<Sheet>> GetSheetsAsync(string spreadsheetId, CancellationToken cancellationToken)
