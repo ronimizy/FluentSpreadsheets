@@ -11,6 +11,7 @@
 		<Title>FluentSpreadsheets.GoogleSheets</Title>
 		<Authors>ronimizy</Authors>
 		<Description>An integration library for FluentSpreadsheets that provides an ability to render components using Google Sheets API v4</Description>
+		<PackageProjectUrl>https://github.com/ronimizy/FluentSpreadsheets</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/ronimizy/FluentSpreadsheets</RepositoryUrl>
 		<RepositoryType>github</RepositoryType>
 		<PackageTags>spreadsheet;layout;google;</PackageTags>
