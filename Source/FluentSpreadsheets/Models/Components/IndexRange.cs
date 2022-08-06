@@ -11,7 +11,7 @@ public readonly struct IndexRange
     {
         if (start.Row > end.Row || start.Column > end.Column)
         {
-            const string message = "IndexRange start shouldn't be greater, than the end.";
+            const string message = "IndexRange start must precede or equal to the end.";
             throw new ValidationException(message);
         }
 
