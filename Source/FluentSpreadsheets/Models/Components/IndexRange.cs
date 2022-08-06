@@ -9,9 +9,9 @@ public readonly struct IndexRange
 {
     public IndexRange(Index start, Index end)
     {
-        if (start.Row <= end.Row || start.Column <= end.Column)
+        if (start.Row > end.Row || start.Column > end.Column)
         {
-            const string message = "IndexRange start must precede end.";
+            const string message = "IndexRange start must precede or be equal to the end.";
             throw new ValidationException(message);
         }
 
