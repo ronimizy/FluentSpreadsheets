@@ -10,8 +10,8 @@ internal static class DimensionRangeFactory
         return new DimensionRange
         {
             Dimension = dimension,
-            StartIndex = startIndex,
-            EndIndex = endIndex,
+            StartIndex = startIndex - 1,
+            EndIndex = endIndex - 1,
             SheetId = sheetId
         };
     }
