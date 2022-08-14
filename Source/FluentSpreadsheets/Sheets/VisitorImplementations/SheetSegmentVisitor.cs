@@ -146,7 +146,7 @@ internal class SheetSegmentVisitor<THeaderData, TRowData, TFooterData> :
         IList<IList<IComponent>> rows,
         IList<IComponent> footers)
     {
-        IEnumerable<int> rowWidthEnumerable = Enumerable.Empty<int>();
+        var rowWidthEnumerable = Enumerable.Empty<int>();
 
         if (headers.Count is not 0)
             rowWidthEnumerable = rowWidthEnumerable.Append(headers[i].Size.Width);

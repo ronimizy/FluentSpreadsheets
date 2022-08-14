@@ -19,9 +19,7 @@ public class SheetBuilder : ISheetBuilder
             .Select(x => new HStackComponent(x))
             .ToArray();
 
-        var width = segments
-            .Select(x => x.RowComponents.Count is 0 ? 0 : x.RowComponents[0].Size.Width)
-            .Sum();
+        var width = segments.Sum(x => x.RowComponents.Count is 0 ? 0 : x.RowComponents[0].Size.Width);
 
         return new VStackComponent(rows, width);
     }
@@ -32,14 +30,11 @@ public class SheetBuilder : ISheetBuilder
         IReadOnlyCollection<TRowData> rowData)
     {
         var visitor = new SheetSegmentVisitor<THeaderData, TRowData, Unit>(headerData, rowData, Unit.Value);
-        
+
         SheetSegmentModel[] segments = builders.Select(visitor.BuildSheetSegment).ToArray();
 
         if (segments.Any(x => x.HeaderComponent is null))
-        {
-            const string message = "Header component cannot be null";
-            throw new InvalidStructureException(message);
-        }
+            throw new InvalidStructureException("Header component cannot be null");
 
         IEnumerable<IComponent> headerComponents = segments.Select(x => x.HeaderComponent!);
         var header = new HStackComponent(headerComponents);
@@ -62,27 +57,21 @@ public class SheetBuilder : ISheetBuilder
         TFooterData footerData)
     {
         var visitor = new SheetSegmentVisitor<THeaderData, TRowData, TFooterData>(headerData, rowData, footerData);
-        
+
         SheetSegmentModel[] sheetSegments = segments.Select(visitor.BuildSheetSegment).ToArray();
-        
+
         if (sheetSegments.Any(x => x.HeaderComponent is null))
-        {
-            const string message = "Header component cannot be null";
-            throw new InvalidStructureException(message);
-        }
-        
+            throw new InvalidStructureException("Header component cannot be null");
+
         if (sheetSegments.Any(x => x.FooterComponent is null))
-        {
-            const string message = "Footer component cannot be null";
-            throw new InvalidStructureException(message);
-        }
-        
+            throw new InvalidStructureException("Footer component cannot be null");
+
         IEnumerable<IComponent> headerComponents = sheetSegments.Select(x => x.HeaderComponent!);
         var header = new HStackComponent(headerComponents);
-        
+
         IEnumerable<IComponent> footerComponents = sheetSegments.Select(x => x.FooterComponent!);
         var footer = new HStackComponent(footerComponents);
-        
+
         IEnumerable<HStackComponent> rows = Enumerable.Range(0, rowData.Count)
             .Select(i => sheetSegments.Select(s => s.RowComponents[i]))
             .Select(x => new HStackComponent(x));
@@ -91,7 +80,7 @@ public class SheetBuilder : ISheetBuilder
             .Concat(rows)
             .Append(footer)
             .ToArray();
-        
+
         return new VStackComponent(components, header.Size.Width);
     }
 }
