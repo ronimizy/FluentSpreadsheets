@@ -137,7 +137,7 @@ internal class SheetSegmentVisitor<THeaderData, TRowData, TFooterData> :
     private static IComponent ScaledComponent(IComponent component, int width)
     {
         var scaleFactor = width / component.Size.Width;
-        return scaleFactor is 1 ? component : new ScaledComponent(component, new Scale(scaleFactor, 1));
+        return scaleFactor is 1 ? component : component.ScaledBy(scaleFactor, Axis.Horizontal);
     }
 
     private static int CountRowWidth(
