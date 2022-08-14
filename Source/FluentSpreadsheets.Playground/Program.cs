@@ -5,11 +5,11 @@ using FluentSpreadsheets.ClosedXML.Rendering;
 using FluentSpreadsheets.GoogleSheets.Factories;
 using FluentSpreadsheets.GoogleSheets.Rendering;
 using FluentSpreadsheets.SheetBuilders;
-using FluentSpreadsheets.SheetSegments;
+using FluentSpreadsheets.Sheets;
+using FluentSpreadsheets.Sheets.Segments;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
-using Google.Apis.Sheets.v4.Data;
 using static FluentSpreadsheets.ComponentFactory;
 using Color = System.Drawing.Color;
 
@@ -44,20 +44,19 @@ Lab[] labs = { lab1, lab2 };
 
 var headerData = new HeaderData(labs);
 
-ISheetSegment<HeaderData, StudentPoints, HeaderData>[] segments =
+ISheetSegment[] segments =
 {
-    new NumberSegment(),
-    new StudentNameSegment(),
-    new LabPointsSegment(),
+    new NumberSegmentBuilder(),
+    new StudentNameSegmentBuilder(),
+    new LabPointsSegmentBuilder(),
 };
 
-var sheetData = new SheetData<HeaderData, StudentPoints, HeaderData>(headerData, studentPoints, headerData);
 var sheetBuilder = new SheetBuilder();
 
-IComponent sheet = sheetBuilder.Build(segments, sheetData);
+var sheet = sheetBuilder.Build(segments, headerData, studentPoints);
 
-await RenderGoogleSheets();
-//await RenderXlsx();
+// await RenderGoogleSheets();
+await RenderXlsx();
 
 async Task RenderGoogleSheets()
 {
@@ -106,9 +105,9 @@ public readonly record struct StudentPoints(Student Student, IReadOnlyCollection
 
 public readonly record struct HeaderData(IReadOnlyCollection<Lab> Labs);
 
-public class NumberSegment : SheetSegmentBase<HeaderData, StudentPoints, HeaderData>
+public class NumberSegmentBuilder : HeaderRowSegmentBase<HeaderData, StudentPoints>
 {
-    protected override IComponent BuildHeader(HeaderData data)
+    public override IComponent BuildHeader(HeaderData data)
     {
         return Label("#")
             .WithContentAlignment(HorizontalAlignment.Center, VerticalAlignment.Center)
@@ -116,7 +115,7 @@ public class NumberSegment : SheetSegmentBase<HeaderData, StudentPoints, HeaderD
             .WithBottomBorder(BorderType.Thin, Color.Black);
     }
 
-    protected override IComponent BuildRow(HeaderRowData<HeaderData, StudentPoints> data, int rowIndex)
+    public override IComponent BuildRow(StudentPoints data, int rowIndex)
     {
         return Label((rowIndex + 1).ToString())
             .WithContentAlignment(HorizontalAlignment.Center, VerticalAlignment.Center)
@@ -125,9 +124,9 @@ public class NumberSegment : SheetSegmentBase<HeaderData, StudentPoints, HeaderD
     }
 }
 
-public class StudentNameSegment : SheetSegmentBase<HeaderData, StudentPoints, HeaderData>
+public class StudentNameSegmentBuilder : HeaderRowSegmentBase<HeaderData, StudentPoints>
 {
-    protected override IComponent BuildHeader(HeaderData data)
+    public override IComponent BuildHeader(HeaderData data)
     {
         return Label("Student Name")
             .WithColumnWidth(30)
@@ -136,18 +135,19 @@ public class StudentNameSegment : SheetSegmentBase<HeaderData, StudentPoints, He
             .WithBottomBorder(BorderType.Thin, Color.Black);
     }
 
-    protected override IComponent BuildRow(HeaderRowData<HeaderData, StudentPoints> data, int rowIndex)
+    public override IComponent BuildRow(StudentPoints data, int rowIndex)
     {
-        return Label(data.RowData.Student.Name)
+        return Label(data.Student.Name)
             .WithContentAlignment(HorizontalAlignment.Center, VerticalAlignment.Center)
             .WithTrailingBorder(BorderType.Thin, Color.Black)
             .WithBottomBorder(BorderType.Thin, Color.Black);
     }
 }
 
-public class LabPointsSegment : PrototypeSheetSegmentBase<HeaderData, StudentPoints, HeaderData, Lab, LabPoints?>
+public class LabPointsSegmentBuilder : PrototypeHeaderRowSegmentBase<HeaderData, Lab, HeaderRowData<Lab, StudentPoints>>,
+    IPrototypeSegmentHeaderCustomizer<HeaderData>
 {
-    protected override IComponent BuildHeader(Lab data)
+    public override IComponent BuildHeader(Lab data)
     {
         return VStack
         (
@@ -173,60 +173,17 @@ public class LabPointsSegment : PrototypeSheetSegmentBase<HeaderData, StudentPoi
         ).WithTrailingBorder(BorderType.Thin, Color.Black);
     }
 
-    protected override IComponent BuildRow(HeaderRowData<Lab, LabPoints?> data, int rowIndex)
+    public override IComponent BuildRow(HeaderRowData<Lab, StudentPoints> data, int rowIndex)
     {
-        LabPoints? points = data.RowData;
+        var labId = data.HeaderData.Id;
+        LabPoints? points = data.RowData.LabPoints.SingleOrDefault(x => x.LabId.Equals(labId));
+
+        if (points.Equals(default))
+            points = null;
 
         var component = points is null
             ? Empty()
             : Label(points.Value.Points, CultureInfo.InvariantCulture);
-
-        component = VStack
-        (
-            component,
-            Label("UnderPoints")
-        );
-
-        component = HStack(component, Label("Peq").ScaledBy(3, Axis.Vertical));
-
-        component = VStack
-        (
-            component,
-            HStack(
-                Label("LOW"),
-                VStack
-                (
-                    Label("1"),
-                    HStack
-                    (
-                        Label("2"),
-                        VStack
-                        (
-                            Label("3"),
-                            HStack
-                            (
-                                VStack
-                                (
-                                    Label("4"),
-                                    HStack
-                                    (
-                                        Label("5.1").ScaledBy(3, Axis.Vertical),
-                                        VStack
-                                        (
-                                            Label("6")
-                                        )
-                                    )
-                                ),
-                                VStack
-                                (
-                                    Label("5")
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        );
 
         return component
             .WithContentAlignment(HorizontalAlignment.Center, VerticalAlignment.Center)
@@ -234,12 +191,18 @@ public class LabPointsSegment : PrototypeSheetSegmentBase<HeaderData, StudentPoi
             .WithBottomBorder(BorderType.Thin, Color.Black);
     }
 
-    protected override IEnumerable<Lab> SelectHeaderData(HeaderData data)
+    public override IEnumerable<Lab> Select(HeaderData data)
         => data.Labs;
 
-    protected override LabPoints? SelectRowData(HeaderRowData<Lab, StudentPoints> data)
+    public IComponent CustomizeHeader(IComponent component, HeaderData data)
     {
-        var points = data.RowData.LabPoints.SingleOrDefault(x => x.LabId.Equals(data.HeaderData.Id));
-        return points.Equals(default) ? null : points;
+        return VStack
+        (
+            Label("Labs")
+                .WithContentAlignment(HorizontalAlignment.Center, VerticalAlignment.Center)
+                .WithBottomBorder(BorderType.Thin, Color.Black)
+                .WithTrailingBorder(BorderType.Thin, Color.Black),
+            component
+        );
     }
 }
