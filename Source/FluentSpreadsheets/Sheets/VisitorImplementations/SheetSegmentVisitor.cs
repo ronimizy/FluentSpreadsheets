@@ -76,7 +76,7 @@ internal class SheetSegmentVisitor<THeaderData, TRowData, TFooterData> :
 
         if (rowComponents.Count is not 0)
         {
-            var convertedRows = ConvertRowsFromSegmentGroupingToRowGrouping(rowComponents, _rowData.Count);
+            var convertedRows = TransposeRows(rowComponents, _rowData.Count);
 
             rows = convertedRows
                 .Select(x => (IComponent)new HStackComponent(x))
@@ -161,7 +161,7 @@ internal class SheetSegmentVisitor<THeaderData, TRowData, TFooterData> :
         return rowWidth;
     }
 
-    private static IEnumerable<IEnumerable<IComponent>> ConvertRowsFromSegmentGroupingToRowGrouping(
+    private static IEnumerable<IEnumerable<IComponent>> TransposeRows(
         IList<IList<IComponent>> rows,
         int length)
     {
