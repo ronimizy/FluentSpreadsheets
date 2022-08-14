@@ -3,8 +3,8 @@ using FluentSpreadsheets.Sheets.Visitors;
 
 namespace FluentSpreadsheets.Sheets;
 
-public abstract class PrototypeHeaderRowFooterSegmentBase<THeaderSource, THeaderDestination, TRowData, TFooterData> :
-    HeaderRowFooterSegmentBase<THeaderDestination, TRowData, TFooterData>,
+public abstract class PrototypeSegmentBase<THeaderSource, THeaderDestination, TRowData, TFooterData> :
+    SegmentBase<THeaderDestination, TRowData, TFooterData>,
     IPrototypeHeaderSegment<THeaderSource, THeaderDestination>
 {
     public abstract IEnumerable<THeaderDestination> Select(THeaderSource source);

@@ -3,7 +3,7 @@ using FluentSpreadsheets.Sheets.Visitors;
 
 namespace FluentSpreadsheets.Sheets;
 
-public abstract class HeaderRowFooterSegmentBase<THeaderData, TRowData, TFooterData> :
+public abstract class SegmentBase<THeaderData, TRowData, TFooterData> :
     IHeaderRowFooterSegment<THeaderData, TRowData, TFooterData>
 {
     public abstract IComponent BuildHeader(THeaderData data);
