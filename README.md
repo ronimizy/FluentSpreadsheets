@@ -179,26 +179,17 @@ you need to use `IComponentRenderer<T>`.
 There are two main kinds of sheet segments:
 
 - A segment that consists of a single data column:
-  - `SegmentBase`
-  - `RowSegmentBase`
-  - `HeaderRowSegmentBase`
+  - `SegmentBase`\
+    Headers, rows, footer
+  - `RowSegmentBase`\
+    Rows
+  - `HeaderRowSegmentBase`\
+    Header, rows
 - A segment that can represent a collection of data columns:
-  - `PrototypeSegmentBase`
-  - `PrototypeHeaderRowSegmentBase`
-  
-
-### SegmentBase
-
-- Requires you to implement 3 methods
-    - `IComponent BuildHeader(THeaderData data)`
-    - `IComponent BuildRow(HeaderRowData<THeaderData, TRowData> data, int rowIndex)`
-    - `IComponent BuildFooter(HeaderFooterData<THeaderData, TFooterData> data)`
-
-### HeaderRowSegmentBase
-
-- Requires you to implement 2 methods
-    - `IComponent BuildHeader(THeaderData data)`
-    - `IComponent BuildRow(HeaderRowData<THeaderData, TRowData> data, int rowIndex)`
+  - `PrototypeSegmentBase`\
+    Headers, rows, footer
+  - `PrototypeHeaderRowSegmentBase`\
+    Headers, rows
 
 ### PrototypeSegmentBase
 
@@ -210,11 +201,6 @@ you must implement `IEnumerable<TSourceHeaderData> SelectHeaderData(THeaderData 
 of header data that prototypes will use from general header data.
 
 You also can implement `IPrototypeSegmentHeaderCustomizer<TData>` and customize header component (all header components in an `HStack`), all changes allowed, except ones that will increase header's width.
-
-### PrototypeHeaderRowSegmentBase
-
-Works like PrototypeSegmentBase, but there is no footer and you must implement \
-`IEnumerable<TDestinationHeaderData> Select(TSourceHeaderData source)`
 
 ### SheetBuilder
 
