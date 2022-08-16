@@ -210,7 +210,7 @@ of header data that prototypes will use from general header data.
 
 You also can implement `IPrototypeSegmentHeaderCustomizer<TData>` and customize header component (all header components in an `HStack`), all changes allowed, except ones that will increase header's width.
 
-### PrototypeSegmentBase
+### PrototypeHeaderRowSegmentBase
 
 Works like PrototypeSegmentBase, but there is no footer and you must implement \
 `IEnumerable<TDestinationHeaderData> Select(TSourceHeaderData source)`
