@@ -50,7 +50,7 @@ class `ComponentFactory`.
 
 #### Hint
 
-> You can import static members of `ComponentFactory` for clener code.
+> You can import static members of `ComponentFactory` for cleaner code.
 > ```csharp
 > using static FluentSpreadsheets.ComponentFactory;
 > ```
@@ -106,7 +106,7 @@ class `ComponentFactory`.
 ### Output
 
 Code above will only produce component composition stored as objects in memory. To render it on the sheet,
-you need to use `IComponentVisitor`.
+you need to use `IComponentRenderer<T>`.
 
 #### Now supported:
 
@@ -114,7 +114,6 @@ you need to use `IComponentVisitor`.
   ```csharp
   var workbook = new XLWorkbook();
   var worksheet = workbook.AddWorksheet("Sample");
-  var xlVisitor = new ClosedXmlVisitor(worksheet, new Index(1, 1));
   
   var helloComponent =
       VStack
@@ -149,7 +148,7 @@ you need to use `IComponentVisitor`.
   };
 
   var service = new SheetsService(initializer);
-  var renderer = new GoogleSheetComponentRenderer(service);  
+  var renderer = new GoogleSheetComponentRenderer(service);
   
   var helloComponent =
       VStack
@@ -177,69 +176,55 @@ you need to use `IComponentVisitor`.
   ```
 ## Sheets API
 
-The base unit of sheets API is `ISheetSegment` interface, it provides an interface to get components for different
-sheet section parts (header, rows, footer).
-
-```csharp
-public interface ISheetSegment<THeaderData, TRowData, TFooterData>
-{
-    IEnumerable<IComponent> BuildHeaders(THeaderData data);
-
-    IEnumerable<IComponent> BuildRows(HeaderRowData<THeaderData, TRowData> data, int rowIndex);
-    
-    IEnumerable<IComponent> BuildFooters(HeaderFooterData<THeaderData, TFooterData> data);
-}
-```
-
 There are two main kinds of sheet segments:
 
-- Plain `SheetSegmentBase`\
-  A segment that consists of a single data column.
-- A `PrototypeSheetSegmentBase`\
-  A segment that can represent a collection of data columns.\
+- A segment that consists of a single data column:
+  - `SegmentBase`\
+    Headers, rows, footer
+  - `RowSegmentBase`\
+    Rows
+  - `HeaderRowSegmentBase`\
+    Header, rows
+- A segment that can represent a collection of data columns:
+  - `PrototypeSegmentBase`\
+    Headers, rows, footer
+  - `PrototypeHeaderRowSegmentBase`\
+    Headers, rows
 
-### SheetSegmentBase
+### PrototypeSegmentBase
 
-- Requires you to implement 2 methods
-    - `IComponent BuildHeader(THeaderData data)`
-    - `IComponent BuildRow(HeaderRowData<THeaderData, TRowData> data, int rowIndex)`
-- With an option to overload
-    - `IComponent BuildFooter(HeaderFooterData<THeaderData, TFooterData> data)`
-
-### PrototypeSheetSegmentBase
-
-Prototype sheet segments are useful when you table may have a dynamic amount of columns depending on the data that has
+Prototype sheet segments are useful when your table may have a dynamic amount of columns depending on the data that has
 been provided.
 
-To be a part of a sheet segment collection, prototype must implement `ISheetSegment<THeaderData, TRowData, TFooterData>`
-interface,
-just like any other static sheet segment. But prototype segment must have a collection of header data to create multiple
-segments, so
-you must implement `IEnumerable<TPrototypeHeaderData> SelectHeaderData(THeaderData data)` method to extract collection
-of header data
-that prototypes will use from general header data.
+Prototype segment must have a collection of header data to create multiple segments, so
+you must implement `IEnumerable<TSourceHeaderData> SelectHeaderData(THeaderData data)` method to extract collection
+of header data that prototypes will use from general header data.
 
-``PrototypeSheetSegmentBase`6`` also requires you to implement:
-
-- `TPrototypeRowData SelectRowData(HeaderRowData<TPrototypeHeaderData, TRowData> data)`
-- `TPrototypeFooterData SelectFooterData(HeaderFooterData<TPrototypeHeaderData, TFooterData> data)`
-
-But there are overloads ``PrototypeSheetSegmentBase`4`` and ``PrototypeSheetSegmentBase`5`` that only
-require `SelectHeaderData` and `SelectHeaderData` + `SelectRowData` methods respectively.
+You also can implement `IPrototypeSegmentHeaderCustomizer<TData>` and customize header component (all header components in an `HStack`), all changes allowed, except ones that will increase header's width.
 
 ### SheetBuilder
 
 The type `SheetBuilder` that conforms to `ISheetBuilder` interface is used to build a sheet from collection of sheet
-segments and
-corresponding sheet data.
+segments and corresponding sheet data.
 
 ```csharp
 public interface ISheetBuilder
 {
+    IComponent Build<TRowData>(
+        IReadOnlyCollection<ISheetSegment> builders,
+        IReadOnlyCollection<TRowData> rowData);
+
+    IComponent Build<THeaderData, TRowData>(
+        IReadOnlyCollection<ISheetSegment> builders,
+        THeaderData headerData,
+        IReadOnlyCollection<TRowData> rowData);
+
     IComponent Build<THeaderData, TRowData, TFooterData>(
-        IReadOnlyCollection<ISheetSegment<THeaderData, TRowData, TFooterData>> segments,
-        SheetData<THeaderData, TRowData, TFooterData> data);
+        IReadOnlyCollection<ISheetSegment> segments,
+        THeaderData headerData,
+        IReadOnlyCollection<TRowData> rowData,
+        TFooterData footerData);
 }
 ```
 
-It's `.Build` method returns a component which is a rectangle that represents table built from given data.
+Each `.Build` method returns a component which is a rectangle that represents table built from given data.
