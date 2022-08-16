@@ -208,7 +208,7 @@ Prototype segment must have a collection of header data to create multiple segme
 you must implement `IEnumerable<TSourceHeaderData> SelectHeaderData(THeaderData data)` method to extract collection
 of header data that prototypes will use from general header data.
 
-You also can implement `IPrototypeSegmentHeaderCustomizer<TData>` and customize header, which will be shown over all cells. 
+You also can implement `IPrototypeSegmentHeaderCustomizer<TData>` and customize header component (all header components in an `HStack`), all changes allowed, except ones that will increase header's width.
 
 ### PrototypeSegmentBase
 
