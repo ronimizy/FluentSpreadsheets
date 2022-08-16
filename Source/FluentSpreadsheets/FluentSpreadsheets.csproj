@@ -21,8 +21,8 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <PackageVersion>0.0.3-alpha</PackageVersion>
-        <PackageReleaseNotes>Fixed index range validation</PackageReleaseNotes>
+        <PackageVersion>0.1.0-alpha</PackageVersion>
+        <PackageReleaseNotes>New sheet building API</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
