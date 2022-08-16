@@ -191,7 +191,7 @@ public class LabPointsSegmentBuilder : PrototypeHeaderRowSegmentBase<HeaderData,
             .WithBottomBorder(BorderType.Thin, Color.Black);
     }
 
-    public override IEnumerable<Lab> Select(HeaderData data)
+    public override IEnumerable<Lab> SelectHeaderData(HeaderData data)
         => data.Labs;
 
     public IComponent CustomizeHeader(IComponent component, HeaderData data)

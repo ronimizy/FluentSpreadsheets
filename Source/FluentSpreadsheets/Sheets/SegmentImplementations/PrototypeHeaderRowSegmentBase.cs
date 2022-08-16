@@ -7,7 +7,7 @@ public abstract class PrototypeHeaderRowSegmentBase<TSourceHeaderData, TDestinat
     HeaderRowSegmentBase<TDestinationHeaderData, TRowData>,
     IPrototypeHeaderSegment<TSourceHeaderData, TDestinationHeaderData>
 {
-    public abstract IEnumerable<TDestinationHeaderData> Select(TSourceHeaderData source);
+    public abstract IEnumerable<TDestinationHeaderData> SelectHeaderData(TSourceHeaderData source);
 
     public override void Accept(ISheetSegmentVisitor visitor)
     {

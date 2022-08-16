@@ -51,7 +51,7 @@ internal class SheetSegmentVisitor<THeaderData, TRowData, TFooterData> :
 
     public void Visit<TDestination>(IPrototypeHeaderSegment<THeaderData, TDestination> builder)
     {
-        TDestination[] data = builder.Select(_headerData).ToArray();
+        TDestination[] data = builder.SelectHeaderData(_headerData).ToArray();
 
         var headerVisitor = new PrototypeHeaderSegmentVisitor<TDestination>(data);
         var rowVisitor = new PrototypeRowSegmentVisitor<TDestination, TRowData>(data, _rowData);
