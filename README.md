@@ -180,6 +180,7 @@ There are two main kinds of sheet segments:
 
 - A segment that consists of a single data column:
   - `SegmentBase`
+  - `RowSegmentBase`
   - `HeaderRowSegmentBase`
 - A segment that can represent a collection of data columns:
   - `PrototypeSegmentBase`
