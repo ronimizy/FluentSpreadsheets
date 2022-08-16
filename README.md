@@ -188,7 +188,7 @@ There are two main kinds of sheet segments:
 
 ### SegmentBase
 
-- Requires you to implement 2 methods
+- Requires you to implement 3 methods
     - `IComponent BuildHeader(THeaderData data)`
     - `IComponent BuildRow(HeaderRowData<THeaderData, TRowData> data, int rowIndex)`
     - `IComponent BuildFooter(HeaderFooterData<THeaderData, TFooterData> data)`
