@@ -1,6 +1,7 @@
 ﻿using FluentSpreadsheets.GoogleSheets.Extensions;
 using FluentSpreadsheets.GoogleSheets.Factories;
 using FluentSpreadsheets.GoogleSheets.Models;
+using FluentSpreadsheets.Styles;
 using FluentSpreadsheets.Visitors;
 using Google.Apis.Sheets.v4.Data;
 
@@ -39,8 +40,8 @@ internal readonly struct GoogleSheetHandler : IComponentVisitorHandler
             MergeCells = new MergeCellsRequest
             {
                 Range = range.ToGridRange(_id),
-                MergeType = MergeType.All
-            }
+                MergeType = MergeType.All,
+            },
         };
 
         StyleRequests.Add(mergeCellsRequest);
@@ -54,39 +55,46 @@ internal readonly struct GoogleSheetHandler : IComponentVisitorHandler
 
     public void StyleRange(Style style, IndexRange range)
     {
-        var cellData = new CellData
+        if (style.Alignment is not null)
         {
-            UserEnteredFormat = new CellFormat
+            var cellData = new CellData
             {
-                HorizontalAlignment = style.Alignment.Horizontal.ToGoogleSheetsAlignment(),
-                VerticalAlignment = style.Alignment.Vertical.ToGoogleSheetsAlignment()
-            }
-        };
+                UserEnteredFormat = new CellFormat
+                {
+                    HorizontalAlignment = style.Alignment.Value.Horizontal?.ToGoogleSheetsAlignment(),
+                    VerticalAlignment = style.Alignment.Value.Vertical?.ToGoogleSheetsAlignment(),
+                },
+            };
 
-        var setAlignmentRequest = new Request
+            var setAlignmentRequest = new Request
+            {
+                RepeatCell = new RepeatCellRequest
+                {
+                    Cell = cellData,
+                    Range = range.ToGridRange(_id),
+                    Fields = UpdateAlignment,
+                },
+            };
+
+            StyleRequests.Add(setAlignmentRequest);
+        }
+
+        if (style.Border is not null)
         {
-            RepeatCell = new RepeatCellRequest
+            var updateBordersRequest = new Request
             {
-                Cell = cellData,
-                Range = range.ToGridRange(_id),
-                Fields = UpdateAlignment
-            }
-        };
+                UpdateBorders = new UpdateBordersRequest
+                {
+                    Top = style.Border.Value.Top?.ToGoogleSheetsBorder(),
+                    Bottom = style.Border.Value.Bottom?.ToGoogleSheetsBorder(),
+                    Left = style.Border.Value.Leading?.ToGoogleSheetsBorder(),
+                    Right = style.Border.Value.Trailing?.ToGoogleSheetsBorder(),
+                    Range = range.ToGridRange(_id),
+                },
+            };
 
-        var updateBordersRequest = new Request
-        {
-            UpdateBorders = new UpdateBordersRequest
-            {
-                Top = style.Border.Top.ToGoogleSheetsBorder(),
-                Bottom = style.Border.Bottom.ToGoogleSheetsBorder(),
-                Left = style.Border.Leading.ToGoogleSheetsBorder(),
-                Right = style.Border.Trailing.ToGoogleSheetsBorder(),
-                Range = range.ToGridRange(_id)
-            }
-        };
-
-        StyleRequests.Add(setAlignmentRequest);
-        StyleRequests.Add(updateBordersRequest);
+            StyleRequests.Add(updateBordersRequest);
+        }
     }
 
     public void WriteString(Index index, string value)
@@ -95,9 +103,9 @@ internal readonly struct GoogleSheetHandler : IComponentVisitorHandler
         {
             Values = new List<IList<object>>
             {
-                new List<object> { value }
+                new List<object> { value },
             },
-            Range = index.ToGoogleSheetsIndex(_name)
+            Range = index.ToGoogleSheetsIndex(_name),
         };
 
         ValueRanges.Add(valueRange);
@@ -111,8 +119,8 @@ internal readonly struct GoogleSheetHandler : IComponentVisitorHandler
         {
             AutoResizeDimensions = new AutoResizeDimensionsRequest
             {
-                Dimensions = dimensionRange
-            }
+                Dimensions = dimensionRange,
+            },
         };
 
         StyleRequests.Add(adjustDimensionRequest);
@@ -121,20 +129,16 @@ internal readonly struct GoogleSheetHandler : IComponentVisitorHandler
     private void SetDimensionSize(Dimension dimension, int startIndex, int endIndex, int pixelSize)
     {
         var dimensionRange = DimensionRangeFactory.Create(dimension, startIndex, endIndex, _id);
+        var dimensionProperties = new DimensionProperties { PixelSize = pixelSize };
 
-        var dimensionProperties = new DimensionProperties
-        {
-            PixelSize = pixelSize
-        };
-
-        var setSizeRequest =  new Request
+        var setSizeRequest = new Request
         {
             UpdateDimensionProperties = new UpdateDimensionPropertiesRequest
             {
                 Properties = dimensionProperties,
                 Range = dimensionRange,
-                Fields = UpdateFieldsAll
-            }
+                Fields = UpdateFieldsAll,
+            },
         };
 
         StyleRequests.Add(setSizeRequest);

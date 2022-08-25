@@ -1,4 +1,5 @@
-﻿using Google.Apis.Sheets.v4.Data;
+﻿using FluentSpreadsheets.Styles;
+using Google.Apis.Sheets.v4.Data;
 using SystemColor = System.Drawing.Color;
 
 namespace FluentSpreadsheets.GoogleSheets.Extensions;
@@ -7,7 +8,7 @@ internal static class BorderExtensions
 {
     public static Border? ToGoogleSheetsBorder(this BorderStyle borderStyle)
     {
-        string? sheetsBorderStyle = GetGoogleSheetsBorderStyle(borderStyle.Type);
+        var sheetsBorderStyle = GetGoogleSheetsBorderStyle(borderStyle.Type);
 
         if (sheetsBorderStyle is null)
             return null;
@@ -17,12 +18,12 @@ internal static class BorderExtensions
             Style = sheetsBorderStyle,
             ColorStyle = new ColorStyle
             {
-                RgbColor = GetGoogleSheetsColor(borderStyle.Color)
-            }
+                RgbColor = GetGoogleSheetsColor(borderStyle.Color),
+            },
         };
     }
 
-    private static string? GetGoogleSheetsBorderStyle(BorderType type)
+    private static string? GetGoogleSheetsBorderStyle(BorderType? type)
     {
         return type switch
         {
@@ -33,7 +34,7 @@ internal static class BorderExtensions
             BorderType.Medium => "SOLID_MEDIUM",
             BorderType.Thick => "SOLID_THICK",
             BorderType.Thin => "SOLID",
-            _ => null
+            _ => null,
         };
     }
 
@@ -47,7 +48,7 @@ internal static class BorderExtensions
             Alpha = color.Value.A,
             Red = color.Value.R,
             Green = color.Value.G,
-            Blue = color.Value.B
+            Blue = color.Value.B,
         };
     }
 }

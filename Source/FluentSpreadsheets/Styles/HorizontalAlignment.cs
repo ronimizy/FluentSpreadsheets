@@ -1,9 +1,7 @@
-namespace FluentSpreadsheets;
+namespace FluentSpreadsheets.Styles;
 
 public enum HorizontalAlignment
 {
-    Unspecified = 0,
-
     Leading,
     Center,
     Trailing,

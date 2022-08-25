@@ -1,3 +1,5 @@
+using FluentSpreadsheets.Styles;
+
 namespace FluentSpreadsheets.GoogleSheets.Extensions;
 
 internal static class AlignmentExtensions
@@ -9,7 +11,7 @@ internal static class AlignmentExtensions
             VerticalAlignment.Top => "TOP",
             VerticalAlignment.Center => "MIDDLE",
             VerticalAlignment.Bottom => "BOTTOM",
-            _ => "VERTICAL_ALIGN_UNSPECIFIED"
+            _ => "VERTICAL_ALIGN_UNSPECIFIED",
         };
     }
     
@@ -20,7 +22,7 @@ internal static class AlignmentExtensions
             HorizontalAlignment.Leading => "LEFT",
             HorizontalAlignment.Center => "CENTER",
             HorizontalAlignment.Trailing => "RIGHT",
-            _ => "HORIZONTAL_ALIGN_UNSPECIFIED"
+            _ => "HORIZONTAL_ALIGN_UNSPECIFIED",
         };
     }
 }

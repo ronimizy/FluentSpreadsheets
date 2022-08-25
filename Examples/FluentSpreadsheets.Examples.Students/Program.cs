@@ -6,6 +6,7 @@ using FluentSpreadsheets.ClosedXML.Rendering;
 using FluentSpreadsheets.SheetBuilders;
 using FluentSpreadsheets.Sheets;
 using FluentSpreadsheets.Sheets.Segments;
+using FluentSpreadsheets.Styles;
 using static FluentSpreadsheets.ComponentFactory;
 
 var studentA = new Student("Student 1");

@@ -1,9 +1,7 @@
-namespace FluentSpreadsheets;
+namespace FluentSpreadsheets.Styles;
 
 public enum VerticalAlignment
 {
-    Unspecified = 0,
-
     Top,
     Center,
     Bottom,

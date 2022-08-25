@@ -5,11 +5,11 @@ namespace FluentSpreadsheets;
 public static class ComponentAdjustmentExtensions
 {
     public static IComponent WithAdjustedRows(this IComponent component)
-        => new AdjustedComponent(component, true, false);
+        => component.Wrap(x => new AdjustedComponent(x, true, false));
 
     public static IComponent WithAdjustedColumns(this IComponent component)
-        => new AdjustedComponent(component, false, true);
+        => component.Wrap(x => new AdjustedComponent(x, false, true));
 
     public static IComponent Adjusted(this IComponent component)
-        => new AdjustedComponent(component, true, true);
+        => component.Wrap(x => new AdjustedComponent(component, true, true));
 }

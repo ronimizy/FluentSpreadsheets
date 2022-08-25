@@ -12,7 +12,7 @@ internal static class DimensionRangeFactory
             Dimension = dimension,
             StartIndex = startIndex - 1,
             EndIndex = endIndex - 1,
-            SheetId = sheetId
+            SheetId = sheetId,
         };
     }
 }

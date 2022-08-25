@@ -1,6 +1,10 @@
+using FluentSpreadsheets.Styles;
+
 namespace FluentSpreadsheets;
 
 public interface IStylingComponent : IComponent
 {
-    Style TryApply(Style style);
+    IComponent StyledComponent { get; }
+    
+    Style Style { get; }
 }

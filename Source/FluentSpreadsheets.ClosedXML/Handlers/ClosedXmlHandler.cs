@@ -1,5 +1,6 @@
 using ClosedXML.Excel;
 using FluentSpreadsheets.ClosedXML.Extensions;
+using FluentSpreadsheets.Styles;
 using FluentSpreadsheets.Visitors;
 
 namespace FluentSpreadsheets.ClosedXML.Handlers;
@@ -17,10 +18,20 @@ internal readonly struct ClosedXmlHandler : IComponentVisitorHandler
     {
         var worksheetRange = _worksheet.Range(range);
 
-        worksheetRange.Style.Alignment.Vertical = style.Alignment.Vertical.ToXlAlignment();
-        worksheetRange.Style.Alignment.Horizontal = style.Alignment.Horizontal.ToXlAlignment();
+        if (style.Alignment is not null)
+        {
+            XLAlignmentVerticalValues? vertical = style.Alignment.Value.Vertical?.ToXlAlignment();
+            XLAlignmentHorizontalValues? horizontal = style.Alignment.Value.Horizontal?.ToXlAlignment();
 
-        worksheetRange.Style.Border.ApplyBorderStyle(style.Border);
+            if (vertical is not null)
+                worksheetRange.Style.Alignment.Vertical = vertical.Value;
+
+            if (horizontal is not null)
+                worksheetRange.Style.Alignment.Horizontal = horizontal.Value;
+        }
+
+        if (style.Border is not null)
+            worksheetRange.Style.Border.ApplyBorderStyle(style.Border.Value);
     }
 
     public void MergeRange(IndexRange range)
