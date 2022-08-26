@@ -2,7 +2,7 @@ namespace FluentSpreadsheets.Styles;
 
 public enum HorizontalAlignment
 {
-    Leading,
+    Leading = 1,
     Center,
     Trailing,
 }
