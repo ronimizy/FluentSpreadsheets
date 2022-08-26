@@ -1,3 +1,5 @@
+using FluentSpreadsheets.Styles;
+
 namespace FluentSpreadsheets.Visitors;
 
 public interface IComponentVisitorHandler

@@ -1,5 +1,6 @@
 using System.Drawing;
 using ClosedXML.Excel;
+using FluentSpreadsheets.Styles;
 
 namespace FluentSpreadsheets.ClosedXML.Extensions;
 
@@ -7,24 +8,23 @@ internal static class BorderExtensions
 {
     public static void ApplyBorderStyle(this IXLBorder border, FrameBorderStyle style)
     {
-        border.TopBorder = style.Top.Type.ToXlBorderStyle();
-        border.TopBorderColor = style.Top.Color.ToXlColor();
+        border.TopBorder = style.Top?.Type?.ToXlBorderStyle() ?? border.TopBorder;
+        border.TopBorderColor = style.Top?.Color.ToXlColor() ?? border.TopBorderColor;
 
-        border.BottomBorder = style.Bottom.Type.ToXlBorderStyle();
-        border.BottomBorderColor = style.Bottom.Color.ToXlColor();
-
-        border.LeftBorder = style.Leading.Type.ToXlBorderStyle();
-        border.LeftBorderColor = style.Leading.Color.ToXlColor();
-
-        border.RightBorder = style.Trailing.Type.ToXlBorderStyle();
-        border.RightBorderColor = style.Trailing.Color.ToXlColor();
+        border.BottomBorder = style.Bottom?.Type?.ToXlBorderStyle() ?? border.BottomBorder;
+        border.BottomBorderColor = style.Bottom?.Color.ToXlColor() ?? border.BottomBorderColor;
+        
+        border.LeftBorder = style.Leading?.Type?.ToXlBorderStyle() ?? border.LeftBorder;
+        border.LeftBorderColor = style.Leading?.Color.ToXlColor() ?? border.LeftBorderColor;
+        
+        border.RightBorder = style.Trailing?.Type?.ToXlBorderStyle() ?? border.RightBorder;
+        border.RightBorderColor = style.Trailing?.Color.ToXlColor() ?? border.RightBorderColor;
     }
 
     public static XLBorderStyleValues ToXlBorderStyle(this BorderType type)
     {
         return type switch
         {
-            BorderType.Unspecified => XLBorderStyleValues.None,
             BorderType.None => XLBorderStyleValues.None,
             BorderType.Dashed => XLBorderStyleValues.Dashed,
             BorderType.Dotted => XLBorderStyleValues.Dotted,

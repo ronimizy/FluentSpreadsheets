@@ -16,6 +16,6 @@ public static class ComponentScaleExtensions
             horizontalFactor *= factor;
 
         var scale = new Scale(horizontalFactor, verticalFactor);
-        return new ScaledComponent(component, scale);
+        return component.Wrap(x => new ScaledComponent(x, scale));
     }
 }

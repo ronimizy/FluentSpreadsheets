@@ -1,3 +1,5 @@
+using FluentSpreadsheets.Styles;
+
 namespace FluentSpreadsheets.Visitors;
 
 public class ComponentVisitor<THandler> : IComponentVisitor where THandler : IComponentVisitorHandler
@@ -105,7 +107,7 @@ public class ComponentVisitor<THandler> : IComponentVisitor where THandler : ICo
 
     public void Visit(IStylingComponent component)
     {
-        _style = component.TryApply(_style);
+        _style = _style.Apply(component.Style);
     }
 
     public void Visit(IRowAdjustedComponent component)

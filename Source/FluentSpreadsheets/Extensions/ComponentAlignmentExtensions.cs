@@ -1,4 +1,4 @@
-using FluentSpreadsheets.ComponentImplementations.StylingComponents.Alignment;
+using FluentSpreadsheets.Styles;
 
 namespace FluentSpreadsheets;
 
@@ -9,20 +9,29 @@ public static class ComponentAlignmentExtensions
         HorizontalAlignment horizontalAlignment,
         VerticalAlignment verticalAlignment)
     {
-        return new AlignmentComponent(component, horizontalAlignment, verticalAlignment);
+        var alignment = new Alignment(verticalAlignment, horizontalAlignment);
+        var style = alignment.AsStyle();
+
+        return component.WrapInStyle(style);
     }
 
     public static IComponent WithContentAlignment(
         this IComponent component,
         HorizontalAlignment horizontalAlignment)
     {
-        return new AlignmentComponent(component, horizontalAlignment, VerticalAlignment.Unspecified);
+        var alignment = new Alignment { Horizontal = horizontalAlignment };
+        var style = alignment.AsStyle();
+
+        return component.WrapInStyle(style);
     }
 
     public static IComponent WithContentAlignment(
         this IComponent component,
         VerticalAlignment verticalAlignment)
     {
-        return new AlignmentComponent(component, HorizontalAlignment.Unspecified, verticalAlignment);
+        var alignment = new Alignment { Vertical = verticalAlignment };
+        var style = alignment.AsStyle();
+
+        return component.WrapInStyle(style);
     }
 }

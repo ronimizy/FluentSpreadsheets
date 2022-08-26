@@ -7,6 +7,7 @@ using FluentSpreadsheets.GoogleSheets.Rendering;
 using FluentSpreadsheets.SheetBuilders;
 using FluentSpreadsheets.Sheets;
 using FluentSpreadsheets.Sheets.Segments;
+using FluentSpreadsheets.Styles;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
@@ -65,7 +66,7 @@ async Task RenderGoogleSheets()
 
     var initializer = new BaseClientService.Initializer
     {
-        HttpClientInitializer = credential
+        HttpClientInitializer = credential,
     };
 
     var service = new SheetsService(initializer);

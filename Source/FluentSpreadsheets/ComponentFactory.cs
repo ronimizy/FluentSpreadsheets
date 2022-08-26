@@ -1,4 +1,5 @@
 using FluentSpreadsheets.ComponentImplementations;
+using FluentSpreadsheets.Styles;
 
 namespace FluentSpreadsheets;
 

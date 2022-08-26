@@ -36,7 +36,7 @@ public class GoogleSheetComponentRenderer : IComponentRenderer<GoogleSheetRender
         var updateRequest = new BatchUpdateValuesRequest
         {
             Data = valueRanges,
-            ValueInputOption = ValueInputOption.UserEntered
+            ValueInputOption = ValueInputOption.UserEntered,
         };
 
         await _sheetsService.Spreadsheets.Values
@@ -51,7 +51,7 @@ public class GoogleSheetComponentRenderer : IComponentRenderer<GoogleSheetRender
     {
         var batchUpdateRequest = new BatchUpdateSpreadsheetRequest
         {
-            Requests = updateRequests
+            Requests = updateRequests,
         };
 
         await _sheetsService.Spreadsheets

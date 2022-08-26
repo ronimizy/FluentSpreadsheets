@@ -12,7 +12,7 @@ internal static class IndexRangeExtensions
             StartColumnIndex = range.Start.Column - 1,
             EndRowIndex = range.End.Row - 1,
             EndColumnIndex = range.End.Column - 1,
-            SheetId = sheetId
+            SheetId = sheetId,
         };
     }
 }

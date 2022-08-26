@@ -1,4 +1,5 @@
 using ClosedXML.Excel;
+using FluentSpreadsheets.Styles;
 
 namespace FluentSpreadsheets.ClosedXML.Extensions;
 
@@ -8,7 +9,6 @@ internal static class AlignmentExtensions
     {
         return alignment switch
         {
-            VerticalAlignment.Unspecified => XLAlignmentVerticalValues.Bottom,
             VerticalAlignment.Top => XLAlignmentVerticalValues.Top,
             VerticalAlignment.Center => XLAlignmentVerticalValues.Center,
             VerticalAlignment.Bottom => XLAlignmentVerticalValues.Bottom,
@@ -20,7 +20,6 @@ internal static class AlignmentExtensions
     {
         return alignment switch
         {
-            HorizontalAlignment.Unspecified => XLAlignmentHorizontalValues.Left,
             HorizontalAlignment.Leading => XLAlignmentHorizontalValues.Left,
             HorizontalAlignment.Center => XLAlignmentHorizontalValues.Center,
             HorizontalAlignment.Trailing => XLAlignmentHorizontalValues.Right,

@@ -1,10 +1,8 @@
-namespace FluentSpreadsheets;
+namespace FluentSpreadsheets.Styles;
 
 public enum BorderType
 {
-    Unspecified = 0,
-
-    None,
+    None = 1,
     Dashed,
     Dotted,
     Double,
