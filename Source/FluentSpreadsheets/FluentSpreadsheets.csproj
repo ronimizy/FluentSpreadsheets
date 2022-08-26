@@ -21,8 +21,8 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <PackageVersion>0.1.0-alpha</PackageVersion>
-        <PackageReleaseNotes>New sheet building API</PackageReleaseNotes>
+        <PackageVersion>0.1.1-alpha</PackageVersion>
+        <PackageReleaseNotes>Styling implementation refactor</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
