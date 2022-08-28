@@ -20,15 +20,15 @@
   An API that provides a set of `components`, that can be used for building static UI with sheet cells as building
   blocks,
   as well as base logic for drawing defined component composition on the sheet.
-- Sheets API\
-  An API that provides a set of abstractions to define `sheet segments` that will dynamically build components,
-  providing a way to build dynamic UI based on given data, as well as a way to combine an output from sheet segments
-  into a single component
-  representing a built table.
+- Table API\
+  An API that provides a set of abstractions to define `tables` by using `rows` built from `components`
+  and `component sources`.
 
 ## Examples
 
-- [Student table](Examples/FluentSpreadsheets.Examples.Students)
+- [Component usage](Examples/FluentSpreadsheets.Examples.Components)
+- [Simple able usage](Examples/FluentSpreadsheets.Examples.Tables)
+- [Complex table usage](Examples/FluentSpreadsheets.Examples.Students)
 
 ## Component API
 
@@ -55,53 +55,62 @@ class `ComponentFactory`.
 > using static FluentSpreadsheets.ComponentFactory;
 > ```
 
-### Usage
+### Components
 
-- Use `.Label` to create a label component. You can pass a `string` to it, or use a generic overload which will
-  call `ToString`
-  on the passed object (`IFormattable` overload supported).
-    ```csharp
-    Label("Hello, World!");
-    Label(2.2, CultureInfo.InvariantCulture);
-    ```
+Use `.Label` to create a label component. You can pass a `string` to it, or use a generic overload which will
+call `ToString`
+on the passed object (`IFormattable` overload supported).
 
-- Use `.VStack` & `.HStack` to stack components vertically or horizontally.
-    ```csharp
-    VStack
+```csharp
+Label("Hello, World!");
+Label(2.2, CultureInfo.InvariantCulture);
+```
+
+### Containers
+
+Use `.VStack` & `.HStack` to stack components vertically or horizontally, they will auto scale child components' width
+and height respectively.
+
+```csharp
+VStack
+(
+    HStack
     (
-        HStack
-        (
-            Label("Hello"),
-            Label(",")
-        ),
-        Label("World!")
-    )
-    ```
+        Label("Hello"),
+        Label(",")
+    ),
+    Label("Stacks!")
+)
+```
 
-  The result will be something like this:\
-  ![Stacks](Docs/Media/hello-stacks.png)
+The result will be something like this:\
+![Stacks](Docs/Media/hello-stacks.png)
 
-  Stacks will automatically scale their children so they all will have an equal width/height and fill a rectangle.
+Stacks will automatically scale their children so they all will have an equal width/height and fill a rectangle.
 
-- Use extension methods to style components.
-  ```csharp
+### Styles
+
+Use extension methods to style components. \
+Styles are cascading! It means that styles applied to container will be inherited by its children (and overriden, if
+needed). \
+
+Cascading behaviour does not apply to styling of single component, if you will apply style A on a component, then 
+style B, the component will have a style equal to style B applied to style A.
+
+```csharp
   VStack
   (
       HStack
       (
-          Label("Hello")
-              .WithContentAlignment(HorizontalAlignment.Trailing)
-              .WithTrailingBorder(BorderType.Thin, Color.Black),
+          Label("Hello").WithContentAlignment(HorizontalAlignment.Trailing),
           Label(",")
       ),
-      Label("Styles!")
-          .WithContentAlignment(HorizontalAlignment.Center, VerticalAlignment.Top)
-          .WithTopBorder(BorderType.Thin, Color.Black)
-          .WithRowHeight(20)
-  ).WithBottomBorder(BorderType.Thin, Color.Black).WithTrailingBorder(BorderType.Thin, Color.Black);
-  ```
-  The result will be something like this:\
-  ![Styles](Docs/Media/hello-styles.png)
+      Label("Styles!").WithContentAlignment(HorizontalAlignment.Center, VerticalAlignment.Top)
+  ).WithTrailingBorder(BorderType.Thin, Color.Black).WithBottomBorder(BorderType.Thin, Color.Black)
+```
+
+The result will be something like this:\
+![Styles](Docs/Media/hello-styles.png)
 
 ### Output
 
@@ -138,7 +147,8 @@ you need to use `IComponentRenderer<T>`.
   
   workbook.SaveAs("sample.xlsx");
   ```
-- Google Sheets output via "Google Sheets API v4" library. (You will need to reference a `FluentSpreadsheets.GoogleSheets` NuGet package)
+- Google Sheets output via "Google Sheets API v4" library. (You will need to reference
+  a `FluentSpreadsheets.GoogleSheets` NuGet package)
   ```csharp
   var credential = GoogleCredential.FromFile("credentials.json");
 
@@ -174,57 +184,65 @@ you need to use `IComponentRenderer<T>`.
 
   await renderer.RenderAsync(renderCommand);
   ```
-## Sheets API
 
-There are two main kinds of sheet segments:
+## Table API
 
-- A segment that consists of a single data column:
-  - `SegmentBase`\
-    Headers, rows, footer
-  - `RowSegmentBase`\
-    Rows
-  - `HeaderRowSegmentBase`\
-    Header, rows
-- A segment that can represent a collection of data columns:
-  - `PrototypeSegmentBase`\
-    Headers, rows, footer
-  - `PrototypeHeaderRowSegmentBase`\
-    Headers, rows
+Table API is based on `ITable<T>` interface, where `T` is a type of model, that is used to render a table.
 
-### PrototypeSegmentBase
+To define a table you need to create a class derived from `RowTable<T>` and implement `IEnumerable<IRowComponent> RenderRows(T model)` method.
 
-Prototype sheet segments are useful when your table may have a dynamic amount of columns depending on the data that has
-been provided.
-
-Prototype segment must have a collection of header data to create multiple segments, so
-you must implement `IEnumerable<TSourceHeaderData> SelectHeaderData(THeaderData data)` method to extract collection
-of header data that prototypes will use from general header data.
-
-You also can implement `IPrototypeSegmentHeaderCustomizer<TData>` and customize header component (all header components in an `HStack`), all changes allowed, except ones that will increase header's width.
-
-### SheetBuilder
-
-The type `SheetBuilder` that conforms to `ISheetBuilder` interface is used to build a sheet from collection of sheet
-segments and corresponding sheet data.
+To customize rendered table implement `ITableCustomizerInterface` by your table class.
 
 ```csharp
-public interface ISheetBuilder
+public readonly record struct CartItem(string Name, decimal Price, int Quantity);
+
+public readonly record struct CartTableModel(IReadOnlyCollection<CartItem> Items);
+
+public class CartTable : RowTable<CartTableModel>, ITableCustomizer
 {
-    IComponent Build<TRowData>(
-        IReadOnlyCollection<ISheetSegment> builders,
-        IReadOnlyCollection<TRowData> rowData);
+    protected override IEnumerable<IRowComponent> RenderRows(CartTableModel model)
+    {
+        yield return Row
+        (
+            Label("Product Name").WithColumnWidth(20),
+            Label("Price"),
+            Label("Quantity")
+        );
 
-    IComponent Build<THeaderData, TRowData>(
-        IReadOnlyCollection<ISheetSegment> builders,
-        THeaderData headerData,
-        IReadOnlyCollection<TRowData> rowData);
+        foreach (var item in model.Items)
+        {
+            yield return Row
+            (
+                Label(item.Name),
+                Label(item.Price, CultureInfo.InvariantCulture),
+                Label(item.Quantity)
+            );
+        }
+    }
 
-    IComponent Build<THeaderData, TRowData, TFooterData>(
-        IReadOnlyCollection<ISheetSegment> segments,
-        THeaderData headerData,
-        IReadOnlyCollection<TRowData> rowData,
-        TFooterData footerData);
+    public IComponentSource Customize(IComponent component)
+    {
+        return component
+            .WithBottomBorder(BorderType.Thin, Color.Black)
+            .WithTrailingBorder(BorderType.Thin, Color.Black);
+    }
 }
 ```
 
-Each `.Build` method returns a component which is a rectangle that represents table built from given data.
+Use `.Render` method on table instance to create a component from model.
+
+```csharp
+var items = new CartItem[]
+{
+    new CartItem("Water", 10, 10),
+    new CartItem("Bread", 20, 10),
+    new CartItem("Milk", 30, 10),
+    new CartItem("Eggs", 40, 10),
+};
+
+var model = new CartTableModel(items);
+
+var table = new CartTable();
+
+var tableComponent = table.Render(model);
+```
