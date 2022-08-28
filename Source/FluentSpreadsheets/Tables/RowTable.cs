@@ -10,7 +10,7 @@ public abstract class RowTable<T> : ITable<T>
         IRowComponent[] rowComponents = RenderRows(model).ToArray();
         IEnumerable<IEnumerable<IComponent>> scaled = RowTableScaler.Instance.Scale(rowComponents);
 
-        IEnumerable<IComponentSource> rows = scaled.Select(HStack).Select((c, i) =>
+        IEnumerable<IComponent> rows = scaled.Select(HStack).Select((c, i) =>
         {
             var row = rowComponents[i];
 
@@ -22,16 +22,8 @@ public abstract class RowTable<T> : ITable<T>
 
         var table = VStack(rows);
 
-        // ReSharper disable once SuspiciousTypeConversion.Global
         if (this is ITableCustomizer tableCustomizer)
-        {
-            var customizedTable = tableCustomizer.Customize(table);
-            
-            if (customizedTable is not IComponent component)
-                throw new InvalidOperationException("Customized table must be a component.");
-
-            table = component;
-        }
+            table = tableCustomizer.Customize(table);
 
         return table;
     }

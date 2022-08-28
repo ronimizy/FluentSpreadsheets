@@ -57,7 +57,7 @@ public class CartTable : RowTable<CartTableModel>, ITableCustomizer
         }
     }
 
-    public IComponentSource Customize(IComponent component)
+    public IComponent Customize(IComponent component)
     {
         return component
             .WithBottomBorder(BorderType.Thin, Color.Black)

@@ -1,3 +1,5 @@
+using FluentSpreadsheets.Wrappables;
+
 namespace FluentSpreadsheets;
 
-public interface IComponentSource : IEnumerable<IComponentSource> { }
+public interface IComponentSource : IBaseComponent, IEnumerable<IBaseComponent>, IWrappable<IComponentSource> { }

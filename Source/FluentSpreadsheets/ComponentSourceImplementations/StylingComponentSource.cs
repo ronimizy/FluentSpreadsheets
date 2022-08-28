@@ -1,22 +1,32 @@
-using System.Collections;
 using FluentSpreadsheets.Styles;
 
 namespace FluentSpreadsheets.ComponentSourceImplementations;
 
-internal class StylingComponentSource : IStylingComponentSource
+internal class StylingComponentSource : ComponentSourceBase, IStylingComponentSource
 {
-    public StylingComponentSource(IComponentSource styledComponentSource, Style style)
+    private readonly IComponentSource _componentSource;
+    private readonly Style _style;
+
+    public StylingComponentSource(IComponentSource componentSource, Style style)
     {
-        StyledComponentSource = styledComponentSource;
-        Style = style;
+        _componentSource = componentSource;
+        _style = style;
     }
 
-    public Style Style { get; }
-    public IComponentSource StyledComponentSource { get; }
+    public override IEnumerator<IBaseComponent> GetEnumerator()
+    {
+        return _componentSource.ExtractComponents().Select(x => x.WithStyleApplied(_style)).GetEnumerator();
+    }
 
-    public IEnumerator<IComponentSource> GetEnumerator()
-        => StyledComponentSource.SelectMany(x => x.WithStyle(Style)).GetEnumerator();
+    public override IComponentSource WithStyleApplied(Style style)
+    {
+        var newStyle = _style.Apply(style);
+        return new StylingComponentSource(_componentSource, newStyle);
+    }
 
-    IEnumerator IEnumerable.GetEnumerator()
-        => GetEnumerator();
+    public override IComponentSource WrappedInto(Func<IComponent, IComponent> wrapper)
+    {
+        var wrapped = new ModifierComponentSource(_componentSource, wrapper);
+        return new StylingComponentSource(wrapped, _style);
+    }
 }

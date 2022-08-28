@@ -6,7 +6,7 @@ namespace FluentSpreadsheets.ComponentImplementations;
 
 internal class VStackComponent : ComponentBase, IVStackComponent
 {
-    public VStackComponent(IEnumerable<IComponentSource> componentEnumerable)
+    public VStackComponent(IEnumerable<IBaseComponent> componentEnumerable)
     {
         IComponent[] components = componentEnumerable.ExtractComponents().ToArray();
 

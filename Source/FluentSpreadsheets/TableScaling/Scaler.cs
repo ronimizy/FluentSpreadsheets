@@ -5,10 +5,10 @@ namespace FluentSpreadsheets.TableScaling;
 
 internal abstract class Scaler
 {
-    public IEnumerable<IEnumerable<IComponent>> Scale(IEnumerable<IEnumerable<IComponentSource>> componentSources)
+    public IEnumerable<IEnumerable<IComponent>> Scale(IEnumerable<IEnumerable<IBaseComponent>> componentSources)
     {
-        EnumeratorNode<IComponentSource>[] nodes = componentSources
-            .Select(x => new EnumeratorNode<IComponentSource>(x.GetEnumerator()))
+        EnumeratorNode<IBaseComponent>[] nodes = componentSources
+            .Select(x => new EnumeratorNode<IBaseComponent>(x.GetEnumerator()))
             .ToArray();
 
         try
@@ -26,16 +26,16 @@ internal abstract class Scaler
         }
         finally
         {
-            foreach (EnumeratorNode<IComponentSource> node in nodes)
+            foreach (EnumeratorNode<IBaseComponent> node in nodes)
             {
                 node.Dispose();
             }
         }
     }
 
-    private static void MoveEnumeratorNodesEdgeEnumerators(IEnumerable<EnumeratorNode<IComponentSource>> nodes)
+    private static void MoveEnumeratorNodesEdgeEnumerators<T>(IEnumerable<EnumeratorNode<T>> nodes)
     {
-        foreach (EnumeratorNode<IComponentSource> node in nodes.Where(x => x.HasValues))
+        foreach (EnumeratorNode<T> node in nodes.Where(x => x.HasValues))
         {
             node.MoveNext();
         }
@@ -44,29 +44,29 @@ internal abstract class Scaler
     protected abstract void ValidateCustomization(IComponent component, IComponent customizedComponent);
 
     protected abstract Axis GetAxis();
-    
-    protected abstract IComponent MergeComponentSources(IEnumerable<IComponentSource> componentSources);
-    
+
+    protected abstract IComponent MergeComponents(IEnumerable<IBaseComponent> componentSources);
+
     protected abstract int SelectDimension(IComponent component);
 
-    private static void IterateEnumeratorNodeInDepth(IList<EnumeratorNode<IComponentSource>> nodes)
+    private static void IterateEnumeratorNodeInDepth(IList<EnumeratorNode<IBaseComponent>> nodes)
     {
         for (var i = 0; i < nodes.Count; i++)
         {
             if (!nodes[i].HasValues)
                 continue;
 
-            while (nodes[i].Value is not IComponent)
+            while (nodes[i].Value is IComponentSource componentSource)
             {
-                EnumeratorNode<IComponentSource> node = nodes[i];
-                IEnumerator<IComponentSource> enumerator = node.Value.GetEnumerator();
-                nodes[i] = new EnumeratorNode<IComponentSource>(enumerator, node);
+                EnumeratorNode<IBaseComponent> node = nodes[i];
+                IEnumerator<IBaseComponent> enumerator = componentSource.GetEnumerator();
+                nodes[i] = new EnumeratorNode<IBaseComponent>(enumerator, node);
                 nodes[i].MoveNext();
             }
         }
     }
 
-    private void ScaleEnumeratorNodesEdgeComponents(EnumeratorNode<IComponentSource>[] nodes)
+    private void ScaleEnumeratorNodesEdgeComponents(EnumeratorNode<IBaseComponent>[] nodes)
     {
         IEnumerable<int> dimensions = nodes
             .Where(x => x.HasValues)
@@ -76,7 +76,7 @@ internal abstract class Scaler
 
         var dimension = LcmCounter.Count(dimensions);
 
-        foreach (EnumeratorNode<IComponentSource> enumerator in nodes.Where(x => x.HasValues))
+        foreach (EnumeratorNode<IBaseComponent> enumerator in nodes.Where(x => x.HasValues))
         {
             if (enumerator.Value is not IComponent component)
                 throw new InvalidOperationException("Max depth component source must be a component");
@@ -86,39 +86,34 @@ internal abstract class Scaler
 
             if (factor is not 1)
             {
-                value = (IComponent)component.ScaledBy(factor, GetAxis());
+                value = component.ScaledBy(factor, GetAxis());
             }
 
             enumerator.Values.Add(value);
         }
     }
 
-    private void FlushDepletedEnumeratorNodes(IList<EnumeratorNode<IComponentSource>> nodes)
+    private void FlushDepletedEnumeratorNodes(IList<EnumeratorNode<IBaseComponent>> nodes)
     {
         for (var i = 0; i < nodes.Count; i++)
         {
             while (!nodes[i].HasValues && nodes[i].Next is not null)
             {
-                EnumeratorNode<IComponentSource> node = nodes[i];
+                EnumeratorNode<IBaseComponent> node = nodes[i];
                 node.Dispose();
 
                 if (node.Next?.Value is ICustomizerComponentSource customizerComponentSource)
                 {
-                    var component = node.Values.Count switch
+                    IComponent component = node.Values.Count switch
                     {
                         0 => Empty(),
                         1 => (IComponent)node.Values[0],
-                        _ => MergeComponentSources(node.Values),
+                        _ => MergeComponents(node.Values),
                     };
 
-                    var customizedComponentSource = customizerComponentSource.Customize(component);
-
-                    if (customizedComponentSource is not IComponent customizedComponent)
-                        throw new InvalidOperationException("Max depth component source must be a component");
-
+                    var customizedComponent = customizerComponentSource.Customize(component);
                     ValidateCustomization(component, customizedComponent);
-
-                    nodes[i].Next!.Values.Add(customizedComponentSource);
+                    nodes[i].Next!.Values.Add(customizedComponent);
                 }
                 else
                 {

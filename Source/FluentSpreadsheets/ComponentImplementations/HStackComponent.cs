@@ -6,7 +6,7 @@ namespace FluentSpreadsheets.ComponentImplementations;
 
 internal class HStackComponent : ComponentBase, IHStackComponent
 {
-    public HStackComponent(IEnumerable<IComponentSource> componentEnumerable)
+    public HStackComponent(IEnumerable<IBaseComponent> componentEnumerable)
     {
         IComponent[] components = componentEnumerable.ExtractComponents().ToArray();
 

@@ -1,8 +1,6 @@
-using System.Collections;
-
 namespace FluentSpreadsheets.ComponentSourceImplementations;
 
-internal class ModifierComponentSource : IComponentSource
+internal class ModifierComponentSource : ComponentSourceBase
 {
     private readonly IComponentSource _source;
     private readonly Func<IComponent, IComponent> _modifier;
@@ -13,9 +11,6 @@ internal class ModifierComponentSource : IComponentSource
         _modifier = modifier;
     }
 
-    public IEnumerator<IComponentSource> GetEnumerator()
+    public override IEnumerator<IBaseComponent> GetEnumerator()
         => _source.ExtractComponents().Select(_modifier).GetEnumerator();
-
-    IEnumerator IEnumerable.GetEnumerator()
-        => GetEnumerator();
 }

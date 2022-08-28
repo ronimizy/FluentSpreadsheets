@@ -1,26 +1,22 @@
-using System.Collections;
-
 namespace FluentSpreadsheets.ComponentSourceImplementations;
 
-internal class CustomizerComponentSource : ICustomizerComponentSource
+internal class CustomizerComponentSource : ComponentSourceBase, ICustomizerComponentSource
 {
     private readonly IComponentSource _componentSource;
-    private readonly Func<IComponentSource, IComponentSource> _customizer;
+    private readonly Func<IComponent, IComponent> _customizer;
 
     public CustomizerComponentSource(
         IComponentSource componentSource,
-        Func<IComponentSource, IComponentSource> customizer)
+        Func<IComponent, IComponent> customizer)
     {
         _componentSource = componentSource;
         _customizer = customizer;
     }
 
-    public IEnumerator<IComponentSource> GetEnumerator()
-        => _componentSource.GetEnumerator();
 
-    IEnumerator IEnumerable.GetEnumerator()
-        => GetEnumerator();
-
-    public IComponentSource Customize(IComponentSource componentSource)
+    public IComponent Customize(IComponent componentSource)
         => _customizer.Invoke(componentSource);
+
+    public override IEnumerator<IBaseComponent> GetEnumerator()
+        => _componentSource.GetEnumerator();
 }

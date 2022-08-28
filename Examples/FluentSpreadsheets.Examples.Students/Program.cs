@@ -88,7 +88,7 @@ public class StudentPointsRowTable : RowTable<StudentPointsSheetData>, ITableCus
                     Label(headerData.MinPoints, CultureInfo.InvariantCulture),
                     Label(headerData.MaxPoints, CultureInfo.InvariantCulture)
                 )
-            ).CustomizedWith(x => VStack(Label("Labs"), x)))
+            )).CustomizedWith(x => VStack(Label("Labs"), x))
         );
 
         foreach (var (data, i) in model.StudentPoints.Select((p, i) => (p, i)))
@@ -102,7 +102,7 @@ public class StudentPointsRowTable : RowTable<StudentPointsSheetData>, ITableCus
         }
     }
 
-    private static IComponentSource BuildLabPointsCell(Lab lab, IEnumerable<LabPoints> labPoints)
+    private static IComponent BuildLabPointsCell(Lab lab, IEnumerable<LabPoints> labPoints)
     {
         var labId = lab.Id;
         LabPoints? points = labPoints.SingleOrDefault(x => x.LabId.Equals(labId));
@@ -120,7 +120,7 @@ public class StudentPointsRowTable : RowTable<StudentPointsSheetData>, ITableCus
             .WithBottomBorder(BorderType.Thin, Color.Black);
     }
 
-    public IComponentSource Customize(IComponent component)
+    public IComponent Customize(IComponent component)
     {
         return component
             .WithContentAlignment(HorizontalAlignment.Center, VerticalAlignment.Center)

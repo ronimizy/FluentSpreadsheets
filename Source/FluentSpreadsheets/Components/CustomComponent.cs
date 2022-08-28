@@ -1,17 +1,15 @@
-using System.Collections;
+using FluentSpreadsheets.Styles;
 using FluentSpreadsheets.Visitors;
 
 namespace FluentSpreadsheets;
 
 public abstract class CustomComponent : IComponent
 {
-    private readonly IEnumerable<IComponent> _components;
     private readonly Lazy<IComponent> _component;
 
     protected CustomComponent()
     {
         _component = new Lazy<IComponent>(BuildBody);
-        _components = Enumerable.Repeat(this, 1);
     }
 
     public Size Size => _component.Value.Size;
@@ -19,11 +17,11 @@ public abstract class CustomComponent : IComponent
     public void Accept(IComponentVisitor visitor)
         => _component.Value.Accept(visitor);
 
-    public IEnumerator<IComponentSource> GetEnumerator()
-        => _components.GetEnumerator();
+    public IComponent WithStyleApplied(Style style)
+        => this.WithStyleAppliedInternal(style);
 
-    IEnumerator IEnumerable.GetEnumerator()
-        => GetEnumerator();
+    public IComponent WrappedInto(Func<IComponent, IComponent> wrapper)
+        => this.WrappedIntoInternal(wrapper);
 
     protected abstract IComponent BuildBody();
 }

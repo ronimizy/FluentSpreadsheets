@@ -1,75 +1,76 @@
 using System.Drawing;
 using FluentSpreadsheets.Styles;
+using FluentSpreadsheets.Wrappables;
 
 namespace FluentSpreadsheets;
 
 public static class ComponentBorderExtensions
 {
-    public static IComponentSource WithLeadingBorder(this IComponentSource component, BorderStyle borderStyle)
+    public static T WithLeadingBorder<T>(this T component, BorderStyle borderStyle) where T : IWrappable<T>
     {
         var frameStyle = new FrameBorderStyle { Leading = borderStyle };
         var style = frameStyle.AsStyle();
 
-        return component.WithStyle(style);
+        return component.WithStyleApplied(style);
     }
 
-    public static IComponentSource WithLeadingBorder(this IComponentSource component, BorderType? borderType, Color? color)
+    public static T WithLeadingBorder<T>(this T component, BorderType? borderType, Color? color) where T : IWrappable<T>
         => component.WithLeadingBorder(new BorderStyle(borderType, color));
 
-    public static IComponentSource WithLeadingBorderType(this IComponentSource component, BorderType borderType)
+    public static T WithLeadingBorderType<T>(this T component, BorderType borderType) where T : IWrappable<T>
         => component.WithLeadingBorder(borderType, null);
 
-    public static IComponentSource WithLeadingBorderColor(this IComponentSource component, Color color)
+    public static T WithLeadingBorderColor<T>(this T component, Color color) where T : IWrappable<T>
         => component.WithLeadingBorder(null, color);
 
-    public static IComponentSource WithTopBorder(this IComponentSource component, BorderStyle borderStyle)
-    {
-        var frameStyle = new FrameBorderStyle { Top = borderStyle };
-        var style = frameStyle.AsStyle();
-
-        return component.WithStyle(style);
-    }
-
-    public static IComponentSource WithTopBorder(this IComponentSource component, BorderType? borderType, Color? color)
-        => component.WithTopBorder(new BorderStyle(borderType, color));
-
-    public static IComponentSource WithTopBorderType(this IComponentSource component, BorderType borderType)
-        => component.WithTopBorder(borderType, null);
-
-    public static IComponentSource WithTopBorderColor(this IComponentSource component, Color color)
-        => component.WithTopBorder(null, color);
-
-    public static IComponentSource WithBottomBorder(this IComponentSource component, BorderStyle borderStyle)
-    {
-        var frameStyle = new FrameBorderStyle { Bottom = borderStyle };
-        var style = frameStyle.AsStyle();
-
-        return component.WithStyle(style);
-    }
-
-    public static IComponentSource WithBottomBorder(this IComponentSource component, BorderType? borderType, Color? color)
-        => component.WithBottomBorder(new BorderStyle(borderType, color));
-
-    public static IComponentSource WithBottomBorderType(this IComponentSource component, BorderType borderType)
-        => component.WithBottomBorder(borderType, null);
-
-    public static IComponentSource WithBottomBorderColor(this IComponentSource component, Color color)
-        => component.WithBottomBorder(null, color);
-
-    public static IComponentSource WithTrailingBorder(this IComponentSource component, BorderStyle borderStyle)
+    public static T WithTrailingBorder<T>(this T component, BorderStyle borderStyle) where T : IWrappable<T>
     {
         var frameStyle = new FrameBorderStyle { Trailing = borderStyle };
         var style = frameStyle.AsStyle();
 
-        return component.WithStyle(style);
+        return component.WithStyleApplied(style);
     }
 
-    public static IComponentSource WithTrailingBorder(this IComponentSource component, BorderType? borderType, Color? color)
+    public static T WithTrailingBorder<T>(this T component, BorderType? borderType, Color? color) where T : IWrappable<T>
         => component.WithTrailingBorder(new BorderStyle(borderType, color));
 
-    public static IComponentSource WithTrailingBorderType(this IComponentSource component, BorderType borderType)
+    public static T WithTrailingBorderType<T>(this T component, BorderType borderType) where T : IWrappable<T>
         => component.WithTrailingBorder(borderType, null);
 
-    public static IComponentSource WithTrailingBorderColor(this IComponentSource component, Color color)
+    public static T WithTrailingBorderColor<T>(this T component, Color color) where T : IWrappable<T>
         => component.WithTrailingBorder(null, color);
+
+    public static T WithTopBorder<T>(this T component, BorderStyle borderStyle) where T : IWrappable<T>
+    {
+        var frameStyle = new FrameBorderStyle { Top = borderStyle };
+        var style = frameStyle.AsStyle();
+
+        return component.WithStyleApplied(style);
+    }
+
+    public static T WithTopBorder<T>(this T component, BorderType? borderType, Color? color) where T : IWrappable<T>
+        => component.WithTopBorder(new BorderStyle(borderType, color));
+
+    public static T WithTopBorderType<T>(this T component, BorderType borderType) where T : IWrappable<T>
+        => component.WithTopBorder(borderType, null);
+
+    public static T WithTopBorderColor<T>(this T component, Color color) where T : IWrappable<T>
+        => component.WithTopBorder(null, color);
+
+    public static T WithBottomBorder<T>(this T component, BorderStyle borderStyle) where T : IWrappable<T>
+    {
+        var frameStyle = new FrameBorderStyle { Bottom = borderStyle };
+        var style = frameStyle.AsStyle();
+
+        return component.WithStyleApplied(style);
+    }
+
+    public static T WithBottomBorder<T>(this T component, BorderType? borderType, Color? color) where T : IWrappable<T>
+        => component.WithBottomBorder(new BorderStyle(borderType, color));
+
+    public static T WithBottomBorderType<T>(this T component, BorderType borderType) where T : IWrappable<T>
+        => component.WithBottomBorder(borderType, null);
+
+    public static T WithBottomBorderColor<T>(this T component, Color color) where T : IWrappable<T>
+        => component.WithBottomBorder(null, color);
 }

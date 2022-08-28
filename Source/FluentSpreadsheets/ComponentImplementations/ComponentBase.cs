@@ -1,24 +1,17 @@
-using System.Collections;
+using FluentSpreadsheets.Styles;
 using FluentSpreadsheets.Visitors;
 
 namespace FluentSpreadsheets.ComponentImplementations;
 
 internal abstract class ComponentBase : IComponent
 {
-    private readonly IEnumerable<IComponent> _components;
-
-    protected ComponentBase()
-    {
-        _components = Enumerable.Repeat(this, 1);
-    }
-
     public abstract Size Size { get; }
 
     public abstract void Accept(IComponentVisitor visitor);
 
-    public IEnumerator<IComponentSource> GetEnumerator()
-        => _components.GetEnumerator();
+    public IComponent WithStyleApplied(Style style)
+        => this.WithStyleAppliedInternal(style);
 
-    IEnumerator IEnumerable.GetEnumerator()
-        => GetEnumerator();
+    public IComponent WrappedInto(Func<IComponent, IComponent> wrapper)
+        => this.WrappedIntoInternal(wrapper);
 }
