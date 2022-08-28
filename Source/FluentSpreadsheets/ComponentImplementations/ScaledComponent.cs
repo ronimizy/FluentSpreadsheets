@@ -2,7 +2,7 @@ using FluentSpreadsheets.Visitors;
 
 namespace FluentSpreadsheets.ComponentImplementations;
 
-internal class ScaledComponent : IScaledComponent
+internal class ScaledComponent : ComponentBase, IScaledComponent
 {
     private readonly IComponent _component;
 
@@ -12,11 +12,11 @@ internal class ScaledComponent : IScaledComponent
         Scale = scale;
     }
 
-    public Size Size => _component.Size * Scale;
+    public override Size Size => _component.Size * Scale;
 
     public Scale Scale { get; }
 
-    public void Accept(IComponentVisitor visitor)
+    public override void Accept(IComponentVisitor visitor)
     {
         visitor.Visit(this);
         _component.Accept(visitor);

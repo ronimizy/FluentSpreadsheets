@@ -3,7 +3,7 @@ using FluentSpreadsheets.Visitors;
 
 namespace FluentSpreadsheets.ComponentImplementations;
 
-public class StylingComponent : IStylingComponent
+internal class StylingComponent : ComponentBase, IStylingComponent
 {
     public StylingComponent(IComponent styledComponent, Style style)
     {
@@ -11,13 +11,13 @@ public class StylingComponent : IStylingComponent
         Style = style;
     }
 
-    public Size Size => StyledComponent.Size;
+    public override Size Size => StyledComponent.Size;
 
     public IComponent StyledComponent { get; }
-    
+
     public Style Style { get; }
 
-    public void Accept(IComponentVisitor visitor)
+    public override void Accept(IComponentVisitor visitor)
     {
         visitor.Visit(this);
         StyledComponent.Accept(visitor);

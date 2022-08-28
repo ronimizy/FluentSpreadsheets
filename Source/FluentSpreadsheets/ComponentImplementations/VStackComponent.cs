@@ -4,11 +4,11 @@ using FluentSpreadsheets.Visitors;
 
 namespace FluentSpreadsheets.ComponentImplementations;
 
-internal class VStackComponent : IVStackComponent
+internal class VStackComponent : ComponentBase, IVStackComponent
 {
-    public VStackComponent(IEnumerable<IComponent> componentEnumerable)
+    public VStackComponent(IEnumerable<IComponentSource> componentEnumerable)
     {
-        IComponent[] components = componentEnumerable.ToArray();
+        IComponent[] components = componentEnumerable.ExtractComponents().ToArray();
 
         var width = LcmCounter.Count(components.Select(x => x.Size.Width));
         var height = 0;
@@ -43,10 +43,10 @@ internal class VStackComponent : IVStackComponent
         Components = components;
     }
 
-    public Size Size { get; }
+    public override Size Size { get; }
 
     public IReadOnlyCollection<IComponent> Components { get; }
 
-    public void Accept(IComponentVisitor visitor)
+    public override void Accept(IComponentVisitor visitor)
         => visitor.Visit(this);
 }

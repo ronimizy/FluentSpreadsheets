@@ -2,15 +2,15 @@ using FluentSpreadsheets.Visitors;
 
 namespace FluentSpreadsheets.ComponentImplementations;
 
-public class EmptyComponent : IComponent
+internal class EmptyComponent : ComponentBase, IComponent
 {
     public EmptyComponent(Size size)
     {
         Size = size;
     }
 
-    public Size Size { get; }
+    public override Size Size { get; }
 
-    public void Accept(IComponentVisitor visitor)
+    public override void Accept(IComponentVisitor visitor)
         => visitor.Visit(this);
 }
