@@ -1,5 +1,5 @@
 using FluentSpreadsheets.ComponentImplementations;
-using FluentSpreadsheets.Styles;
+using FluentSpreadsheets.ComponentSourceImplementations;
 
 namespace FluentSpreadsheets;
 
@@ -26,21 +26,33 @@ public static class ComponentFactory
     public static IComponent Label<T>(T value, IFormatProvider? formatProvider) where T : IFormattable
         => Label(value, null, formatProvider);
 
-    public static IComponent VStack(params IComponent[] components)
+    public static IComponent VStack(params IComponentSource[] components)
         => new VStackComponent(components);
 
-    public static IComponent VStack(IEnumerable<IComponent> components)
+    public static IComponent VStack(IEnumerable<IComponentSource> components)
         => new VStackComponent(components);
 
-    public static IComponent VStack(Func<IEnumerable<IComponent>> func)
+    public static IComponent VStack(Func<IEnumerable<IComponentSource>> func)
         => new VStackComponent(func.Invoke());
 
-    public static IComponent HStack(params IComponent[] components)
+    public static IComponent HStack(params IComponentSource[] components)
         => new HStackComponent(components);
 
-    public static IComponent HStack(IEnumerable<IComponent> components)
+    public static IComponent HStack(IEnumerable<IComponentSource> components)
         => new HStackComponent(components);
 
-    public static IComponent HStack(Func<IEnumerable<IComponent>> func)
+    public static IComponent HStack(Func<IEnumerable<IComponentSource>> func)
         => new HStackComponent(func.Invoke());
+
+    public static IComponentSource ForEach<T>(IEnumerable<T> enumerable, Func<T, IComponentSource> factory)
+        => new ForEachComponentSource<T>(enumerable, factory);
+
+    public static IRowComponent Row(params IComponentSource[] components)
+        => new RowComponent(components);
+
+    public static IRowComponent Row(IEnumerable<IComponentSource> components)
+        => new RowComponent(components);
+
+    public static IRowComponent Row(Func<IEnumerable<IComponentSource>> func)
+        => new RowComponent(func.Invoke());
 }
