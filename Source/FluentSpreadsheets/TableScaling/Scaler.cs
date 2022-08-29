@@ -82,12 +82,7 @@ internal abstract class Scaler
                 throw new InvalidOperationException("Max depth component source must be a component");
 
             var factor = dimension / component.Size.Width;
-            var value = component;
-
-            if (factor is not 1)
-            {
-                value = component.ScaledBy(factor, GetAxis());
-            }
+            var value = factor is 1 ? component : component.ScaledBy(factor, GetAxis());
 
             enumerator.Values.Add(value);
         }
