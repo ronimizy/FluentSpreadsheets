@@ -99,15 +99,7 @@ internal abstract class Scaler
 
                 if (node.Next?.Value is ICustomizerComponentSource customizerComponentSource)
                 {
-                    IComponent component = node.Values.Count switch
-                    {
-                        0 => Empty(),
-                        1 => (IComponent)node.Values[0],
-                        _ => MergeComponents(node.Values),
-                    };
-
-                    var customizedComponent = customizerComponentSource.Customize(component);
-                    ValidateCustomization(component, customizedComponent);
+                    var customizedComponent = GetCustomizedComponent(node, customizerComponentSource);
                     nodes[i].Next!.Values.Add(customizedComponent);
                 }
                 else
@@ -118,5 +110,19 @@ internal abstract class Scaler
                 nodes[i] = nodes[i].Next!;
             }
         }
+    }
+
+    private IComponent GetCustomizedComponent(EnumeratorNode<IBaseComponent> node, ICustomizerComponentSource customizerComponentSource)
+    {
+        var component = node.Values.Count switch
+        {
+            0 => Empty(),
+            1 => (IComponent)node.Values[0],
+            _ => MergeComponents(node.Values),
+        };
+
+        var customizedComponent = customizerComponentSource.Customize(component);
+        ValidateCustomization(component, customizedComponent);
+        return customizedComponent;
     }
 }
