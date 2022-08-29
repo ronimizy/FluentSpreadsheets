@@ -21,7 +21,7 @@ internal static class BaseComponentExtensions
             }
             else
             {
-                throw new InvalidOperationException("Unknown component type");
+                throw new UnknownComponentTypeException(baseComponent);
             }
         }
     }
@@ -34,7 +34,7 @@ internal static class BaseComponentExtensions
         {
             IComponent component => component.WithStyleApplied(style),
             IComponentSource source => source.WithStyleApplied(style),
-            _ => throw new InvalidOperationException("Unknown component type")
+            _ => throw new UnknownComponentTypeException(baseComponent),
         };
     }
 
@@ -46,7 +46,7 @@ internal static class BaseComponentExtensions
         {
             IComponent component => wrapper(component),
             IComponentSource source => source.WrappedInto(wrapper),
-            _ => throw new InvalidOperationException("Unknown component type")
+            _ => throw new UnknownComponentTypeException(baseComponent),
         };
     }
 }
