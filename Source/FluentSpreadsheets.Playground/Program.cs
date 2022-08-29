@@ -130,7 +130,7 @@ public class StudentPointsRowTable : RowTable<StudentPointsSheetData>, ITableCus
         {
             yield return Row
             (
-                Label((i + 1).ToString()),
+                Label(i + 1),
                 Label(data.Student.Name),
                 ForEach(model.HeaderData.Labs, lab => BuildLabPointsCell(lab, data.LabPoints))
             );
