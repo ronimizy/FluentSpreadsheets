@@ -94,7 +94,7 @@ Use extension methods to style components. \
 Styles are cascading! It means that styles applied to container will be inherited by its children (and overriden, if
 needed). \
 
-Cascading behaviour does not apply to styling of single component, if you will apply style A on a component, then 
+Cascading behaviour does not apply to styling of single component, if you will apply style A on a component, then
 style B, the component will have a style equal to style B applied to style A.
 
 ```csharp
@@ -109,7 +109,7 @@ style B, the component will have a style equal to style B applied to style A.
   ).WithTrailingBorder(BorderType.Thin, Color.Black).WithBottomBorder(BorderType.Thin, Color.Black)
 ```
 
-> Components are immutable, when you apply a style to a component, it will return a new component with the style applied, 
+> Components are immutable, when you apply a style to a component, it will return a new component with the style applied,
 > the object you called a method on will not be changed.
 
 The result will be something like this:\
@@ -122,77 +122,77 @@ you need to use `IComponentRenderer<T>`.
 
 #### Now supported:
 
-- Excel output via "ClosedXML" library. (You will need to reference a `FluentSpreadsheets.ClosedXML` NuGet package)
-  ```csharp
-  var workbook = new XLWorkbook();
-  var worksheet = workbook.AddWorksheet("Sample");
-  
-  var helloComponent =
-      VStack
-      (
-          HStack
-          (
-              Label("Hello")
-                  .WithContentAlignment(HorizontalAlignment.Trailing)
-                  .WithTrailingBorder(BorderType.Thin, Color.Black),
-              Label(",")
-          ),
-          Label("Styles!")
-              .WithContentAlignment(HorizontalAlignment.Center, VerticalAlignment.Top)
-              .WithTopBorder(BorderType.Thin, Color.Black)
-              .WithRowHeight(20)
-      ).WithBottomBorder(BorderType.Thin, Color.Black).WithTrailingBorder(BorderType.Thin, Color.Black);
+##### Excel output via "ClosedXML" library. (You will need to reference a `FluentSpreadsheets.ClosedXML` NuGet package)
+```csharp
+var workbook = new XLWorkbook();
+var worksheet = workbook.AddWorksheet("Sample");
 
-  var renderer = new ClosedXmlComponentRenderer();
-  var renderCommand = new ClosedXmlRenderCommand(worksheet, helloComponent);
-  
-  await renderer.RenderAsync(renderCommand);
-  
-  workbook.SaveAs("sample.xlsx");
-  ```
-- Google Sheets output via "Google Sheets API v4" library. (You will need to reference
-  a `FluentSpreadsheets.GoogleSheets` NuGet package)
-  ```csharp
-  var credential = GoogleCredential.FromFile("credentials.json");
+var helloComponent =
+    VStack
+    (
+        HStack
+        (
+            Label("Hello")
+                .WithContentAlignment(HorizontalAlignment.Trailing)
+                .WithTrailingBorder(BorderType.Thin, Color.Black),
+            Label(",")
+        ),
+        Label("Styles!")
+            .WithContentAlignment(HorizontalAlignment.Center, VerticalAlignment.Top)
+            .WithTopBorder(BorderType.Thin, Color.Black)
+            .WithRowHeight(20)
+    ).WithBottomBorder(BorderType.Thin, Color.Black).WithTrailingBorder(BorderType.Thin, Color.Black);
 
-  var initializer = new BaseClientService.Initializer
-  {
-    HttpClientInitializer = credential
-  };
+var renderer = new ClosedXmlComponentRenderer();
+var renderCommand = new ClosedXmlRenderCommand(worksheet, helloComponent);
 
-  var service = new SheetsService(initializer);
-  var renderer = new GoogleSheetComponentRenderer(service);
-  
-  var helloComponent =
-      VStack
-      (
-          HStack
-          (
-              Label("Hello")
-                  .WithContentAlignment(HorizontalAlignment.Trailing)
-                  .WithTrailingBorder(BorderType.Thin, Color.Black),
-              Label(",")
-          ),
-          Label("Styles!")
-              .WithContentAlignment(HorizontalAlignment.Center, VerticalAlignment.Top)
-              .WithTopBorder(BorderType.Thin, Color.Black)
-              .WithRowHeight(20)
-      ).WithBottomBorder(BorderType.Thin, Color.Black).WithTrailingBorder(BorderType.Thin, Color.Black);
+await renderer.RenderAsync(renderCommand);
 
-  const string spreadsheetId = "SampleSpreadsheetId";
-  const string title = "SampleTitle";
+workbook.SaveAs("sample.xlsx");
+```
+##### Google Sheets output via "Google Sheets API v4" library. (You will need to referencea `FluentSpreadsheets.GoogleSheets` NuGet package)
+```csharp
+var credential = GoogleCredential.FromFile("credentials.json");
 
-  var renderCommandFactory = new RenderCommandFactory(service);
-  var renderCommand = await renderCommandFactory.CreateAsync(spreadsheetId, title, helloComponent);
+var initializer = new BaseClientService.Initializer
+{
+  HttpClientInitializer = credential
+};
 
-  await renderer.RenderAsync(renderCommand);
-  ```
+var service = new SheetsService(initializer);
+var renderer = new GoogleSheetComponentRenderer(service);
+
+var helloComponent =
+    VStack
+    (
+        HStack
+        (
+            Label("Hello")
+                .WithContentAlignment(HorizontalAlignment.Trailing)
+                .WithTrailingBorder(BorderType.Thin, Color.Black),
+            Label(",")
+        ),
+        Label("Styles!")
+            .WithContentAlignment(HorizontalAlignment.Center, VerticalAlignment.Top)
+            .WithTopBorder(BorderType.Thin, Color.Black)
+            .WithRowHeight(20)
+    ).WithBottomBorder(BorderType.Thin, Color.Black).WithTrailingBorder(BorderType.Thin, Color.Black);
+
+const string spreadsheetId = "SampleSpreadsheetId";
+const string title = "SampleTitle";
+
+var renderCommandFactory = new RenderCommandFactory(service);
+var renderCommand = await renderCommandFactory.CreateAsync(spreadsheetId, title, helloComponent);
+
+await renderer.RenderAsync(renderCommand);
+```
 
 ## Table API
 
 Table API is based on `ITable<T>` interface, where `T` is a type of model, that is used to render a table.
 
-To define a table you need to create a class derived from `RowTable<T>` and implement `IEnumerable<IRowComponent> RenderRows(T model)` method.
+To define a table you need to create a class derived from `RowTable<T>` and
+implement `IEnumerable<IRowComponent> RenderRows(T model)` method.
 
 To customize rendered table implement `ITableCustomizerInterface` by your table class.
 
@@ -223,7 +223,7 @@ public class CartTable : RowTable<CartTableModel>, ITableCustomizer
         }
     }
 
-    public IComponentSource Customize(IComponent component)
+    public IComponent Customize(IComponent component)
     {
         return component
             .WithBottomBorder(BorderType.Thin, Color.Black)
@@ -248,4 +248,25 @@ var model = new CartTableModel(items);
 var table = new CartTable();
 
 var tableComponent = table.Render(model);
+```
+
+If you want to customize already scaled component group, you can call a `CustomizedWith` modifier on it. \
+(ex: add a common header for a header group), you can see it's usage in a 
+[student points table example](Examples/FluentSpreadsheets.Examples.Students/README.md)
+
+```csharp
+ForEach(model.HeaderData.Labs, headerData => VStack
+(
+    Label(headerData.Name),
+    HStack
+    (
+        Label("Min"),
+        Label("Max")
+    ),
+    HStack
+    (
+        Label(headerData.MinPoints, CultureInfo.InvariantCulture),
+        Label(headerData.MaxPoints, CultureInfo.InvariantCulture)
+    )
+)).CustomizedWith(x => VStack(Label("Labs"), x))
 ```
