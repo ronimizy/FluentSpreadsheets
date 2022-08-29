@@ -15,7 +15,10 @@ internal class StylingComponentSource : ComponentSourceBase, IStylingComponentSo
 
     public override IEnumerator<IBaseComponent> GetEnumerator()
     {
-        return _componentSource.ExtractComponents().Select(x => x.WithStyleApplied(_style)).GetEnumerator();
+        return _componentSource
+            .ExtractComponents()
+            .Select(x => x.WithStyleApplied(_style))
+            .GetEnumerator();
     }
 
     public override IComponentSource WithStyleApplied(Style style)
