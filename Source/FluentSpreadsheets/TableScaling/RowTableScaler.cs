@@ -19,8 +19,8 @@ internal class RowTableScaler : Scaler
     protected override Axis GetAxis()
         => Axis.Horizontal;
 
-    protected override IComponent MergeComponents(IEnumerable<IBaseComponent> componentSources)
-        => ComponentFactory.HStack(componentSources);
+    protected override IComponent MergeComponents(IEnumerable<IBaseComponent> components)
+        => ComponentFactory.HStack(components);
 
     protected override int SelectDimension(IComponent component)
         => component.Size.Width;

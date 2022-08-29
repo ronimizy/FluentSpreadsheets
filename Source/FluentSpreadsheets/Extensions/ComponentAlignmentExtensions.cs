@@ -6,7 +6,7 @@ namespace FluentSpreadsheets;
 public static class ComponentAlignmentExtensions
 {
     public static T WithContentAlignment<T>(
-        this T componentSource,
+        this T wrappable,
         HorizontalAlignment horizontalAlignment,
         VerticalAlignment verticalAlignment)
         where T : IWrappable<T>
@@ -14,28 +14,28 @@ public static class ComponentAlignmentExtensions
         var alignment = new Alignment(verticalAlignment, horizontalAlignment);
         var style = alignment.AsStyle();
 
-        return componentSource.WithStyleApplied(style);
+        return wrappable.WithStyleApplied(style);
     }
 
     public static T WithContentAlignment<T>(
-        this T componentSource,
+        this T wrappable,
         HorizontalAlignment horizontalAlignment)
         where T : IWrappable<T>
     {
         var alignment = new Alignment { Horizontal = horizontalAlignment };
         var style = alignment.AsStyle();
 
-        return componentSource.WithStyleApplied(style);
+        return wrappable.WithStyleApplied(style);
     }
 
     public static T WithContentAlignment<T>(
-        this T componentSource,
+        this T wrappable,
         VerticalAlignment verticalAlignment)
         where T : IWrappable<T>
     {
         var alignment = new Alignment { Vertical = verticalAlignment };
         var style = alignment.AsStyle();
 
-        return componentSource.WithStyleApplied(style);
+        return wrappable.WithStyleApplied(style);
     }
 }

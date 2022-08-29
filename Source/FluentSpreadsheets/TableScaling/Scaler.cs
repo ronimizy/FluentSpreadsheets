@@ -5,9 +5,9 @@ namespace FluentSpreadsheets.TableScaling;
 
 internal abstract class Scaler
 {
-    public IEnumerable<IEnumerable<IComponent>> Scale(IEnumerable<IEnumerable<IBaseComponent>> componentSources)
+    public IEnumerable<IEnumerable<IComponent>> Scale(IEnumerable<IEnumerable<IBaseComponent>> components)
     {
-        EnumeratorNode<IBaseComponent>[] nodes = componentSources
+        EnumeratorNode<IBaseComponent>[] nodes = components
             .Select(x => new EnumeratorNode<IBaseComponent>(x.GetEnumerator()))
             .ToArray();
 
@@ -45,7 +45,7 @@ internal abstract class Scaler
 
     protected abstract Axis GetAxis();
 
-    protected abstract IComponent MergeComponents(IEnumerable<IBaseComponent> componentSources);
+    protected abstract IComponent MergeComponents(IEnumerable<IBaseComponent> components);
 
     protected abstract int SelectDimension(IComponent component);
 
@@ -56,10 +56,10 @@ internal abstract class Scaler
             if (!nodes[i].HasValues)
                 continue;
 
-            while (nodes[i].Value is IComponentSource componentSource)
+            while (nodes[i].Value is IComponentGroup componentGroup)
             {
                 EnumeratorNode<IBaseComponent> node = nodes[i];
-                IEnumerator<IBaseComponent> enumerator = componentSource.GetEnumerator();
+                IEnumerator<IBaseComponent> enumerator = componentGroup.GetEnumerator();
                 nodes[i] = new EnumeratorNode<IBaseComponent>(enumerator, node);
                 nodes[i].MoveNext();
             }
@@ -97,9 +97,9 @@ internal abstract class Scaler
                 EnumeratorNode<IBaseComponent> node = nodes[i];
                 node.Dispose();
 
-                if (node.Next?.Value is ICustomizerComponentSource customizerComponentSource)
+                if (node.Next?.Value is ICustomizerComponentGroup customizerComponentGroup)
                 {
-                    var customizedComponent = GetCustomizedComponent(node, customizerComponentSource);
+                    var customizedComponent = GetCustomizedComponent(node, customizerComponentGroup);
                     nodes[i].Next!.Values.Add(customizedComponent);
                 }
                 else
@@ -112,7 +112,7 @@ internal abstract class Scaler
         }
     }
 
-    private IComponent GetCustomizedComponent(EnumeratorNode<IBaseComponent> node, ICustomizerComponentSource customizerComponentSource)
+    private IComponent GetCustomizedComponent(EnumeratorNode<IBaseComponent> node, ICustomizerComponentGroup customizerComponentGroup)
     {
         var component = node.Values.Count switch
         {
@@ -121,7 +121,7 @@ internal abstract class Scaler
             _ => MergeComponents(node.Values),
         };
 
-        var customizedComponent = customizerComponentSource.Customize(component);
+        var customizedComponent = customizerComponentGroup.Customize(component);
         ValidateCustomization(component, customizedComponent);
         return customizedComponent;
     }

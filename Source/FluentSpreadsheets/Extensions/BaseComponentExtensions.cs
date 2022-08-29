@@ -12,7 +12,7 @@ internal static class BaseComponentExtensions
             {
                 yield return component;
             }
-            else if (baseComponent is IComponentSource source)
+            else if (baseComponent is IComponentGroup source)
             {
                 foreach (var innerComponent in source.ExtractComponents())
                 {
@@ -33,7 +33,7 @@ internal static class BaseComponentExtensions
         return baseComponent switch
         {
             IComponent component => component.WithStyleApplied(style),
-            IComponentSource source => source.WithStyleApplied(style),
+            IComponentGroup source => source.WithStyleApplied(style),
             _ => throw new UnknownComponentTypeException(baseComponent),
         };
     }
@@ -45,7 +45,7 @@ internal static class BaseComponentExtensions
         return baseComponent switch
         {
             IComponent component => wrapper(component),
-            IComponentSource source => source.WrappedInto(wrapper),
+            IComponentGroup source => source.WrappedInto(wrapper),
             _ => throw new UnknownComponentTypeException(baseComponent),
         };
     }

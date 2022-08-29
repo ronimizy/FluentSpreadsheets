@@ -1,5 +1,5 @@
+using FluentSpreadsheets.ComponentGroupImplementations;
 using FluentSpreadsheets.ComponentImplementations;
-using FluentSpreadsheets.ComponentSourceImplementations;
 using FluentSpreadsheets.TableComponentImplementations;
 
 namespace FluentSpreadsheets;
@@ -45,8 +45,8 @@ public static class ComponentFactory
     public static IComponent HStack(Func<IEnumerable<IBaseComponent>> func)
         => new HStackComponent(func.Invoke());
 
-    public static IComponentSource ForEach<T>(IEnumerable<T> enumerable, Func<T, IBaseComponent> factory)
-        => new ForEachComponentSource<T>(enumerable, factory);
+    public static IComponentGroup ForEach<T>(IEnumerable<T> enumerable, Func<T, IBaseComponent> factory)
+        => new ForEachComponentGroup<T>(enumerable, factory);
 
     public static IRowComponent Row(params IBaseComponent[] components)
         => new RowComponent(components);

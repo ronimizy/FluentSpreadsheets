@@ -19,8 +19,8 @@ internal class ColumnTableScaler : Scaler
     protected override Axis GetAxis()
         => Axis.Vertical;
 
-    protected override IComponent MergeComponents(IEnumerable<IBaseComponent> componentSources)
-        => ComponentFactory.VStack(componentSources);
+    protected override IComponent MergeComponents(IEnumerable<IBaseComponent> components)
+        => ComponentFactory.VStack(components);
 
     protected override int SelectDimension(IComponent component)
         => component.Size.Height;
