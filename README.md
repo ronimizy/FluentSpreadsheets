@@ -109,6 +109,9 @@ style B, the component will have a style equal to style B applied to style A.
   ).WithTrailingBorder(BorderType.Thin, Color.Black).WithBottomBorder(BorderType.Thin, Color.Black)
 ```
 
+> Components are immutable, when you apply a style to a component, it will return a new component with the style applied, 
+> the object you called a method on will not be changed.
+
 The result will be something like this:\
 ![Styles](Docs/Media/hello-styles.png)
 
