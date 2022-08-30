@@ -1,15 +1,16 @@
 using FluentSpreadsheets.ComponentImplementations;
+using FluentSpreadsheets.Wrappables;
 
 namespace FluentSpreadsheets;
 
 public static class ComponentAdjustmentExtensions
 {
-    public static IComponent WithAdjustedRows(this IComponent component)
-        => component.Wrap(x => new AdjustedComponent(x, true, false));
+    public static T WithAdjustedRows<T>(this T component) where T : IWrappable<T>
+        => component.WrappedInto(x => new AdjustedComponent(x, true, false));
 
-    public static IComponent WithAdjustedColumns(this IComponent component)
-        => component.Wrap(x => new AdjustedComponent(x, false, true));
+    public static T WithAdjustedColumns<T>(this T component) where T : IWrappable<T>
+        => component.WrappedInto(x => new AdjustedComponent(x, false, true));
 
-    public static IComponent Adjusted(this IComponent component)
-        => component.Wrap(x => new AdjustedComponent(component, true, true));
+    public static T Adjusted<T>(this T component) where T : IWrappable<T>
+        => component.WrappedInto(x => new AdjustedComponent(x, true, true));
 }

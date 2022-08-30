@@ -2,7 +2,7 @@ using FluentSpreadsheets.Visitors;
 
 namespace FluentSpreadsheets.ComponentImplementations;
 
-internal class AdjustedComponent : IRowAdjustedComponent, IColumnAdjustedComponent
+internal class AdjustedComponent : ComponentBase, IRowAdjustedComponent, IColumnAdjustedComponent
 {
     private readonly bool _adjustColumn;
     private readonly bool _adjustRow;
@@ -15,9 +15,9 @@ internal class AdjustedComponent : IRowAdjustedComponent, IColumnAdjustedCompone
         _adjustColumn = adjustColumn;
     }
 
-    public Size Size => _component.Size;
+    public override Size Size => _component.Size;
 
-    public void Accept(IComponentVisitor visitor)
+    public override void Accept(IComponentVisitor visitor)
     {
         _component.Accept(visitor);
 

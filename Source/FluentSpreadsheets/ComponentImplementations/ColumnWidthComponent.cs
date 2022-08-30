@@ -2,7 +2,7 @@ using FluentSpreadsheets.Visitors;
 
 namespace FluentSpreadsheets.ComponentImplementations;
 
-internal class ColumnWidthComponent : IColumnWidthComponent
+internal class ColumnWidthComponent : ComponentBase, IColumnWidthComponent
 {
     private readonly IComponent _component;
 
@@ -12,11 +12,11 @@ internal class ColumnWidthComponent : IColumnWidthComponent
         Width = width;
     }
 
-    public Size Size => _component.Size;
+    public override Size Size => _component.Size;
 
     public int Width { get; }
 
-    public void Accept(IComponentVisitor visitor)
+    public override void Accept(IComponentVisitor visitor)
     {
         visitor.Visit(this);
         _component.Accept(visitor);

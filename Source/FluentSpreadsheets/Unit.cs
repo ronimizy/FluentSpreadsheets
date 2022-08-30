@@ -1,6 +1,6 @@
 namespace FluentSpreadsheets;
 
-internal struct Unit
+public struct Unit
 {
     public static Unit Value => new Unit();
     

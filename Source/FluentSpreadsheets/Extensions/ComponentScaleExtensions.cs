@@ -1,10 +1,11 @@
 using FluentSpreadsheets.ComponentImplementations;
+using FluentSpreadsheets.Wrappables;
 
 namespace FluentSpreadsheets;
 
 public static class ComponentScaleExtensions
 {
-    public static IComponent ScaledBy(this IComponent component, int factor, Axis axis)
+    public static T ScaledBy<T>(this T component, int factor, Axis axis) where T : IWrappable<T>
     {
         var verticalFactor = 1;
         var horizontalFactor = 1;
@@ -16,6 +17,6 @@ public static class ComponentScaleExtensions
             horizontalFactor *= factor;
 
         var scale = new Scale(horizontalFactor, verticalFactor);
-        return component.Wrap(x => new ScaledComponent(x, scale));
+        return component.WrappedInto(x => new ScaledComponent(x, scale));
     }
 }
