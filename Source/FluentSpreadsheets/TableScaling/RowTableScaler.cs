@@ -7,13 +7,13 @@ internal class RowTableScaler : Scaler
     private RowTableScaler() { }
 
     public static RowTableScaler Instance => LazyInstance.Value;
-    
+
     protected override void ValidateCustomization(IComponent component, IComponent customizedComponent)
     {
         if (component.Size.Width.Equals(customizedComponent.Size.Width))
             return;
 
-        throw new InvalidCustomizationException();
+        throw new InvalidCustomizationException("Customized component width must be equal to the component height");
     }
 
     protected override Axis GetAxis()

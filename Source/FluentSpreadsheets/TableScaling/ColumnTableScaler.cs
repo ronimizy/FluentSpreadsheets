@@ -13,7 +13,7 @@ internal class ColumnTableScaler : Scaler
         if (component.Size.Height.Equals(customizedComponent.Size.Height))
             return;
 
-        throw new InvalidCustomizationException();
+        throw new InvalidCustomizationException("Customized component height must be equal to the component height");
     }
 
     protected override Axis GetAxis()
