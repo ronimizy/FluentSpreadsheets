@@ -13,7 +13,7 @@ internal abstract class Scaler
 
         try
         {
-            while (nodes.Any(x => x.HasValues))
+            while (nodes.Any(x => x.ListHasValues))
             {
                 FlushDepletedEnumeratorNodes(nodes);
                 MoveEnumeratorNodesEdgeEnumerators(nodes);

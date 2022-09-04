@@ -20,6 +20,8 @@ internal class EnumeratorNode<T> : IDisposable
 
     public bool HasValues { get; private set; }
 
+    public bool ListHasValues => HasValues || (Next?.ListHasValues ?? false);
+
     public List<T> Values { get; }
 
     public void MoveNext()
