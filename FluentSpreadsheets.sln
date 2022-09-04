@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentSpreadsheets.Examples
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentSpreadsheets.Examples.Tables", "Examples\FluentSpreadsheets.Examples.Tables\FluentSpreadsheets.Examples.Tables.csproj", "{1B94DDA7-A55A-4202-B271-C018E846A1A4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentSpreadsheets.Test", "FluentSpreadsheets.Test\FluentSpreadsheets.Test.csproj", "{8C09C0B6-42CC-4F59-9058-F947AC8999BC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{1B94DDA7-A55A-4202-B271-C018E846A1A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B94DDA7-A55A-4202-B271-C018E846A1A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B94DDA7-A55A-4202-B271-C018E846A1A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C09C0B6-42CC-4F59-9058-F947AC8999BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C09C0B6-42CC-4F59-9058-F947AC8999BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C09C0B6-42CC-4F59-9058-F947AC8999BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C09C0B6-42CC-4F59-9058-F947AC8999BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

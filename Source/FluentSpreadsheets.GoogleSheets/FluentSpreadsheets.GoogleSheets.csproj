@@ -21,8 +21,8 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<PackageVersion>1.0.0</PackageVersion>
-		<PackageReleaseNotes>Table API refactor</PackageReleaseNotes>
+		<PackageVersion>1.0.1</PackageVersion>
+		<PackageReleaseNotes>Fix: skipping after component group termination</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>
