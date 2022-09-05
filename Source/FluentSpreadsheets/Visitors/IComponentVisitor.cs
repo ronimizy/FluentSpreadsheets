@@ -9,6 +9,8 @@ public interface IComponentVisitor
     void Visit(IHStackComponent component);
 
     void Visit(ILabelComponent component);
+    
+    void Visit(ICellAwareComponent component);
 
     void Visit(IScaledComponent component);
 
