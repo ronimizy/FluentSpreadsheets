@@ -17,7 +17,5 @@ internal class CellAwareComponent : ComponentBase, ICellAwareComponent
         => _valueFactory.Invoke(index);
 
     public override void Accept(IComponentVisitor visitor)
-    {
-        visitor.Visit(this);
-    }
+        => visitor.Visit(this);
 }
