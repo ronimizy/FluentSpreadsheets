@@ -100,6 +100,20 @@ public class ComponentVisitor<THandler> : IComponentVisitor where THandler : ICo
         _handler.WriteString(_index, component.Text);
     }
 
+    public void Visit(ICellAwareComponent component)
+    {
+        var size = component.Size * _scale;
+        var end = new Index(_index.Row + size.Height, _index.Column + size.Width);
+        var range = new IndexRange(_index, end);
+
+        if (!_scale.IsNone)
+            _handler.MergeRange(range);
+
+        var text = component.BuildValue(_index);
+        _handler.StyleRange(_style, range);
+        _handler.WriteString(_index, text);
+    }
+
     public void Visit(IScaledComponent component)
     {
         _scale *= component.Scale;

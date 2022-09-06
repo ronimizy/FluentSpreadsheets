@@ -27,6 +27,24 @@ public static class ComponentFactory
     public static IComponent Label<T>(T value, IFormatProvider? formatProvider) where T : IFormattable
         => Label(value, null, formatProvider);
 
+    public static IComponent Label(Func<Index, string> factory)
+        => new CellAwareComponent(factory);
+
+    public static IComponent Label<T>(Func<Index, T> factory)
+        => new CellAwareComponent(x => factory.Invoke(x)?.ToString() ?? string.Empty);
+
+    public static IComponent Label<T>(Func<Index, T> factory, string? format, IFormatProvider? formatProvider)
+        where T : IFormattable
+    {
+        string Func(Index x)
+            => factory.Invoke(x)?.ToString(format, formatProvider) ?? string.Empty;
+
+        return new CellAwareComponent(Func);
+    }
+
+    public static IComponent Label<T>(Func<Index, T> factory, IFormatProvider? formatProvider) where T : IFormattable
+        => Label(factory, null, formatProvider);
+
     public static IComponent VStack(params IBaseComponent[] components)
         => new VStackComponent(components);
 
