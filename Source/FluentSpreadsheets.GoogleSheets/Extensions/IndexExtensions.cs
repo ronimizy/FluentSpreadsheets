@@ -4,9 +4,9 @@ namespace FluentSpreadsheets.GoogleSheets.Extensions;
 
 public static class IndexExtensions
 {
-    public static string ToGoogleSheetsIndex(this Index index, string sheetName)
+    public static string ToGoogleSheetsIndex(this Index index, string sheetTitle)
     {
-        return $"{sheetName}!{GetColumnIndex(index.Column)}{index.Row}";
+        return $"{sheetTitle}!{GetColumnIndex(index.Column)}{index.Row}";
     }
 
     private static string GetColumnIndex(int value)
