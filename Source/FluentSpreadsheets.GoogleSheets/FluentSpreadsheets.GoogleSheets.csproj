@@ -21,8 +21,8 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<PackageVersion>1.0.1</PackageVersion>
-		<PackageReleaseNotes>Fix: skipping after component group termination</PackageReleaseNotes>
+		<PackageVersion>1.0.2</PackageVersion>
+		<PackageReleaseNotes>Exposed API for converting Index to google string</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>

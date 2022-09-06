@@ -2,7 +2,7 @@
 
 namespace FluentSpreadsheets.GoogleSheets.Extensions;
 
-internal static class IndexExtensions
+public static class IndexExtensions
 {
     public static string ToGoogleSheetsIndex(this Index index, string sheetName)
     {
