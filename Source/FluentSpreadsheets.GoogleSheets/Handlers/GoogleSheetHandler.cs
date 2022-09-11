@@ -11,6 +11,7 @@ internal readonly struct GoogleSheetHandler : IComponentVisitorHandler
 {
     private const string UpdateFieldsAll = "*";
     private const string UpdateAlignment = "userEnteredFormat(horizontalAlignment, verticalAlignment)";
+    private const string UpdateBackgroundColor = "userEnteredFormat(backgroundColor)";
 
     private readonly int _id;
     private readonly string _name;
@@ -66,7 +67,7 @@ internal readonly struct GoogleSheetHandler : IComponentVisitorHandler
                 },
             };
 
-            var setAlignmentRequest = new Request
+            var request = new Request
             {
                 RepeatCell = new RepeatCellRequest
                 {
@@ -76,12 +77,12 @@ internal readonly struct GoogleSheetHandler : IComponentVisitorHandler
                 },
             };
 
-            StyleRequests.Add(setAlignmentRequest);
+            StyleRequests.Add(request);
         }
 
         if (style.Border is not null)
         {
-            var updateBordersRequest = new Request
+            var request = new Request
             {
                 UpdateBorders = new UpdateBordersRequest
                 {
@@ -93,7 +94,30 @@ internal readonly struct GoogleSheetHandler : IComponentVisitorHandler
                 },
             };
 
-            StyleRequests.Add(updateBordersRequest);
+            StyleRequests.Add(request);
+        }
+
+        if (style.Fill is not null)
+        {
+            var cellData = new CellData
+            {
+                UserEnteredFormat = new CellFormat
+                {
+                    BackgroundColor = style.Fill.Value.ToGoogleColor(),
+                },
+            };
+
+            var request = new Request
+            {
+                RepeatCell = new RepeatCellRequest
+                {
+                    Cell = cellData,
+                    Range = range.ToGridRange(_id),
+                    Fields = UpdateBackgroundColor,
+                },
+            };
+
+            StyleRequests.Add(request);
         }
     }
 
