@@ -17,21 +17,7 @@ internal readonly struct ClosedXmlHandler : IComponentVisitorHandler
     public void StyleRange(Style style, IndexRange range)
     {
         var worksheetRange = _worksheet.Range(range);
-
-        if (style.Alignment is not null)
-        {
-            XLAlignmentVerticalValues? vertical = style.Alignment.Value.Vertical?.ToXlAlignment();
-            XLAlignmentHorizontalValues? horizontal = style.Alignment.Value.Horizontal?.ToXlAlignment();
-
-            if (vertical is not null)
-                worksheetRange.Style.Alignment.Vertical = vertical.Value;
-
-            if (horizontal is not null)
-                worksheetRange.Style.Alignment.Horizontal = horizontal.Value;
-        }
-
-        if (style.Border is not null)
-            worksheetRange.Style.Border.ApplyBorderStyle(style.Border.Value);
+        worksheetRange.ApplyStyle(style);
     }
 
     public void MergeRange(IndexRange range)
