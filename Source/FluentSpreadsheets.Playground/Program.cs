@@ -124,7 +124,7 @@ public class StudentPointsRowTable : RowTable<StudentPointsSheetData>, ITableCus
                     Label(headerData.MaxPoints, CultureInfo.InvariantCulture)
                 )
             )).CustomizedWith(x => VStack(Label("Labs"), x))
-        );
+        ).FilledWith(Color.LightGray);
 
         foreach (var (data, i) in model.StudentPoints.Select((p, i) => (p, i)))
         {
