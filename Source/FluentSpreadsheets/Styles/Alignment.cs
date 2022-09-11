@@ -1,6 +1,7 @@
 namespace FluentSpreadsheets.Styles;
 
 public readonly record struct Alignment(VerticalAlignment? Vertical, HorizontalAlignment? Horizontal)
+    : IApplicable<Alignment>
 {
     public Alignment Apply(Alignment alignment)
     {
