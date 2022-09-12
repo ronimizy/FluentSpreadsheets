@@ -51,4 +51,14 @@ internal readonly struct ClosedXmlHandler : IComponentVisitorHandler
     {
         _worksheet.Columns(from, upTo - 1).Width = width;
     }
+
+    public void FreezeRows(int count)
+    {
+        _worksheet.SheetView.FreezeRows(count);
+    }
+
+    public void FreezeColumns(int count)
+    {
+        _worksheet.SheetView.FreezeColumns(count);
+    }
 }
