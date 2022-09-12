@@ -2,23 +2,23 @@ using FluentSpreadsheets.Visitors;
 
 namespace FluentSpreadsheets.ComponentImplementations;
 
-internal class RowHeightComponent : ComponentBase, IRowHeightComponent
+internal class RowHeightComponent : TopLevelComponentBase, IRowHeightComponent
 {
-    private readonly IComponent _component;
-
-    public RowHeightComponent(IComponent component, int height)
+    public RowHeightComponent(IComponent component, int height) : base(component)
     {
-        _component = component;
         Height = height;
     }
 
-    public override Size Size => _component.Size;
+    public override Size Size => Wrapped.Size;
 
     public int Height { get; }
 
     public override void Accept(IComponentVisitor visitor)
     {
         visitor.Visit(this);
-        _component.Accept(visitor);
+        Wrapped.Accept(visitor);
     }
+
+    protected override IComponent WrapIntoCurrent(IComponent component)
+        => new RowHeightComponent(component, Height);
 }

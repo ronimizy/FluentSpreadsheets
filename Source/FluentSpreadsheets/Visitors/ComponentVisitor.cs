@@ -147,4 +147,14 @@ public class ComponentVisitor<THandler> : IComponentVisitor where THandler : ICo
         var size = component.Size * _scale;
         _handler.SetColumnWidth(_index.Column, _index.Column + size.Width, component.Width);
     }
+
+    public void Visit(IFrozenRowComponent component)
+    {
+        _handler.FreezeRows(component.Size.Height);
+    }
+
+    public void Visit(IFrozenColumnComponent component)
+    {
+        _handler.FreezeColumns(component.Size.Width);
+    }
 }

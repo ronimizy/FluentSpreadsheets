@@ -2,23 +2,23 @@ using FluentSpreadsheets.Visitors;
 
 namespace FluentSpreadsheets.ComponentImplementations;
 
-internal class ColumnWidthComponent : ComponentBase, IColumnWidthComponent
+internal class ColumnWidthComponent : TopLevelComponentBase, IColumnWidthComponent
 {
-    private readonly IComponent _component;
-
-    public ColumnWidthComponent(IComponent component, int width)
+    public ColumnWidthComponent(IComponent component, int width) : base(component)
     {
-        _component = component;
         Width = width;
     }
 
-    public override Size Size => _component.Size;
+    public override Size Size => Wrapped.Size;
 
     public int Width { get; }
 
     public override void Accept(IComponentVisitor visitor)
     {
         visitor.Visit(this);
-        _component.Accept(visitor);
+        Wrapped.Accept(visitor);
     }
+
+    protected override IComponent WrapIntoCurrent(IComponent component)
+        => new ColumnWidthComponent(component, Width);
 }

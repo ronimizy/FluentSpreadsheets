@@ -23,8 +23,7 @@ internal class VStackComponent : ComponentBase, IVStackComponent
             if (scaleFactor is 1)
                 continue;
 
-            var scale = new Scale(scaleFactor, 1);
-            components[i] = new ScaledComponent(components[i], scale);
+            components[i] = components[i].ScaledBy(scaleFactor, Axis.Horizontal);
         }
 
         Components = new ReadOnlyCollection<IComponent>(components);

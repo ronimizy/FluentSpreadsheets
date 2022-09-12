@@ -23,8 +23,7 @@ internal class HStackComponent : ComponentBase, IHStackComponent
             if (scaleFactor is 1)
                 continue;
 
-            var scale = new Scale(1, scaleFactor);
-            components[i] = new ScaledComponent(components[i], scale);
+            components[i] = components[i].ScaledBy(scaleFactor, Axis.Vertical);
         }
 
         Components = new ReadOnlyCollection<IComponent>(components);

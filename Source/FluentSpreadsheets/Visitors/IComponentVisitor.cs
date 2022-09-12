@@ -23,4 +23,8 @@ public interface IComponentVisitor
     void Visit(IRowHeightComponent component);
 
     void Visit(IColumnWidthComponent component);
+
+    void Visit(IFrozenRowComponent component);
+    
+    void Visit(IFrozenColumnComponent component);
 }
