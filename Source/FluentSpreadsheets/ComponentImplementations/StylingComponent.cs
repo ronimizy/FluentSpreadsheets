@@ -3,9 +3,9 @@ using FluentSpreadsheets.Visitors;
 
 namespace FluentSpreadsheets.ComponentImplementations;
 
-internal class StylingComponent : ComponentBase, IStylingComponent
+internal class StylingComponent : TopLevelComponentBase, IStylingComponent
 {
-    public StylingComponent(IComponent styledComponent, Style style)
+    public StylingComponent(IComponent styledComponent, Style style) : base(styledComponent)
     {
         StyledComponent = styledComponent;
         Style = style;
@@ -22,4 +22,7 @@ internal class StylingComponent : ComponentBase, IStylingComponent
         visitor.Visit(this);
         StyledComponent.Accept(visitor);
     }
+
+    protected override IComponent WrapIntoCurrent(IComponent component)
+        => new StylingComponent(component, Style);
 }

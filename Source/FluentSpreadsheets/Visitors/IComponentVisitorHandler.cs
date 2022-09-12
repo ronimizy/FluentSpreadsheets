@@ -17,4 +17,8 @@ public interface IComponentVisitorHandler
     void SetRowHeight(int from, int upTo, int height);
 
     void SetColumnWidth(int from, int upTo, int width);
+
+    void FreezeRows(int count);
+    
+    void FreezeColumns(int count);
 }
