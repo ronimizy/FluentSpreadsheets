@@ -108,7 +108,7 @@ public class StudentPointsRowTable : RowTable<StudentPointsSheetData>, ITableCus
     {
         yield return Row
         (
-            Label("#"),
+            Label("#").Frozen(),
             Label("Student Name").WithColumnWidth(30),
             ForEach(model.HeaderData.Labs, headerData => VStack
             (
