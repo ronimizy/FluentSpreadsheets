@@ -51,6 +51,50 @@ internal readonly struct GoogleSheetHandler : IComponentVisitorHandler
     public void SetColumnWidth(int from, int upTo, int width)
         => SetDimensionSize(Dimension.Columns, from, upTo, width);
 
+    public void FreezeRows(int count)
+    {
+        var properties = new SheetProperties
+        {
+            GridProperties = new GridProperties
+            {
+                FrozenRowCount = count,
+            },
+        };
+
+        var request = new Request
+        {
+            UpdateSheetProperties = new UpdateSheetPropertiesRequest
+            {
+                Properties = properties,
+                Fields = "gridProperties.frozenRowCount",
+            },
+        };
+
+        StyleRequests.Add(request);
+    }
+
+    public void FreezeColumns(int count)
+    {
+        var properties = new SheetProperties
+        {
+            GridProperties = new GridProperties
+            {
+                FrozenColumnCount = count,
+            },
+        };
+
+        var request = new Request
+        {
+            UpdateSheetProperties = new UpdateSheetPropertiesRequest
+            {
+                Properties = properties,
+                Fields = "gridProperties.frozenColumnCount",
+            },
+        };
+
+        StyleRequests.Add(request);
+    }
+
     public void SetRowHeight(int from, int upTo, int height)
         => SetDimensionSize(Dimension.Columns, from, upTo, height);
 
