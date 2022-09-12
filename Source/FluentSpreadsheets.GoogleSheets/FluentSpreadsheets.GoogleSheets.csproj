@@ -21,8 +21,8 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<PackageVersion>1.1.0</PackageVersion>
-		<PackageReleaseNotes>Feat: fill color style</PackageReleaseNotes>
+		<PackageVersion>1.2.0</PackageVersion>
+		<PackageReleaseNotes>Added frozen dimensions support</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>
