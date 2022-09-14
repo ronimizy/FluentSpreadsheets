@@ -10,7 +10,7 @@ using static ComponentFactory;
 public class RowSheetTest
 {
     [Fact]
-    public void Test1()
+    public void Render_Should_ProduceCorrectAmountOfComponents()
     {
         // Arrange
         var studentA = new Student("Aboba 1");

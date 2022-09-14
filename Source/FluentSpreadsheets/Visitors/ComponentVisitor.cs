@@ -150,11 +150,13 @@ public class ComponentVisitor<THandler> : IComponentVisitor where THandler : ICo
 
     public void Visit(IFrozenRowComponent component)
     {
-        _handler.FreezeRows(component.Size.Height);
+        var count = _index.Row + component.Size.Height - 1;
+        _handler.FreezeRows(count);
     }
 
     public void Visit(IFrozenColumnComponent component)
     {
-        _handler.FreezeColumns(component.Size.Width);
+        var count = _index.Column + component.Size.Width - 1;
+        _handler.FreezeColumns(count);
     }
 }
