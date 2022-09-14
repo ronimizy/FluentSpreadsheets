@@ -66,7 +66,7 @@ async Task RenderGoogleSheets()
 
     var renderer = new GoogleSheetComponentRenderer(service);
 
-    const string title = "";
+    const string title = "New Sheet Name";
 
     var renderCommandFactory = new RenderCommandFactory(service);
 
@@ -108,8 +108,8 @@ public class StudentPointsRowTable : RowTable<StudentPointsSheetData>, ITableCus
     {
         yield return Row
         (
-            Label("#").Frozen(),
-            Label("Student Name").WithColumnWidth(30),
+            Label("#"),
+            Label("Student Name").WithColumnWidth(30).Frozen(),
             ForEach(model.HeaderData.Labs, headerData => VStack
             (
                 Label(headerData.Name),

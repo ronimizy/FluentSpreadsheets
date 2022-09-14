@@ -21,8 +21,8 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<PackageVersion>1.2.0</PackageVersion>
-		<PackageReleaseNotes>Added frozen dimensions support</PackageReleaseNotes>
+		<PackageVersion>1.2.1</PackageVersion>
+		<PackageReleaseNotes>Fixed frozen dimension size evaluation</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>
