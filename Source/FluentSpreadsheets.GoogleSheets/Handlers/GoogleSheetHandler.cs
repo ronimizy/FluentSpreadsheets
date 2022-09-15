@@ -59,6 +59,7 @@ internal readonly struct GoogleSheetHandler : IComponentVisitorHandler
             {
                 FrozenRowCount = count,
             },
+            SheetId = _id,
         };
 
         var request = new Request
@@ -81,6 +82,7 @@ internal readonly struct GoogleSheetHandler : IComponentVisitorHandler
             {
                 FrozenColumnCount = count,
             },
+            SheetId = _id,
         };
 
         var request = new Request
