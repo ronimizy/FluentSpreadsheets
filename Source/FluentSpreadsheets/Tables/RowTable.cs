@@ -1,3 +1,4 @@
+using FluentSpreadsheets.ContainerImplementations;
 using FluentSpreadsheets.TableScaling;
 using static FluentSpreadsheets.ComponentFactory;
 
@@ -9,24 +10,16 @@ public abstract class RowTable<T> : ITable<T>
     {
         IRowComponent[] rowComponents = RenderRows(model).ToArray();
         IEnumerable<IEnumerable<IComponent>> scaled = RowTableScaler.Instance.Scale(rowComponents);
+        IComponent[] rows = scaled.Select(HStack).ToArray();
 
-        IEnumerable<IComponent> rows = scaled.Select(HStack).Select((c, i) =>
-        {
-            var row = rowComponents[i];
+        var width = rows.Length is 0 ? 0 : rows.Max(x => x.Size.Width);
+        var stack = new VStackComponent(rows, width);
 
-            if (row is ICustomizerRowComponent customizer)
-                return customizer.Customize(c);
-
-            return c;
-        });
-
-        var table = VStack(rows);
-
-        if (this is ITableCustomizer tableCustomizer)
-            table = tableCustomizer.Customize(table);
-
-        return table;
+        return Customize(stack);
     }
 
     protected abstract IEnumerable<IRowComponent> RenderRows(T model);
+
+    protected virtual IComponent Customize(IComponent component)
+        => component;
 }

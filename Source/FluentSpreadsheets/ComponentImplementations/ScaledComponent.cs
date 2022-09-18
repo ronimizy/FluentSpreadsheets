@@ -2,11 +2,11 @@ using FluentSpreadsheets.Visitors;
 
 namespace FluentSpreadsheets.ComponentImplementations;
 
-internal class ScaledComponent : ComponentBase, IScaledComponent
+internal sealed class ScaledComponent : ComponentBase, IScaledComponent
 {
     private readonly IComponent _component;
 
-    public ScaledComponent(IComponent component, Scale scale)
+    public ScaledComponent(IComponent component, Scale scale) : base(component.Style)
     {
         _component = component;
         Scale = scale;

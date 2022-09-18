@@ -1,5 +1,6 @@
 using FluentSpreadsheets.ComponentGroupImplementations;
 using FluentSpreadsheets.ComponentImplementations;
+using FluentSpreadsheets.ContainerImplementations;
 using FluentSpreadsheets.TableComponentImplementations;
 
 namespace FluentSpreadsheets;
@@ -17,6 +18,9 @@ public static class ComponentFactory
 
     public static IComponent Label(string text)
         => new LabelComponent(text);
+
+    public static IComponent Label()
+        => Label(string.Empty);
 
     public static IComponent Label<T>(T value)
         => Label(value?.ToString() ?? string.Empty);
@@ -53,12 +57,18 @@ public static class ComponentFactory
 
     public static IComponent VStack(Func<IEnumerable<IBaseComponent>> func)
         => new VStackComponent(func.Invoke());
+    
+    public static IComponent VStack(IComponentGroup group)
+        => new VStackComponent(group);
 
     public static IComponent HStack(params IBaseComponent[] components)
         => new HStackComponent(components);
 
     public static IComponent HStack(IEnumerable<IBaseComponent> components)
         => new HStackComponent(components);
+
+    public static IComponent HStack(IComponentGroup group)
+        => new HStackComponent(group);
 
     public static IComponent HStack(Func<IEnumerable<IBaseComponent>> func)
         => new HStackComponent(func.Invoke());

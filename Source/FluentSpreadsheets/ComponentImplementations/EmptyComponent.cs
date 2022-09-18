@@ -2,7 +2,7 @@ using FluentSpreadsheets.Visitors;
 
 namespace FluentSpreadsheets.ComponentImplementations;
 
-internal class EmptyComponent : ComponentBase, IComponent
+internal sealed class EmptyComponent : ComponentBase, IComponent
 {
     public EmptyComponent(Size size)
     {

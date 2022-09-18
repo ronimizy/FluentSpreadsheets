@@ -1,5 +1,3 @@
-using FluentSpreadsheets.Styles;
-
 namespace FluentSpreadsheets.Visitors;
 
 public class ComponentVisitor<THandler> : IComponentVisitor where THandler : IComponentVisitorHandler
@@ -7,12 +5,10 @@ public class ComponentVisitor<THandler> : IComponentVisitor where THandler : ICo
     private readonly THandler _handler;
     private Index _index;
     private Scale _scale;
-    private Style _style;
 
-    public ComponentVisitor(Index index, THandler handler, Style style = default)
+    public ComponentVisitor(Index index, THandler handler)
     {
         _index = index;
-        _style = style;
         _handler = handler;
         _scale = Scale.None;
     }
@@ -25,24 +21,14 @@ public class ComponentVisitor<THandler> : IComponentVisitor where THandler : ICo
 
         if (!_scale.IsNone)
             _handler.MergeRange(range);
-
-        _handler.StyleRange(_style, range);
     }
 
     public void Visit(IVStackComponent component)
     {
-        var size = component.Size;
-
         var index = _index;
         var scale = _scale;
-        var style = _style;
 
-        var end = new Index(index.Row + size.Height, index.Column + size.Width);
-        var range = new IndexRange(_index, end);
-
-        _handler.StyleRange(style, range);
-
-        foreach (var subComponent in component.Components)
+        foreach (var subComponent in component)
         {
             var subcomponentSize = subComponent.Size * _scale;
 
@@ -54,24 +40,15 @@ public class ComponentVisitor<THandler> : IComponentVisitor where THandler : ICo
             };
 
             _scale = scale;
-            _style = style;
         }
     }
 
     public void Visit(IHStackComponent component)
     {
-        var size = component.Size;
-
         var index = _index;
         var scale = _scale;
-        var style = _style;
 
-        var end = new Index(index.Row + size.Height, index.Column + size.Width);
-        var range = new IndexRange(_index, end);
-
-        _handler.StyleRange(style, range);
-
-        foreach (var subComponent in component.Components)
+        foreach (var subComponent in component)
         {
             var subcomponentSize = subComponent.Size * _scale;
             subComponent.Accept(this);
@@ -83,7 +60,6 @@ public class ComponentVisitor<THandler> : IComponentVisitor where THandler : ICo
 
             _index = index;
             _scale = scale;
-            _style = style;
         }
     }
 
@@ -96,7 +72,6 @@ public class ComponentVisitor<THandler> : IComponentVisitor where THandler : ICo
         if (!_scale.IsNone)
             _handler.MergeRange(range);
 
-        _handler.StyleRange(_style, range);
         _handler.WriteString(_index, component.Text);
     }
 
@@ -110,7 +85,6 @@ public class ComponentVisitor<THandler> : IComponentVisitor where THandler : ICo
             _handler.MergeRange(range);
 
         var text = component.BuildValue(_index);
-        _handler.StyleRange(_style, range);
         _handler.WriteString(_index, text);
     }
 
@@ -121,7 +95,11 @@ public class ComponentVisitor<THandler> : IComponentVisitor where THandler : ICo
 
     public void Visit(IStylingComponent component)
     {
-        _style = _style.Apply(component.Style);
+        var size = component.Size * _scale;
+        var end = new Index(_index.Row + size.Height, _index.Column + size.Width);
+        var range = new IndexRange(_index, end);
+
+        _handler.StyleRange(component.Style, range);
     }
 
     public void Visit(IRowAdjustedComponent component)

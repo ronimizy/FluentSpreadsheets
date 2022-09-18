@@ -2,34 +2,32 @@ using FluentSpreadsheets.Styles;
 
 namespace FluentSpreadsheets.ComponentGroupImplementations;
 
-internal class StylingComponentGroup : ComponentGroupBase, IStylingComponentGroup
+internal sealed class StylingComponentGroup : ComponentGroupBase, IStylingComponentGroup
 {
     private readonly IComponentGroup _componentGroup;
-    private readonly Style _style;
 
-    public StylingComponentGroup(IComponentGroup componentGroup, Style style)
+    public StylingComponentGroup(IComponentGroup componentGroup, Style style) : base(style)
     {
         _componentGroup = componentGroup;
-        _style = style;
     }
 
     public override IEnumerator<IBaseComponent> GetEnumerator()
     {
         return _componentGroup
             .ExtractComponents()
-            .Select(x => x.WithStyleApplied(_style))
+            .Select(x => x.WithStyleApplied(Style.Apply(x.Style)))
             .GetEnumerator();
     }
 
     public override IComponentGroup WithStyleApplied(Style style)
     {
-        var newStyle = _style.Apply(style);
+        var newStyle = Style.Apply(style);
         return new StylingComponentGroup(_componentGroup, newStyle);
     }
 
     public override IComponentGroup WrappedInto(Func<IComponent, IComponent> wrapper)
     {
         var wrapped = new ModifierComponentGroup(_componentGroup, wrapper);
-        return new StylingComponentGroup(wrapped, _style);
+        return new StylingComponentGroup(wrapped, Style);
     }
 }

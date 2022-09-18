@@ -2,7 +2,7 @@ using FluentSpreadsheets.Visitors;
 
 namespace FluentSpreadsheets.ComponentImplementations;
 
-internal class CellAwareComponent : ComponentBase, ICellAwareComponent
+internal sealed class CellAwareComponent : ComponentBase, ICellAwareComponent
 {
     private readonly Func<Index, string> _valueFactory;
 

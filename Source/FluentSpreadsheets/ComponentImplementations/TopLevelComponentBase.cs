@@ -1,29 +1,26 @@
 using FluentSpreadsheets.Styles;
-using FluentSpreadsheets.Visitors;
 
 namespace FluentSpreadsheets.ComponentImplementations;
 
-internal abstract class TopLevelComponentBase : IComponent
+internal abstract class TopLevelComponentBase : ComponentBase
 {
-    protected TopLevelComponentBase(IComponent wrapped)
+    protected TopLevelComponentBase(IComponent wrapped) : base(wrapped.Style)
+    {
+        Wrapped = wrapped;
+    }
+
+    protected TopLevelComponentBase(IComponent wrapped, Style style) : base(style)
     {
         Wrapped = wrapped;
     }
 
     protected IComponent Wrapped { get; }
 
-    public abstract Size Size { get; }
-
-    public IComponent WithStyleApplied(Style style)
-        => this.WithStyleAppliedInternal(style);
-
-    public IComponent WrappedInto(Func<IComponent, IComponent> wrapper)
+    public override IComponent WrappedInto(Func<IComponent, IComponent> wrapper)
     {
         var wrapped = Wrapped.WrappedInto(wrapper);
         return WrapIntoCurrent(wrapped);
     }
-
-    public abstract void Accept(IComponentVisitor visitor);
 
     protected abstract IComponent WrapIntoCurrent(IComponent component);
 }
