@@ -2,7 +2,7 @@ using FluentSpreadsheets.Visitors;
 
 namespace FluentSpreadsheets.ComponentImplementations;
 
-internal class ColumnWidthComponent : TopLevelComponentBase, IColumnWidthComponent
+internal sealed class ColumnWidthComponent : TopLevelComponentBase, IColumnWidthComponent
 {
     public ColumnWidthComponent(IComponent component, int width) : base(component)
     {

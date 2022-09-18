@@ -2,7 +2,7 @@ using FluentSpreadsheets.Visitors;
 
 namespace FluentSpreadsheets.ComponentImplementations;
 
-internal class LabelComponent : ComponentBase, ILabelComponent
+internal sealed class LabelComponent : ComponentBase, ILabelComponent
 {
     public LabelComponent(string text)
     {

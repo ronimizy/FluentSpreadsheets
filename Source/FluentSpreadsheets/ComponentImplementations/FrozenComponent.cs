@@ -2,7 +2,7 @@ using FluentSpreadsheets.Visitors;
 
 namespace FluentSpreadsheets.ComponentImplementations;
 
-internal class FrozenComponent : TopLevelComponentBase, IFrozenRowComponent, IFrozenColumnComponent
+internal sealed class FrozenComponent : TopLevelComponentBase, IFrozenRowComponent, IFrozenColumnComponent
 {
     private readonly bool _freezeRows;
     private readonly bool _freezeColumns;

@@ -35,7 +35,7 @@ public readonly record struct CartItem(string Name, decimal Price, int Quantity)
 
 public readonly record struct CartTableModel(IReadOnlyCollection<CartItem> Items);
 
-public class CartTable : RowTable<CartTableModel>, ITableCustomizer
+public class CartTable : RowTable<CartTableModel>
 {
     protected override IEnumerable<IRowComponent> RenderRows(CartTableModel model)
     {
@@ -57,7 +57,7 @@ public class CartTable : RowTable<CartTableModel>, ITableCustomizer
         }
     }
 
-    public IComponent Customize(IComponent component)
+    protected override IComponent Customize(IComponent component)
     {
         return component
             .WithBottomBorder(BorderType.Thin, Color.Black)

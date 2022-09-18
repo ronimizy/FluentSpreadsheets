@@ -2,7 +2,7 @@ using FluentSpreadsheets.Visitors;
 
 namespace FluentSpreadsheets.ComponentImplementations;
 
-internal class RowHeightComponent : TopLevelComponentBase, IRowHeightComponent
+internal sealed class RowHeightComponent : TopLevelComponentBase, IRowHeightComponent
 {
     public RowHeightComponent(IComponent component, int height) : base(component)
     {

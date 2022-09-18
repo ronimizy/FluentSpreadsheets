@@ -2,7 +2,7 @@ using FluentSpreadsheets.Visitors;
 
 namespace FluentSpreadsheets.ComponentImplementations;
 
-internal class AdjustedComponent : TopLevelComponentBase, IRowAdjustedComponent, IColumnAdjustedComponent
+internal sealed class AdjustedComponent : TopLevelComponentBase, IRowAdjustedComponent, IColumnAdjustedComponent
 {
     private readonly bool _adjustColumn;
     private readonly bool _adjustRow;

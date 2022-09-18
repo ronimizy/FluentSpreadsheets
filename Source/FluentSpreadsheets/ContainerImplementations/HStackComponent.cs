@@ -1,11 +1,12 @@
 using System.Collections.ObjectModel;
 using FluentSpreadsheets.Tools;
-using FluentSpreadsheets.Visitors;
 
-namespace FluentSpreadsheets.ComponentImplementations;
+namespace FluentSpreadsheets.ContainerImplementations;
 
-internal class HStackComponent : ComponentBase, IHStackComponent
+internal sealed class HStackComponent : HStackComponentBase
 {
+    private readonly IReadOnlyCollection<IComponent> _components;
+
     public HStackComponent(IEnumerable<IBaseComponent> componentEnumerable)
     {
         IComponent[] components = componentEnumerable.ExtractComponents().ToArray();
@@ -26,7 +27,7 @@ internal class HStackComponent : ComponentBase, IHStackComponent
             components[i] = components[i].ScaledBy(scaleFactor, Axis.Vertical);
         }
 
-        Components = new ReadOnlyCollection<IComponent>(components);
+        _components = new ReadOnlyCollection<IComponent>(components);
         Size = new Size(width, height);
     }
 
@@ -34,18 +35,14 @@ internal class HStackComponent : ComponentBase, IHStackComponent
     ///     Constructor used for SheetBuilder to create a stack without redundant memory allocations.
     ///     DO NOT USE ANYWHERE ELSE, EXCEPT WHEN YOU KNOW THAT COMPONENTS ARE WELL SCALED.
     /// </summary>
-    public HStackComponent(IReadOnlyCollection<IComponent> components, int height)
+    internal HStackComponent(IReadOnlyCollection<IComponent> components, int height)
     {
         var width = components.Sum(x => x.Size.Width);
 
         Size = new Size(width, height);
-        Components = components;
+        _components = components;
     }
 
-    public override Size Size { get; }
-
-    public IReadOnlyCollection<IComponent> Components { get; }
-
-    public override void Accept(IComponentVisitor visitor)
-        => visitor.Visit(this);
+    public override IEnumerator<IComponent> GetEnumerator()
+        => _components.GetEnumerator();
 }
