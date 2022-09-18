@@ -194,7 +194,7 @@ Table API is based on `ITable<T>` interface, where `T` is a type of model, that 
 To define a table you need to create a class derived from `RowTable<T>` and
 implement `IEnumerable<IRowComponent> RenderRows(T model)` method.
 
-To customize rendered table implement `ITableCustomizerInterface` by your table class.
+To customize rendered table override `Customize` method in your table class.
 
 ```csharp
 public readonly record struct CartItem(string Name, decimal Price, int Quantity);
@@ -223,7 +223,7 @@ public class CartTable : RowTable<CartTableModel>, ITableCustomizer
         }
     }
 
-    public IComponent Customize(IComponent component)
+    public override IComponent Customize(IComponent component)
     {
         return component
             .WithBottomBorder(BorderType.Thin, Color.Black)
