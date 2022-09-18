@@ -21,8 +21,8 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <PackageVersion>1.2.1</PackageVersion>
-        <PackageReleaseNotes>Fixed frozen dimension size evaluation</PackageReleaseNotes>
+        <PackageVersion>1.2.2</PackageVersion>
+        <PackageReleaseNotes>Fixed component group customization</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
