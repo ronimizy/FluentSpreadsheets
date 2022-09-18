@@ -102,14 +102,14 @@ public readonly record struct StudentPointsSheetData(
     HeaderData HeaderData,
     IReadOnlyCollection<StudentPoints> StudentPoints);
 
-public class StudentPointsRowTable : RowTable<StudentPointsSheetData>, ITableCustomizer
+public class StudentPointsRowTable : RowTable<StudentPointsSheetData>
 {
     protected override IEnumerable<IRowComponent> RenderRows(StudentPointsSheetData model)
     {
         yield return Row
         (
-            Label("#"),
-            Label("Student Name").WithColumnWidth(30).Frozen(),
+            Label("#").Frozen(),
+            Label("Student Name").WithColumnWidth(30),
             ForEach(model.HeaderData.Labs, headerData => VStack
             (
                 Label(headerData.Name),
@@ -155,7 +155,7 @@ public class StudentPointsRowTable : RowTable<StudentPointsSheetData>, ITableCus
             .WithBottomBorder(BorderType.Thin, Color.Black);
     }
 
-    public IComponent Customize(IComponent component)
+    protected override IComponent Customize(IComponent component)
     {
         return component
             .WithContentAlignment(HorizontalAlignment.Center, VerticalAlignment.Center)

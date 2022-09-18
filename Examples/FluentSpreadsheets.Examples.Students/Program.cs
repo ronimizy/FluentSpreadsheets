@@ -67,7 +67,7 @@ public readonly record struct StudentPointsSheetData(
     HeaderData HeaderData,
     IReadOnlyCollection<StudentPoints> StudentPoints);
 
-public class StudentPointsRowTable : RowTable<StudentPointsSheetData>, ITableCustomizer
+public class StudentPointsRowTable : RowTable<StudentPointsSheetData>
 {
     protected override IEnumerable<IRowComponent> RenderRows(StudentPointsSheetData model)
     {
@@ -120,7 +120,7 @@ public class StudentPointsRowTable : RowTable<StudentPointsSheetData>, ITableCus
             .WithBottomBorder(BorderType.Thin, Color.Black);
     }
 
-    public IComponent Customize(IComponent component)
+    protected override IComponent Customize(IComponent component)
     {
         return component
             .WithContentAlignment(HorizontalAlignment.Center, VerticalAlignment.Center)

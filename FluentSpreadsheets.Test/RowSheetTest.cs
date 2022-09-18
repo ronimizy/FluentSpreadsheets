@@ -52,10 +52,10 @@ public class RowSheetTest
 
         // Assert
         var stack = sheet.Should().BeAssignableTo<IVStackComponent>().Subject;
-        var headerComponent = stack.Components.First();
+        var headerComponent = stack.First();
         var headerStack = headerComponent.Should().BeAssignableTo<IHStackComponent>().Subject;
 
-        headerStack.Components.Should().HaveCount(4);
+        headerStack.Should().HaveCount(4);
     }
 
     public readonly record struct Student(string Name);
