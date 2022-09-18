@@ -35,7 +35,7 @@ internal sealed class VStackComponent : VStackComponentBase
     ///     Constructor used for SheetBuilder to create a stack without redundant memory allocations.
     ///     DO NOT USE ANYWHERE ELSE, EXCEPT WHEN YOU KNOW THAT COMPONENTS ARE WELL SCALED.
     /// </summary>
-    public VStackComponent(IReadOnlyCollection<IComponent> components, int width)
+    internal VStackComponent(IReadOnlyCollection<IComponent> components, int width)
     {
         var height = components.Sum(x => x.Size.Height);
 
