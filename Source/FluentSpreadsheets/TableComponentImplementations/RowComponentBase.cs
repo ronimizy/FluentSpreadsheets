@@ -7,7 +7,7 @@ internal abstract class RowComponentBase : IRowComponent
 {
     public IRowComponent WithStyleApplied(Style style)
     {
-        IEnumerable<IBaseComponent> enumerable = this.Select(x => x.WithStyleApplied(style.Apply(x.Style)));
+        IEnumerable<IBaseComponent> enumerable = this.Select(x => x.WithStyleApplied(style));
         return new RowComponent(enumerable);
     }
 
