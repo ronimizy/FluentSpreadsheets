@@ -21,7 +21,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <PackageVersion>1.2.3</PackageVersion>
+        <PackageVersion>1.2.4</PackageVersion>
         <PackageReleaseNotes>Fixed styling for row components</PackageReleaseNotes>
     </PropertyGroup>
 
