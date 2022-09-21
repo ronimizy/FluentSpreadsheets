@@ -1,11 +1,10 @@
-using System.Globalization;
 using FluentAssertions;
-using FluentSpreadsheets.Tables;
+using FluentSpreadsheets.Test.Models;
+using FluentSpreadsheets.Test.Tables;
 using Xunit;
 
 namespace FluentSpreadsheets.Test;
 
-using static ComponentFactory;
 
 public class RowSheetTest
 {
@@ -56,46 +55,5 @@ public class RowSheetTest
         var headerStack = headerComponent.Should().BeAssignableTo<IHStackComponent>().Subject;
 
         headerStack.Should().HaveCount(4);
-    }
-
-    public readonly record struct Student(string Name);
-
-    public readonly record struct Lab(int Id, string Name, double MinPoints, double MaxPoints);
-
-    public readonly record struct LabPoints(int LabId, double Points);
-
-    public readonly record struct StudentPoints(Student Student, IReadOnlyCollection<LabPoints> LabPoints);
-
-    public readonly record struct HeaderData(IReadOnlyCollection<Lab> Labs);
-
-    public readonly record struct StudentPointsSheetData(
-        HeaderData HeaderData,
-        IReadOnlyCollection<StudentPoints> StudentPoints);
-
-    public class StudentPointsRowTable : RowTable<StudentPointsSheetData>
-    {
-        protected override IEnumerable<IRowComponent> RenderRows(StudentPointsSheetData model)
-        {
-            yield return Row
-            (
-                Label("#"),
-                Label("Student Name"),
-                ForEach(model.HeaderData.Labs, headerData => VStack
-                (
-                    Label(headerData.Name),
-                    HStack
-                    (
-                        Label("Min"),
-                        Label("Max")
-                    ),
-                    HStack
-                    (
-                        Label(headerData.MinPoints, CultureInfo.InvariantCulture),
-                        Label(headerData.MaxPoints, CultureInfo.InvariantCulture)
-                    )
-                )).CustomizedWith(x => VStack(Label("Labs"), x)),
-                Label("Total")
-            );
-        }
     }
 }
