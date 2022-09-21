@@ -35,7 +35,7 @@ public class CascadeStyleTest
     }
 
     [Fact]
-    public void Render_Should_RenderProperStyles()
+    public void Table_Should_RenderProperStyles()
     {
         var finalColor = Color.Green;
 
@@ -61,5 +61,24 @@ public class CascadeStyleTest
         var lastRowStack = lastRow.Should().BeAssignableTo<IHStackComponent>().Subject;
 
         lastRowStack.Single().Style.Fill.Should().BeEquivalentTo(finalColor);
+    }
+
+    [Fact]
+    public void RowContainer_Should_RenderProperStyles()
+    {
+        var color = Color.Aquamarine;
+        
+        var row = Row
+        (
+            HStack
+            (
+                Label()
+            ).FilledWith(color)
+        ).FilledWith(Color.Azure);
+
+        var stack = row.First().Should().BeAssignableTo<IHStackComponent>().Subject;
+        var label = stack.Single();
+
+        label.Style.Fill.Should().BeEquivalentTo(color);
     }
 }

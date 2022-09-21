@@ -5,13 +5,10 @@ namespace FluentSpreadsheets.TableComponentImplementations;
 
 internal abstract class RowComponentBase : IRowComponent
 {
-    public IRowComponent WithStyleApplied(Style style)
-    {
-        IEnumerable<IBaseComponent> enumerable = this.Select(x => x.WithStyleApplied(style));
-        return new RowComponent(enumerable);
-    }
+    public virtual IRowComponent WithStyleApplied(Style style)
+        => new StylingRowComponent(this, style);
 
-    public IRowComponent WrappedInto(Func<IComponent, IComponent> wrapper)
+    public virtual IRowComponent WrappedInto(Func<IComponent, IComponent> wrapper)
     {
         IEnumerable<IBaseComponent> enumerable = this.Select(x => x.WrappedInto(wrapper));
         return new RowComponent(enumerable);
