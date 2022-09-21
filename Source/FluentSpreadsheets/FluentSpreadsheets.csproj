@@ -21,8 +21,8 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <PackageVersion>1.2.2</PackageVersion>
-        <PackageReleaseNotes>Fixed component group customization</PackageReleaseNotes>
+        <PackageVersion>1.2.3</PackageVersion>
+        <PackageReleaseNotes>Fixed styling for row components</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>

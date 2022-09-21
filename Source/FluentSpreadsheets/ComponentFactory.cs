@@ -2,6 +2,7 @@ using FluentSpreadsheets.ComponentGroupImplementations;
 using FluentSpreadsheets.ComponentImplementations;
 using FluentSpreadsheets.ContainerImplementations;
 using FluentSpreadsheets.TableComponentImplementations;
+using FluentSpreadsheets.Tables;
 
 namespace FluentSpreadsheets;
 
@@ -84,4 +85,7 @@ public static class ComponentFactory
 
     public static IRowComponent Row(Func<IEnumerable<IBaseComponent>> func)
         => new RowComponent(func.Invoke());
+
+    public static ITable<T> Table<T>(Func<T, IEnumerable<IRowComponent>> generator)
+        => new DynamicTable<T>(generator);
 }
