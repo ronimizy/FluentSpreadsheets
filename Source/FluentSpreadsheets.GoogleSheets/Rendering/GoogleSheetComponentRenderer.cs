@@ -24,9 +24,11 @@ public class GoogleSheetComponentRenderer : IComponentRenderer<GoogleSheetRender
         var visitor = new ComponentVisitor<GoogleSheetHandler>(new Index(1, 1), handler);
         component.Accept(visitor);
 
-        return Task.WhenAll(
-            UpdateValueRangesAsync(spreadsheetId, handler.ValueRanges, cancellationToken),
-            UpdateStylesAsync(spreadsheetId, handler.StyleRequests, cancellationToken));
+        return Task.WhenAll
+        (
+            UpdateStylesAsync(spreadsheetId, handler.StyleRequests, cancellationToken),
+            UpdateValueRangesAsync(spreadsheetId, handler.ValueRanges, cancellationToken)
+        );
     }
 
     private async Task UpdateValueRangesAsync(
