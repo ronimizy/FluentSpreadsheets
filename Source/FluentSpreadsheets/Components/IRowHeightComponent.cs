@@ -2,5 +2,5 @@ namespace FluentSpreadsheets;
 
 public interface IRowHeightComponent : IComponent
 {
-    public int Height { get; }
+    public RelativeSize Height { get; }
 }

@@ -115,6 +115,9 @@ style B, the component will have a style equal to style B applied to style A.
 The result will be something like this:\
 ![Styles](Docs/Media/hello-styles.png)
 
+#### Resizing
+Size values are accepted as relative multipliers to default platform's sizes (column width/row height). \
+
 ### Output
 
 Code above will only produce component composition stored as objects in memory. To render it on the sheet,
@@ -140,7 +143,7 @@ var helloComponent =
         Label("Styles!")
             .WithContentAlignment(HorizontalAlignment.Center, VerticalAlignment.Top)
             .WithTopBorder(BorderType.Thin, Color.Black)
-            .WithRowHeight(20)
+            .WithRowHeight(1.7)
     ).WithBottomBorder(BorderType.Thin, Color.Black).WithTrailingBorder(BorderType.Thin, Color.Black);
 
 var renderer = new ClosedXmlComponentRenderer();
@@ -175,7 +178,7 @@ var helloComponent =
         Label("Styles!")
             .WithContentAlignment(HorizontalAlignment.Center, VerticalAlignment.Top)
             .WithTopBorder(BorderType.Thin, Color.Black)
-            .WithRowHeight(20)
+            .WithRowHeight(1.7)
     ).WithBottomBorder(BorderType.Thin, Color.Black).WithTrailingBorder(BorderType.Thin, Color.Black);
 
 const string spreadsheetId = "SampleSpreadsheetId";
@@ -207,7 +210,7 @@ public class CartTable : RowTable<CartTableModel>, ITableCustomizer
     {
         yield return Row
         (
-            Label("Product Name").WithColumnWidth(20),
+            Label("Product Name").WithColumnWidth(1.7),
             Label("Price"),
             Label("Quantity")
         );

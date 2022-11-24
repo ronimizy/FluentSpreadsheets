@@ -28,78 +28,6 @@ internal readonly struct GoogleSheetHandler : IComponentVisitorHandler
     public IList<Request> StyleRequests { get; }
     public IList<ValueRange> ValueRanges { get; }
 
-    public void AdjustColumns(int from, int upTo)
-        => AdjustDimension(Dimension.Columns, from, upTo);
-
-    public void AdjustRows(int from, int upTo)
-        => AdjustDimension(Dimension.Rows, from, upTo);
-
-    public void MergeRange(IndexRange range)
-    {
-        var mergeCellsRequest = new Request
-        {
-            MergeCells = new MergeCellsRequest
-            {
-                Range = range.ToGridRange(_id),
-                MergeType = MergeType.All,
-            },
-        };
-
-        StyleRequests.Add(mergeCellsRequest);
-    }
-
-    public void SetColumnWidth(int from, int upTo, int width)
-        => SetDimensionSize(Dimension.Columns, from, upTo, width);
-
-    public void FreezeRows(int count)
-    {
-        var properties = new SheetProperties
-        {
-            GridProperties = new GridProperties
-            {
-                FrozenRowCount = count,
-            },
-            SheetId = _id,
-        };
-
-        var request = new Request
-        {
-            UpdateSheetProperties = new UpdateSheetPropertiesRequest
-            {
-                Properties = properties,
-                Fields = "gridProperties.frozenRowCount",
-            },
-        };
-
-        StyleRequests.Add(request);
-    }
-
-    public void FreezeColumns(int count)
-    {
-        var properties = new SheetProperties
-        {
-            GridProperties = new GridProperties
-            {
-                FrozenColumnCount = count,
-            },
-            SheetId = _id,
-        };
-
-        var request = new Request
-        {
-            UpdateSheetProperties = new UpdateSheetPropertiesRequest
-            {
-                Properties = properties,
-                Fields = "gridProperties.frozenColumnCount",
-            },
-        };
-
-        StyleRequests.Add(request);
-    }
-
-    public void SetRowHeight(int from, int upTo, int height)
-        => SetDimensionSize(Dimension.Columns, from, upTo, height);
-
     public void StyleRange(Style style, IndexRange range)
     {
         if (style.Alignment is not null)
@@ -167,6 +95,20 @@ internal readonly struct GoogleSheetHandler : IComponentVisitorHandler
         }
     }
 
+    public void MergeRange(IndexRange range)
+    {
+        var mergeCellsRequest = new Request
+        {
+            MergeCells = new MergeCellsRequest
+            {
+                Range = range.ToGridRange(_id),
+                MergeType = MergeType.All,
+            },
+        };
+
+        StyleRequests.Add(mergeCellsRequest);
+    }
+
     public void WriteString(Index index, string value)
     {
         var valueRange = new ValueRange
@@ -179,6 +121,70 @@ internal readonly struct GoogleSheetHandler : IComponentVisitorHandler
         };
 
         ValueRanges.Add(valueRange);
+    }
+
+    public void AdjustRows(int from, int upTo)
+        => AdjustDimension(Dimension.Rows, from, upTo);
+
+    public void AdjustColumns(int from, int upTo)
+        => AdjustDimension(Dimension.Columns, from, upTo);
+
+    public void SetRowHeight(int from, int upTo, RelativeSize height)
+    {
+        const int defaultHeight = 21;
+        SetDimensionSize(Dimension.Columns, from, upTo, height.Value * defaultHeight);
+    }
+
+    public void SetColumnWidth(int from, int upTo, RelativeSize width)
+    {
+        const int defaultWidth = 120;
+        SetDimensionSize(Dimension.Columns, from, upTo, width.Value * defaultWidth);
+    }
+
+    public void FreezeRows(int count)
+    {
+        var properties = new SheetProperties
+        {
+            GridProperties = new GridProperties
+            {
+                FrozenRowCount = count,
+            },
+            SheetId = _id,
+        };
+
+        var request = new Request
+        {
+            UpdateSheetProperties = new UpdateSheetPropertiesRequest
+            {
+                Properties = properties,
+                Fields = "gridProperties.frozenRowCount",
+            },
+        };
+
+        StyleRequests.Add(request);
+    }
+
+    public void FreezeColumns(int count)
+    {
+        var properties = new SheetProperties
+        {
+            GridProperties = new GridProperties
+            {
+                FrozenColumnCount = count,
+            },
+            SheetId = _id,
+        };
+
+        var request = new Request
+        {
+            UpdateSheetProperties = new UpdateSheetPropertiesRequest
+            {
+                Properties = properties,
+                Fields = "gridProperties.frozenColumnCount",
+            },
+        };
+
+        StyleRequests.Add(request);
     }
 
     private void AdjustDimension(Dimension dimension, int startIndex, int endIndex)
@@ -196,10 +202,10 @@ internal readonly struct GoogleSheetHandler : IComponentVisitorHandler
         StyleRequests.Add(adjustDimensionRequest);
     }
 
-    private void SetDimensionSize(Dimension dimension, int startIndex, int endIndex, int pixelSize)
+    private void SetDimensionSize(Dimension dimension, int startIndex, int endIndex, double pixelSize)
     {
         var dimensionRange = DimensionRangeFactory.Create(dimension, startIndex, endIndex, _id);
-        var dimensionProperties = new DimensionProperties { PixelSize = pixelSize };
+        var dimensionProperties = new DimensionProperties { PixelSize = (int)pixelSize };
 
         var setSizeRequest = new Request
         {

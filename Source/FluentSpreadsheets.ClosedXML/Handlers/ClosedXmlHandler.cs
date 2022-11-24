@@ -42,14 +42,16 @@ internal readonly struct ClosedXmlHandler : IComponentVisitorHandler
         _worksheet.Columns(from, upTo).AdjustToContents();
     }
 
-    public void SetRowHeight(int from, int upTo, int height)
+    public void SetRowHeight(int from, int upTo, RelativeSize height)
     {
-        _worksheet.Rows(from, upTo - 1).Height = height;
+        const int defaultHeight = 15;
+        _worksheet.Rows(from, upTo - 1).Height = height.Value * defaultHeight;
     }
 
-    public void SetColumnWidth(int from, int upTo, int width)
+    public void SetColumnWidth(int from, int upTo, RelativeSize width)
     {
-        _worksheet.Columns(from, upTo - 1).Width = width;
+        const int defaultWidth = 10;
+        _worksheet.Columns(from, upTo - 1).Width = width.Value * defaultWidth;
     }
 
     public void FreezeRows(int count)
