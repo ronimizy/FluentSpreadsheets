@@ -48,8 +48,8 @@ var sheetData = new StudentPointsSheetData(headerData, studentPoints);
 
 var sheet = table.Render(sheetData);
 
-// await RenderGoogleSheets();
-await RenderXlsx();
+await RenderGoogleSheets();
+// await RenderXlsx();
 
 async Task RenderGoogleSheets()
 {

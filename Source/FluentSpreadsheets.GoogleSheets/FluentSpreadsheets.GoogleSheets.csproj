@@ -21,8 +21,8 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<PackageVersion>1.2.5</PackageVersion>
-		<PackageReleaseNotes>Fixed styling for row components</PackageReleaseNotes>
+		<PackageVersion>1.2.6</PackageVersion>
+		<PackageReleaseNotes>Parallel value and style assignment</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>

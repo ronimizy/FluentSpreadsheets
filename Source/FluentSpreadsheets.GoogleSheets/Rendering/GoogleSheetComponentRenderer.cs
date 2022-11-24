@@ -16,16 +16,17 @@ public class GoogleSheetComponentRenderer : IComponentRenderer<GoogleSheetRender
         _sheetsService = sheetsService;
     }
 
-    public async Task RenderAsync(GoogleSheetRenderCommand command, CancellationToken cancellationToken = default)
+    public Task RenderAsync(GoogleSheetRenderCommand command, CancellationToken cancellationToken = default)
     {
-        (string spreadsheetId, int id, string title, IComponent component) = command;
+        var (spreadsheetId, id, title, component) = command;
 
         var handler = new GoogleSheetHandler(id, title);
         var visitor = new ComponentVisitor<GoogleSheetHandler>(new Index(1, 1), handler);
         component.Accept(visitor);
 
-        await UpdateValueRangesAsync(spreadsheetId, handler.ValueRanges, cancellationToken);
-        await UpdateStylesAsync(spreadsheetId, handler.StyleRequests, cancellationToken);
+        return Task.WhenAll(
+            UpdateValueRangesAsync(spreadsheetId, handler.ValueRanges, cancellationToken),
+            UpdateStylesAsync(spreadsheetId, handler.StyleRequests, cancellationToken));
     }
 
     private async Task UpdateValueRangesAsync(
