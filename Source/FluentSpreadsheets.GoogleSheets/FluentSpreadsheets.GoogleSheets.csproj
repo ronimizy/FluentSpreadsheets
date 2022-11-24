@@ -21,8 +21,8 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<PackageVersion>1.2.6</PackageVersion>
-		<PackageReleaseNotes>Parallel value and style assignment</PackageReleaseNotes>
+		<PackageVersion>1.2.7</PackageVersion>
+		<PackageReleaseNotes>Changed render execution order (first styles, then values)</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>
