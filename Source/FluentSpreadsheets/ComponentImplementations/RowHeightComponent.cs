@@ -4,14 +4,14 @@ namespace FluentSpreadsheets.ComponentImplementations;
 
 internal sealed class RowHeightComponent : TopLevelComponentBase, IRowHeightComponent
 {
-    public RowHeightComponent(IComponent component, int height) : base(component)
+    public RowHeightComponent(IComponent component, RelativeSize height) : base(component)
     {
         Height = height;
     }
 
     public override Size Size => Wrapped.Size;
 
-    public int Height { get; }
+    public RelativeSize Height { get; }
 
     public override void Accept(IComponentVisitor visitor)
     {

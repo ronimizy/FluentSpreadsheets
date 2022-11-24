@@ -41,7 +41,7 @@ public class CartTable : RowTable<CartTableModel>
     {
         yield return Row
         (
-            Label("Product Name").WithColumnWidth(20),
+            Label("Product Name").WithColumnWidth(1.7),
             Label("Price"),
             Label("Quantity")
         );

@@ -4,14 +4,14 @@ namespace FluentSpreadsheets.ComponentImplementations;
 
 internal sealed class ColumnWidthComponent : TopLevelComponentBase, IColumnWidthComponent
 {
-    public ColumnWidthComponent(IComponent component, int width) : base(component)
+    public ColumnWidthComponent(IComponent component, RelativeSize width) : base(component)
     {
         Width = width;
     }
 
     public override Size Size => Wrapped.Size;
 
-    public int Width { get; }
+    public RelativeSize Width { get; }
 
     public override void Accept(IComponentVisitor visitor)
     {

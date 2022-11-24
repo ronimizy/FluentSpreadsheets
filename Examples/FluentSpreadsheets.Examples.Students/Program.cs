@@ -74,7 +74,7 @@ public class StudentPointsRowTable : RowTable<StudentPointsSheetData>
         yield return Row
         (
             Label("#"),
-            Label("Student Name").WithColumnWidth(30),
+            Label("Student Name").WithColumnWidth(1.7),
             ForEach(model.HeaderData.Labs, headerData => VStack
             (
                 Label(headerData.Name),

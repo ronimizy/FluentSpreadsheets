@@ -14,9 +14,9 @@ public interface IComponentVisitorHandler
 
     void AdjustColumns(int from, int upTo);
 
-    void SetRowHeight(int from, int upTo, int height);
+    void SetRowHeight(int from, int upTo, RelativeSize height);
 
-    void SetColumnWidth(int from, int upTo, int width);
+    void SetColumnWidth(int from, int upTo, RelativeSize width);
 
     void FreezeRows(int count);
     
