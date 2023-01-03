@@ -1,16 +1,10 @@
 # FluentSpreadsheets
 
-### FluentSpreadsheets
+### FluentSpreadsheets [![badge](https://img.shields.io/nuget/vpre/FluentSpreadsheets?style=flat-square)](https://www.nuget.org/packages/FluentSpreadsheets/)
 
-[![badge](https://img.shields.io/nuget/vpre/FluentSpreadsheets?style=flat-square)](https://www.nuget.org/packages/FluentSpreadsheets/)
+### FluentSpreadsheets.ClosedXML [![badge](https://img.shields.io/nuget/vpre/FluentSpreadsheets.ClosedXML?style=flat-square)](https://www.nuget.org/packages/FluentSpreadsheets.ClosedXML/)
 
-### FluentSpreadsheets.ClosedXML
-
-[![badge](https://img.shields.io/nuget/vpre/FluentSpreadsheets.ClosedXML?style=flat-square)](https://www.nuget.org/packages/FluentSpreadsheets.ClosedXML/)
-
-### FluentSpreadsheets.GoogleSheets
-
-[![badge](https://img.shields.io/nuget/vpre/FluentSpreadsheets.GoogleSheets?style=flat-square)](https://www.nuget.org/packages/FluentSpreadsheets.GoogleSheets/)
+### FluentSpreadsheets.GoogleSheets [![badge](https://img.shields.io/nuget/vpre/FluentSpreadsheets.GoogleSheets?style=flat-square)](https://www.nuget.org/packages/FluentSpreadsheets.GoogleSheets/)
 
 ## Overview
 
