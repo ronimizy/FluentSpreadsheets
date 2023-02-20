@@ -41,6 +41,8 @@ public class ComponentVisitor<THandler> : IComponentVisitor where THandler : ICo
 
             _scale = scale;
         }
+
+        _index = index;
     }
 
     public void Visit(IHStackComponent component)
@@ -51,16 +53,18 @@ public class ComponentVisitor<THandler> : IComponentVisitor where THandler : ICo
         foreach (var subComponent in component)
         {
             var subcomponentSize = subComponent.Size * _scale;
+
             subComponent.Accept(this);
 
-            index = index with
+            _index = index with
             {
                 Column = index.Column + subcomponentSize.Width,
             };
 
-            _index = index;
             _scale = scale;
         }
+
+        _index = index;
     }
 
     public void Visit(ILabelComponent component)
