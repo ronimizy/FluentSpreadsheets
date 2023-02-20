@@ -23,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Source\FluentSpreadsheets.GoogleSheets\FluentSpreadsheets.GoogleSheets.csproj" />
       <ProjectReference Include="..\Source\FluentSpreadsheets\FluentSpreadsheets.csproj" />
     </ItemGroup>
 

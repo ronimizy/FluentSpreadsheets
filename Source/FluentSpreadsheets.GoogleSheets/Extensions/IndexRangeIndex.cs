@@ -10,7 +10,7 @@ public static class IndexRangeExtensions
 
         if (exclamationIndex is not -1)
         {
-            value = value[exclamationIndex..];
+            value = value[(exclamationIndex+1)..];
         }
 
         var separatorIndex = value.IndexOf(':');
