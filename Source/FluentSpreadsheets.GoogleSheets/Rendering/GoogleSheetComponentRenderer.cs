@@ -36,6 +36,9 @@ public class GoogleSheetComponentRenderer : IComponentRenderer<GoogleSheetRender
         IList<ValueRange> valueRanges,
         CancellationToken cancellationToken)
     {
+        if (valueRanges.Count is 0)
+            return;
+        
         var updateRequest = new BatchUpdateValuesRequest
         {
             Data = valueRanges,
@@ -52,6 +55,9 @@ public class GoogleSheetComponentRenderer : IComponentRenderer<GoogleSheetRender
         IList<Request> updateRequests,
         CancellationToken cancellationToken)
     {
+        if (updateRequests.Count is 0)
+            return;
+        
         var batchUpdateRequest = new BatchUpdateSpreadsheetRequest
         {
             Requests = updateRequests,
