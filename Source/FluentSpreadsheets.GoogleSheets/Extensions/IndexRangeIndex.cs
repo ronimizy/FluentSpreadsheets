@@ -2,9 +2,29 @@
 
 namespace FluentSpreadsheets.GoogleSheets.Extensions;
 
-internal static class IndexRangeExtensions
+public static class IndexRangeExtensions
 {
-    public static GridRange ToGridRange(this IndexRange range, int sheetId)
+    public static IndexRange FromSpan(ReadOnlySpan<char> value)
+    {
+        var exclamationIndex = value.IndexOf('!');
+
+        if (exclamationIndex is not -1)
+        {
+            value = value[exclamationIndex..];
+        }
+
+        var separatorIndex = value.IndexOf(':');
+
+        if (separatorIndex is -1)
+            throw new GoogleSheetsException("Invalid index range");
+
+        ReadOnlySpan<char> from = value[..separatorIndex];
+        ReadOnlySpan<char> to = value[(separatorIndex + 1)..];
+
+        return new IndexRange(IndexExtensions.FromSpan(from), IndexExtensions.FromSpan(to));
+    }
+
+    internal static GridRange ToGridRange(this IndexRange range, int sheetId)
     {
         return new GridRange
         {
