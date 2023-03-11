@@ -58,7 +58,7 @@ public class ComponentVisitor<THandler> : IComponentVisitor where THandler : ICo
 
             _index = index with
             {
-                Column = index.Column + subcomponentSize.Width,
+                Column = _index.Column + subcomponentSize.Width,
             };
 
             _scale = scale;
