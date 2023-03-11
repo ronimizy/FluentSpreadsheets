@@ -132,7 +132,7 @@ internal readonly struct GoogleSheetHandler : IComponentVisitorHandler
     public void SetRowHeight(int from, int upTo, RelativeSize height)
     {
         const int defaultHeight = 21;
-        SetDimensionSize(Dimension.Columns, from, upTo, height.Value * defaultHeight);
+        SetDimensionSize(Dimension.Rows, from, upTo, height.Value * defaultHeight);
     }
 
     public void SetColumnWidth(int from, int upTo, RelativeSize width)

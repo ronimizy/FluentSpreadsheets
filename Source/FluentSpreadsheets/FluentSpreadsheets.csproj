@@ -21,8 +21,8 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <PackageVersion>1.3.1</PackageVersion>
-        <PackageReleaseNotes>Fixed index positioning, when rendering stacks</PackageReleaseNotes>
+        <PackageVersion>1.3.2</PackageVersion>
+        <PackageReleaseNotes>Fixed HStack rendering</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
