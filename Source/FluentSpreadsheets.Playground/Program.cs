@@ -48,8 +48,8 @@ var sheetData = new StudentPointsSheetData(headerData, studentPoints);
 
 var sheet = table.Render(sheetData);
 
-// await RenderGoogleSheets();
-await RenderXlsx();
+await RenderGoogleSheets();
+// await RenderXlsx();
 
 async Task RenderGoogleSheets()
 {
@@ -109,7 +109,7 @@ public class StudentPointsRowTable : RowTable<StudentPointsSheetData>
         yield return Row
         (
             Label("#").Frozen(),
-            Label("Student Name").WithColumnWidth(1.7),
+            Label("Student Name").WithColumnWidth(1.7).WithTextColor(Color.Red),
             ForEach(model.HeaderData.Labs, headerData => VStack
             (
                 Label(headerData.Name),

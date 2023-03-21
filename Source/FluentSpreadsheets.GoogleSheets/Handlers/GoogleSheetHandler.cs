@@ -2,6 +2,7 @@
 using FluentSpreadsheets.GoogleSheets.Factories;
 using FluentSpreadsheets.GoogleSheets.Models;
 using FluentSpreadsheets.Styles;
+using FluentSpreadsheets.Styles.Text;
 using FluentSpreadsheets.Visitors;
 using Google.Apis.Sheets.v4.Data;
 
@@ -12,6 +13,7 @@ internal readonly struct GoogleSheetHandler : IComponentVisitorHandler
     private const string UpdateFieldsAll = "*";
     private const string UpdateAlignment = "userEnteredFormat(horizontalAlignment, verticalAlignment)";
     private const string UpdateBackgroundColor = "userEnteredFormat(backgroundColor)";
+    private const string UpdateFontStyle = "userEnteredFormat(textFormat(foregroundColor,bold,italic))";
 
     private readonly int _id;
     private readonly string _name;
@@ -88,6 +90,36 @@ internal readonly struct GoogleSheetHandler : IComponentVisitorHandler
                     Cell = cellData,
                     Range = range.ToGridRange(_id),
                     Fields = UpdateBackgroundColor,
+                },
+            };
+
+            StyleRequests.Add(request);
+        }
+
+        if (style.Text is not null)
+        {
+            var textStyle = style.Text.Value;
+
+            var cellFormat = new CellFormat
+            {
+                TextFormat = new TextFormat
+                {
+                    ForegroundColor = textStyle.Color?.ToGoogleColor(),
+                    Bold = textStyle.Kind?.HasFlag(TextKind.Bold),
+                    Italic = textStyle.Kind?.HasFlag(TextKind.Italic),
+                },
+            };
+
+            var request = new Request
+            {
+                RepeatCell = new RepeatCellRequest
+                {
+                    Cell = new CellData
+                    {
+                        UserEnteredFormat = cellFormat,
+                    },
+                    Range = range.ToGridRange(_id),
+                    Fields = UpdateFontStyle,
                 },
             };
 
