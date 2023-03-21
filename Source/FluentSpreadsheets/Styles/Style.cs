@@ -1,8 +1,13 @@
 using System.Drawing;
+using FluentSpreadsheets.Styles.Text;
 
 namespace FluentSpreadsheets.Styles;
 
-public readonly record struct Style(FrameBorderStyle? Border, Alignment? Alignment, Color? Fill) : IApplicable<Style>
+public readonly record struct Style(
+    FrameBorderStyle? Border,
+    Alignment? Alignment,
+    Color? Fill,
+    TextStyle? Text) : IApplicable<Style>
 {
     public Style Apply(Style style)
     {
@@ -10,7 +15,8 @@ public readonly record struct Style(FrameBorderStyle? Border, Alignment? Alignme
         (
             Border.TryApply(style.Border),
             Alignment.TryApply(style.Alignment),
-            style.Fill ?? Fill
+            style.Fill ?? Fill,
+            style.Text ?? Text
         );
     }
 }

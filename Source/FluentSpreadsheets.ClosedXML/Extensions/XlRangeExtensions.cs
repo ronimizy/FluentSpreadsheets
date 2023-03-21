@@ -1,6 +1,7 @@
 using System.Drawing;
 using ClosedXML.Excel;
 using FluentSpreadsheets.Styles;
+using FluentSpreadsheets.Styles.Text;
 
 namespace FluentSpreadsheets.ClosedXML.Extensions;
 
@@ -11,6 +12,7 @@ internal static class XlRangeExtensions
         range.ApplyAlignment(style.Alignment);
         range.ApplyBorderStyle(style.Border);
         range.ApplyFillStyle(style.Fill);
+        range.ApplyTextStyle(style.Text);
     }
 
     private static void ApplyAlignment(this IXLRange range, Alignment? alignment)
@@ -38,5 +40,22 @@ internal static class XlRangeExtensions
     {
         if (fill is not null)
             range.Style.Fill.BackgroundColor = XLColor.FromColor(fill.Value);
+    }
+
+    private static void ApplyTextStyle(this IXLRange range, TextStyle? textStyle)
+    {
+        if (textStyle is null)
+            return;
+
+        if (textStyle.Value.Color is not null)
+            range.Style.Font.FontColor = XLColor.FromColor(textStyle.Value.Color.Value);
+
+        if (textStyle.Value.Kind is not null)
+        {
+            var kind = textStyle.Value.Kind.Value;
+
+            range.Style.Font.Italic = kind.HasFlag(TextKind.Italic);
+            range.Style.Font.Bold = kind.HasFlag(TextKind.Bold);
+        }
     }
 }
