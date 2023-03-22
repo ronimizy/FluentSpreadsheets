@@ -76,7 +76,7 @@ public class ComponentVisitor<THandler> : IComponentVisitor where THandler : ICo
         if (!_scale.IsNone)
             _handler.MergeRange(range);
 
-        _handler.WriteString(_index, component.Text);
+        _handler.WriteString(_index, component.Text, component.HasFormula);
     }
 
     public void Visit(ICellAwareComponent component)
@@ -89,7 +89,7 @@ public class ComponentVisitor<THandler> : IComponentVisitor where THandler : ICo
             _handler.MergeRange(range);
 
         var text = component.BuildValue(_index);
-        _handler.WriteString(_index, text);
+        _handler.WriteString(_index, text, component.HasFormula);
     }
 
     public void Visit(IScaledComponent component)

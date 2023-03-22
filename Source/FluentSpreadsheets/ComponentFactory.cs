@@ -18,7 +18,7 @@ public static class ComponentFactory
         => Empty(new Size(1, 1));
 
     public static IComponent Label(string text)
-        => new LabelComponent(text);
+        => new LabelComponent(text, false);
 
     public static IComponent Label()
         => Label(string.Empty);
@@ -33,10 +33,10 @@ public static class ComponentFactory
         => Label(value, null, formatProvider);
 
     public static IComponent Label(Func<Index, string> factory)
-        => new CellAwareComponent(factory);
+        => new CellAwareComponent(factory, false);
 
     public static IComponent Label<T>(Func<Index, T> factory)
-        => new CellAwareComponent(x => factory.Invoke(x)?.ToString() ?? string.Empty);
+        => new CellAwareComponent(x => factory.Invoke(x)?.ToString() ?? string.Empty, false);
 
     public static IComponent Label<T>(Func<Index, T> factory, string? format, IFormatProvider? formatProvider)
         where T : IFormattable
@@ -44,11 +44,17 @@ public static class ComponentFactory
         string Func(Index x)
             => factory.Invoke(x)?.ToString(format, formatProvider) ?? string.Empty;
 
-        return new CellAwareComponent(Func);
+        return new CellAwareComponent(Func, false);
     }
 
     public static IComponent Label<T>(Func<Index, T> factory, IFormatProvider? formatProvider) where T : IFormattable
         => Label(factory, null, formatProvider);
+
+    public static IComponent Formula(string formula)
+        => new LabelComponent(formula, true);
+
+    public static IComponent Formula(Func<Index, string> factory)
+        => new CellAwareComponent(factory, true);
 
     public static IComponent VStack(params IBaseComponent[] components)
         => new VStackComponent(components);

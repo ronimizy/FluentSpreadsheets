@@ -142,7 +142,7 @@ internal readonly struct GoogleSheetHandler : IComponentVisitorHandler
         StyleRequests.Add(mergeCellsRequest);
     }
 
-    public void WriteString(Index index, string value)
+    public void WriteString(Index index, string value, bool hasFormula)
     {
         var valueRange = new ValueRange
         {

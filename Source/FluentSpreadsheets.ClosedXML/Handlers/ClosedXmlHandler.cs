@@ -26,10 +26,18 @@ internal readonly struct ClosedXmlHandler : IComponentVisitorHandler
         worksheetRange.Merge();
     }
 
-    public void WriteString(Index index, string value)
+    public void WriteString(Index index, string value, bool hasFormula)
     {
         var worksheetCell = _worksheet.Cell(index);
-        worksheetCell.Value = value;
+
+        if (hasFormula)
+        {
+            worksheetCell.FormulaA1 = value;
+        }
+        else
+        {
+            worksheetCell.Value = value;
+        }
     }
 
     public void AdjustRows(int from, int upTo)
