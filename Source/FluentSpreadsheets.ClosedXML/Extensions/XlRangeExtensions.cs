@@ -57,5 +57,10 @@ internal static class XlRangeExtensions
             range.Style.Font.Italic = kind.HasFlag(TextKind.Italic);
             range.Style.Font.Bold = kind.HasFlag(TextKind.Bold);
         }
+
+        if (textStyle.Value.Wrapping is TextWrapping.Wrap)
+        {
+            range.Style.Alignment.WrapText = true;
+        }
     }
 }
