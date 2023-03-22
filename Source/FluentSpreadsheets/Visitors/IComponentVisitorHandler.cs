@@ -8,7 +8,7 @@ public interface IComponentVisitorHandler
 
     void MergeRange(IndexRange range);
 
-    void WriteString(Index index, string value);
+    void WriteString(Index index, string value, bool hasFormula);
 
     void AdjustRows(int from, int upTo);
 
