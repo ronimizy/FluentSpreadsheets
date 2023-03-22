@@ -21,8 +21,8 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<PackageVersion>1.4.2</PackageVersion>
-		<PackageReleaseNotes>Fixed text style generics</PackageReleaseNotes>
+		<PackageVersion>1.4.3</PackageVersion>
+		<PackageReleaseNotes>Added index methods</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>
