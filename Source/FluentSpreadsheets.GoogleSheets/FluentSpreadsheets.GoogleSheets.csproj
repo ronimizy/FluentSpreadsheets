@@ -21,8 +21,8 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<PackageVersion>1.4.1</PackageVersion>
-		<PackageReleaseNotes>Added text wrapping</PackageReleaseNotes>
+		<PackageVersion>1.4.2</PackageVersion>
+		<PackageReleaseNotes>Fixed text style generics</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>
