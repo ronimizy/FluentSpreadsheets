@@ -12,12 +12,21 @@ public static class ComponentTextExtensions
         return component.WithStyleApplied(style);
     }
 
-    public static IComponent WithTextStyle(this IComponent component, Color? textColor, TextKind? textKind)
-        => component.WithTextStyle(new TextStyle(textColor, textKind));
+    public static IComponent WithTextStyle(
+        this IComponent component,
+        Color? textColor = null,
+        TextKind? textKind = null,
+        TextWrapping? wrapping = null)
+    {
+        return component.WithTextStyle(new TextStyle(textColor, textKind, wrapping));
+    }
 
     public static IComponent WithTextColor(this IComponent component, Color textColor)
-        => component.WithTextStyle(textColor, null);
+        => component.WithTextStyle(textColor: textColor);
 
     public static IComponent WithTextKind(this IComponent component, TextKind textKind)
-        => component.WithTextStyle(null, textKind);
+        => component.WithTextStyle(textKind: textKind);
+
+    public static IComponent WithTextWrapping(this IComponent component, TextWrapping wrapping = TextWrapping.Wrap)
+        => component.WithTextStyle(wrapping: wrapping);
 }

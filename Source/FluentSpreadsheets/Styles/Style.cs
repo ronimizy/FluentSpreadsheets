@@ -16,7 +16,7 @@ public readonly record struct Style(
             Border.TryApply(style.Border),
             Alignment.TryApply(style.Alignment),
             style.Fill ?? Fill,
-            style.Text ?? Text
+            Text.TryApply(style.Text)
         );
     }
 }

@@ -109,7 +109,10 @@ public class StudentPointsRowTable : RowTable<StudentPointsSheetData>
         yield return Row
         (
             Label("#").Frozen(),
-            Label("Student Name").WithColumnWidth(1.7).WithTextColor(Color.Red),
+            Label("Student Name adadalkdmawd;ladl;lamda;lwdma;wdlma;wdlma;dlam")
+                .WithColumnWidth(1.7)
+                .WithTextColor(Color.Red)
+                .WithTextWrapping(),
             ForEach(model.HeaderData.Labs, headerData => VStack
             (
                 Label(headerData.Name),

@@ -13,7 +13,7 @@ internal readonly struct GoogleSheetHandler : IComponentVisitorHandler
     private const string UpdateFieldsAll = "*";
     private const string UpdateAlignment = "userEnteredFormat(horizontalAlignment, verticalAlignment)";
     private const string UpdateBackgroundColor = "userEnteredFormat(backgroundColor)";
-    private const string UpdateFontStyle = "userEnteredFormat(textFormat(foregroundColor,bold,italic))";
+    private const string UpdateTextStyle = "userEnteredFormat(textFormat(foregroundColor,bold,italic),wrapStrategy)";
 
     private readonly int _id;
     private readonly string _name;
@@ -108,6 +108,7 @@ internal readonly struct GoogleSheetHandler : IComponentVisitorHandler
                     Bold = textStyle.Kind?.HasFlag(TextKind.Bold),
                     Italic = textStyle.Kind?.HasFlag(TextKind.Italic),
                 },
+                WrapStrategy = textStyle.Wrapping.ToGoogleWrappingStrategy(),
             };
 
             var request = new Request
@@ -119,7 +120,7 @@ internal readonly struct GoogleSheetHandler : IComponentVisitorHandler
                         UserEnteredFormat = cellFormat,
                     },
                     Range = range.ToGridRange(_id),
-                    Fields = UpdateFontStyle,
+                    Fields = UpdateTextStyle,
                 },
             };
 
