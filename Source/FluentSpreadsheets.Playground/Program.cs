@@ -4,6 +4,7 @@ using FluentSpreadsheets;
 using FluentSpreadsheets.ClosedXML.Rendering;
 using FluentSpreadsheets.GoogleSheets.Factories;
 using FluentSpreadsheets.GoogleSheets.Rendering;
+using FluentSpreadsheets.Labels;
 using FluentSpreadsheets.Styles;
 using FluentSpreadsheets.Tables;
 using Google.Apis.Auth.OAuth2;
@@ -48,8 +49,8 @@ var sheetData = new StudentPointsSheetData(headerData, studentPoints);
 
 var sheet = table.Render(sheetData);
 
-await RenderGoogleSheets();
-// await RenderXlsx();
+// await RenderGoogleSheets();
+await RenderXlsx();
 
 async Task RenderGoogleSheets()
 {
@@ -109,10 +110,11 @@ public class StudentPointsRowTable : RowTable<StudentPointsSheetData>
         yield return Row
         (
             Label("#").Frozen(),
-            Label("Student Name adadalkdmawd;ladl;lamda;lwdma;wdlma;wdlma;dlam")
+            Label("Student Name")
                 .WithColumnWidth(1.7)
                 .WithTextColor(Color.Red)
-                .WithTextWrapping(),
+                .WithTextWrapping()
+                .WithIndexRangeLabel(out var studentNameLabel),
             ForEach(model.HeaderData.Labs, headerData => VStack
             (
                 Label(headerData.Name),
@@ -126,7 +128,7 @@ public class StudentPointsRowTable : RowTable<StudentPointsSheetData>
                     Label(headerData.MinPoints, CultureInfo.InvariantCulture),
                     Label(headerData.MaxPoints, CultureInfo.InvariantCulture)
                 )
-            )).CustomizedWith(x => VStack(Label("Labs"), x))
+            )).CustomizedWith(x => VStack(Label(_ => $"Labs - {studentNameLabel.Range}"), x))
         ).FilledWith(Color.LightGray);
 
         foreach (var (data, i) in model.StudentPoints.Select((p, i) => (p, i)))

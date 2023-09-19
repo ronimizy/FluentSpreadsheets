@@ -141,4 +141,18 @@ public class ComponentVisitor<THandler> : IComponentVisitor where THandler : ICo
         var count = _index.Column + component.Size.Width - 1;
         _handler.FreezeColumns(count);
     }
+
+    public void Visit(IIndexLabelComponent component)
+    {
+        Size size = component.Size * _scale;
+
+        if (size is { Width: 1, Height: 1 })
+        {
+            component.AssignIndex(_index);
+        }
+        else
+        {
+            component.AssignIndexRange(new IndexRange(_index, size));
+        }
+    }
 }

@@ -27,4 +27,6 @@ public interface IComponentVisitor
     void Visit(IFrozenRowComponent component);
     
     void Visit(IFrozenColumnComponent component);
+
+    void Visit(IIndexLabelComponent component);
 }
