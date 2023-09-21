@@ -40,6 +40,12 @@ internal readonly struct ClosedXmlHandler : IComponentVisitorHandler
         }
     }
 
+    public void WriteString<T>(Index index, T context, Func<T, string> valueFactory, bool hasFormula)
+    {
+        var value = valueFactory.Invoke(context);
+        WriteString(index, value, hasFormula);
+    }
+
     public void AdjustRows(int from, int upTo)
     {
         _worksheet.Rows(from, upTo).AdjustToContents();

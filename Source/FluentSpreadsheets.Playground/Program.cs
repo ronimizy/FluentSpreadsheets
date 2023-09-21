@@ -107,14 +107,16 @@ public class StudentPointsRowTable : RowTable<StudentPointsSheetData>
 {
     protected override IEnumerable<IRowComponent> RenderRows(StudentPointsSheetData model)
     {
+        var studentNameLabel = LabelProxy.CreateForRange();
+        
         yield return Row
         (
-            Label("#").Frozen(),
+            Label(_ => $"# - {studentNameLabel.Label.Range}").Frozen(),
             Label("Student Name")
                 .WithColumnWidth(1.7)
                 .WithTextColor(Color.Red)
                 .WithTextWrapping()
-                .WithIndexRangeLabel(out var studentNameLabel),
+                .WithIndexRangeLabel(studentNameLabel),
             ForEach(model.HeaderData.Labs, headerData => VStack
             (
                 Label(headerData.Name),
@@ -122,13 +124,13 @@ public class StudentPointsRowTable : RowTable<StudentPointsSheetData>
                 (
                     Label("Min"),
                     Label("Max")
-                ),
+                ).WithIndexLabel(out var stackLabel),
                 HStack
                 (
                     Label(headerData.MinPoints, CultureInfo.InvariantCulture),
                     Label(headerData.MaxPoints, CultureInfo.InvariantCulture)
                 )
-            )).CustomizedWith(x => VStack(Label(_ => $"Labs - {studentNameLabel.Range}"), x))
+            )).CustomizedWith(x => VStack(Label(_ => $"Labs - {studentNameLabel.Label.Range}"), x))
         ).FilledWith(Color.LightGray);
 
         foreach (var (data, i) in model.StudentPoints.Select((p, i) => (p, i)))

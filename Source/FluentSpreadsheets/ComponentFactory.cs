@@ -1,7 +1,4 @@
-using FluentSpreadsheets.ComponentGroupImplementations;
-using FluentSpreadsheets.ComponentImplementations;
-using FluentSpreadsheets.ContainerImplementations;
-using FluentSpreadsheets.TableComponentImplementations;
+using FluentSpreadsheets.Implementations;
 using FluentSpreadsheets.Tables;
 
 namespace FluentSpreadsheets;

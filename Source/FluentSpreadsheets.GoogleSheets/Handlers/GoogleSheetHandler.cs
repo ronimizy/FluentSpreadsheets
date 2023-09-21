@@ -156,6 +156,12 @@ internal readonly struct GoogleSheetHandler : IComponentVisitorHandler
         ValueRanges.Add(valueRange);
     }
 
+    public void WriteString<T>(Index index, T context, Func<T, string> valueFactory, bool hasFormula)
+    {
+        var value = valueFactory.Invoke(context);
+        WriteString(index, value, hasFormula);
+    }
+
     public void AdjustRows(int from, int upTo)
         => AdjustDimension(Dimension.Rows, from, upTo);
 

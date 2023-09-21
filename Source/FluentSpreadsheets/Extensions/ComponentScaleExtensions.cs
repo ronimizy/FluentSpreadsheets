@@ -1,4 +1,4 @@
-using FluentSpreadsheets.ComponentImplementations;
+using FluentSpreadsheets.Implementations;
 using FluentSpreadsheets.Wrappables;
 
 namespace FluentSpreadsheets;

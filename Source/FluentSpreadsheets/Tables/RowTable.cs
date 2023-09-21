@@ -1,4 +1,4 @@
-using FluentSpreadsheets.ContainerImplementations;
+using FluentSpreadsheets.Implementations;
 using FluentSpreadsheets.TableScaling;
 using static FluentSpreadsheets.ComponentFactory;
 

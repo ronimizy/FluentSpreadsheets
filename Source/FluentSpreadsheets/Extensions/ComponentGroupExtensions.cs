@@ -1,4 +1,4 @@
-using FluentSpreadsheets.ComponentGroupImplementations;
+using FluentSpreadsheets.Implementations;
 
 namespace FluentSpreadsheets;
 

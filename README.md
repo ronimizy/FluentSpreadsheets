@@ -267,3 +267,76 @@ ForEach(model.HeaderData.Labs, headerData => VStack
     )
 )).CustomizedWith(x => VStack(Label("Labs"), x))
 ```
+
+## Index and IndexRange labels
+
+As composing components result in component stretching and resizing, there is no deterministic way of addressing 
+components using hard coded indices. Library provides label API, labels are computed in rendering process,
+so they contain indices and index ranges that are correct relative to stretched and resized components in sheet's grid.
+
+You can get Index or IndexRange of certain component by accessing `Index` or `Range` property accordingly.
+
+### Inline labels
+
+You can apply `WithIndexLabel` or `WithIndexRangeLabel` modifer which will give you out a label as an `out` parameter.
+
+As composing FluentSpreadsheets layouts done as continuous object creation rather then being part of delegate body, 
+components share same markup context and labels can be used in any components after defining them as `out` parameter.
+
+```csharp
+HStack
+(
+    Label("Min"),
+    Label("Max")
+).WithIndexLabel(out var stackLabel)
+```
+
+### Label elevation
+Even though defining inline labels is pretty handy, they are not applicable in cases, when you need to reference
+some components in other **prior** to their definitions. This is when "label elevation" process comes in.
+
+Label elevation is implemented via label proxies, which are created using `LabelProxy` static class 
+and it's `Create` and `CreateForRange` methods. They create proxies for index labels and index range labels accordingly.
+
+`WithIndexLabel` and `WithIndexRangeLabel` modifiers have overloads which accept proxies.
+
+```csharp
+var studentNameLabel = LabelProxy.CreateForRange();
+
+Label("Student Name")
+  .WithColumnWidth(1.7)
+  .WithTextColor(Color.Red)
+  .WithTextWrapping()
+  .WithIndexRangeLabel(studentNameLabel)
+```
+
+To retrieve label from proxy, access it's `Label` property
+
+```csharp
+Label(_ => $"# - {studentNameLabel.Label.Range}")
+```
+
+Additionally, you can assign labels to proxies manually using `AssignLabel` method.
+
+### Limitations
+
+As labels are computed during rendering process, you cannot use them with components that eagerly compute it's content,
+because at the time of creating the component, label value is unknown.
+
+For example `Label(string)` method and string interpolation will result in `UnsetLabelException` being thrown.
+
+```csharp
+Label($"# - {studentNameLabel.Label.Range}")
+```
+
+Luckily, there are index aware overloads for these kind of components, which compute their value lazily, 
+only when rendered onto a sheet.
+
+```csharp
+Label(_ => $"# - {studentNameLabel.Label.Range}")
+```
+
+### IndexLabel with stretched and resized components
+
+When you apply index label on components that has size larger than (1, 1) after scaling, 
+the top left index will be assigned to the index label
