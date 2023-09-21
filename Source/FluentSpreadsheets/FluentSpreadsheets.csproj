@@ -21,13 +21,16 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <PackageVersion>1.4.4</PackageVersion>
-        <PackageReleaseNotes>Added formulas</PackageReleaseNotes>
+        <PatchVersion>0</PatchVersion>
+        <Version>1.5.$(PatchVersion)</Version>
+        <PackageReleaseNotes>
+            Added index labels
+        </PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
-        <None Include="..\..\LICENSE.md" Pack="true" PackagePath="\" />
+        <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
+        <None Include="..\..\LICENSE.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
 
