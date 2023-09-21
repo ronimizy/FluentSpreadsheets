@@ -19,6 +19,9 @@ public readonly struct IndexRange
         End = end;
     }
 
+    public IndexRange(Index start, Size size)
+        : this(start, new Index(start.Row + size.Height, start.Column + size.Width)) { }
+
     public Index Start { get; }
 
     public Index End { get; }

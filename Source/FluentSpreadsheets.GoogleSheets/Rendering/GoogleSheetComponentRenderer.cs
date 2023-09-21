@@ -19,16 +19,21 @@ public class GoogleSheetComponentRenderer : IComponentRenderer<GoogleSheetRender
     public Task RenderAsync(GoogleSheetRenderCommand command, CancellationToken cancellationToken = default)
     {
         var (spreadsheetId, id, title, component) = command;
+        var index = new Index(1, 1);
+
+        // Empty handler run is needed to compute labels
+        var emptyHandler = new EmptyVisitorHandler();
+        var emptyVisitor = new ComponentVisitor<EmptyVisitorHandler>(index, emptyHandler);
 
         var handler = new GoogleSheetHandler(id, title);
         var visitor = new ComponentVisitor<GoogleSheetHandler>(new Index(1, 1), handler);
+
+        command.Component.Accept(emptyVisitor);
         component.Accept(visitor);
 
-        return Task.WhenAll
-        (
+        return Task.WhenAll(
             UpdateStylesAsync(spreadsheetId, handler.StyleRequests, cancellationToken),
-            UpdateValueRangesAsync(spreadsheetId, handler.ValueRanges, cancellationToken)
-        );
+            UpdateValueRangesAsync(spreadsheetId, handler.ValueRanges, cancellationToken));
     }
 
     private async Task UpdateValueRangesAsync(
@@ -38,7 +43,7 @@ public class GoogleSheetComponentRenderer : IComponentRenderer<GoogleSheetRender
     {
         if (valueRanges.Count is 0)
             return;
-        
+
         var updateRequest = new BatchUpdateValuesRequest
         {
             Data = valueRanges,
@@ -57,7 +62,7 @@ public class GoogleSheetComponentRenderer : IComponentRenderer<GoogleSheetRender
     {
         if (updateRequests.Count is 0)
             return;
-        
+
         var batchUpdateRequest = new BatchUpdateSpreadsheetRequest
         {
             Requests = updateRequests,

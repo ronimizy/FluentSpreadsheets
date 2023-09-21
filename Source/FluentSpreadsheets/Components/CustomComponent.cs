@@ -1,4 +1,4 @@
-using FluentSpreadsheets.ComponentImplementations;
+using FluentSpreadsheets.Implementations;
 using FluentSpreadsheets.Styles;
 using FluentSpreadsheets.Visitors;
 using FluentSpreadsheets.Wrappables;

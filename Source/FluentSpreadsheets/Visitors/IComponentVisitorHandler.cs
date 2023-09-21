@@ -10,6 +10,8 @@ public interface IComponentVisitorHandler
 
     void WriteString(Index index, string value, bool hasFormula);
 
+    void WriteString<T>(Index index, T context, Func<T, string> valueFactory, bool hasFormula);
+
     void AdjustRows(int from, int upTo);
 
     void AdjustColumns(int from, int upTo);

@@ -1,41 +1,44 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>netstandard2.1</TargetFramework>
-		<LangVersion>10</LangVersion>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-	</PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <LangVersion>10</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
 
-	<PropertyGroup>
-		<Title>FluentSpreadsheets.GoogleSheets</Title>
-		<Authors>ronimizy</Authors>
-		<Description>An integration library for FluentSpreadsheets that provides an ability to render components using Google Sheets API v4</Description>
-		<PackageProjectUrl>https://github.com/ronimizy/FluentSpreadsheets</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/ronimizy/FluentSpreadsheets</RepositoryUrl>
-		<RepositoryType>github</RepositoryType>
-		<PackageTags>spreadsheet;layout;google;</PackageTags>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	</PropertyGroup>
+    <PropertyGroup>
+        <Title>FluentSpreadsheets.GoogleSheets</Title>
+        <Authors>ronimizy</Authors>
+        <Description>An integration library for FluentSpreadsheets that provides an ability to render components using Google Sheets API v4</Description>
+        <PackageProjectUrl>https://github.com/ronimizy/FluentSpreadsheets</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/ronimizy/FluentSpreadsheets</RepositoryUrl>
+        <RepositoryType>github</RepositoryType>
+        <PackageTags>spreadsheet;layout;google;</PackageTags>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    </PropertyGroup>
 
-	<PropertyGroup>
-		<PackageVersion>1.4.3</PackageVersion>
-		<PackageReleaseNotes>Added index methods</PackageReleaseNotes>
-	</PropertyGroup>
+    <PropertyGroup>
+        <PatchVersion>0</PatchVersion>
+        <Version>1.5.$(PatchVersion)</Version>
+        <PackageReleaseNotes>
+            Added index lables
+        </PackageReleaseNotes>
+    </PropertyGroup>
 
-	<ItemGroup>
-		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
-		<None Include="..\..\LICENSE.md" Pack="true" PackagePath="\" />
-	</ItemGroup>
+    <ItemGroup>
+        <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
+        <None Include="..\..\LICENSE.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\FluentSpreadsheets\FluentSpreadsheets.csproj" />
-	</ItemGroup>
-	
-	<ItemGroup>
-		<PackageReference Include="Google.Apis.Sheets.v4" Version="1.57.0.2727" />
-	</ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\FluentSpreadsheets\FluentSpreadsheets.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Google.Apis.Sheets.v4" Version="1.57.0.2727"/>
+    </ItemGroup>
 
 </Project>

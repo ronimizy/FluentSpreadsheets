@@ -88,8 +88,7 @@ public class ComponentVisitor<THandler> : IComponentVisitor where THandler : ICo
         if (!_scale.IsNone)
             _handler.MergeRange(range);
 
-        var text = component.BuildValue(_index);
-        _handler.WriteString(_index, text, component.HasFormula);
+        _handler.WriteString(_index, component, c => c.BuildValue(_index), component.HasFormula);
     }
 
     public void Visit(IScaledComponent component)
@@ -140,5 +139,13 @@ public class ComponentVisitor<THandler> : IComponentVisitor where THandler : ICo
     {
         var count = _index.Column + component.Size.Width - 1;
         _handler.FreezeColumns(count);
+    }
+
+    public void Visit(IIndexLabelComponent component)
+    {
+        var size = component.Size * _scale;
+
+        component.AssignIndex(_index);
+        component.AssignIndexRange(new IndexRange(_index, size));
     }
 }

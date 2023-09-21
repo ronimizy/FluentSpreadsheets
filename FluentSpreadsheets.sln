@@ -21,6 +21,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentSpreadsheets.Examples
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentSpreadsheets.Test", "FluentSpreadsheets.Test\FluentSpreadsheets.Test.csproj", "{8C09C0B6-42CC-4F59-9058-F947AC8999BC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{884F5F9B-8897-40DE-998F-51CDD732200F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{D4A183C7-3C26-43ED-A7A3-85410E0EA5CF}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
+		.github\workflows\publish.yml = .github\workflows\publish.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +75,7 @@ Global
 		{ECDC4DC6-E484-46BE-AE1E-D81167A849BB} = {83F888A6-8564-45CB-B5B6-6C95C71D869F}
 		{17E5C95D-022B-44CF-BCCE-EF7326CF6B25} = {83F888A6-8564-45CB-B5B6-6C95C71D869F}
 		{1B94DDA7-A55A-4202-B271-C018E846A1A4} = {83F888A6-8564-45CB-B5B6-6C95C71D869F}
+		{D4A183C7-3C26-43ED-A7A3-85410E0EA5CF} = {884F5F9B-8897-40DE-998F-51CDD732200F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {46A80724-DDF3-4E9A-9EFE-451A01025AE6}

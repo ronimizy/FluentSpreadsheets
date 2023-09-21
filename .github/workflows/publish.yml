@@ -1,0 +1,87 @@
+name: "publish packages"
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'src/**'
+      - '.github/workflows/publish.yml'
+      - '*.props'
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    outputs:
+      cache-key: ${{ steps.create-cache-keys.outputs.cache-key }}
+    
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 7.0.203
+
+      - name: Create cache keys
+        id: create-cache-keys
+        run: |
+          echo cache-key=${{ runner.os }}-${{ hashFiles('src/**') }}-packages >> "$GITHUB_OUTPUT"
+
+      - name: cache packages
+        id: cache-packages
+        uses: actions/cache@v3
+        with:
+          path: .packages
+          key: ${{ steps.create-cache-keys.outputs.cache-key }}
+          restore-keys: ${{ steps.create-cache-keys.outputs.cache-key }}
+
+      - name: Cache nuget packages
+        uses: actions/cache@v3
+        if: ${{ steps.cache-packages.outputs.cache-hit != 'true' }}
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-${{ hashFiles('**/*.Packages.props', '**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: restore
+        if: ${{ steps.cache-packages.outputs.cache-hit != 'true' }}
+        run: dotnet restore FluentSpreadsheets.sln
+
+      - name: build
+        if: ${{ steps.cache-packages.outputs.cache-hit != 'true' }}
+        run: dotnet build FluentSpreadsheets.sln -c Release --no-restore /p:PatchVersion=${{ github.run_number }}
+
+      - name: move packages
+        if: ${{ steps.cache-packages.outputs.cache-hit != 'true' }}
+        run: |
+          rm -rf .packages
+          mkdir .packages
+          mv Source/FluentSpreadsheets/bin/Release/*.nupkg .packages/
+          mv Source/FluentSpreadsheets.ClosedXML/bin/Release/*.nupkg .packages/
+          mv Source/FluentSpreadsheets.GoogleSheets/bin/Release/*.nupkg .packages/
+
+  
+  publish:
+    name: publish
+    runs-on: ubuntu-latest
+    needs: build
+    environment: nuget.org
+    
+    steps:
+      - name: load packages
+        uses: actions/cache@v3
+        with:
+          fail-on-cache-miss: true
+          path: .packages
+          key: ${{ needs.build.outputs.cache-key }}
+
+      - name: publish to GitHub nuget repository
+        run: |
+          for file in .packages/*.nupkg
+          do
+            dotnet nuget push "${file#/}" --source "nuget.org" --api-key ${{ secrets.NUGET_API_KEY }}
+          done
