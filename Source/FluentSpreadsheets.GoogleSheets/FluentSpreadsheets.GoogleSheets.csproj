@@ -39,6 +39,7 @@
 
     <ItemGroup>
         <PackageReference Include="Google.Apis.Sheets.v4" Version="1.62.0.3148" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
     </ItemGroup>
 
     <ItemGroup>

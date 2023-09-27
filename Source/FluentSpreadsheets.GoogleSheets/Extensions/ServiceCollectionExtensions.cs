@@ -9,7 +9,7 @@ namespace FluentSpreadsheets.GoogleSheets.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IFluentSpreadsheetsConfigurationBuilder AddGoogle(
+    public static IFluentSpreadsheetsConfigurationBuilder AddGoogleSheets(
         this IFluentSpreadsheetsConfigurationBuilder builder,
         Action<IGoogleBuilder>? configuration = null)
     {

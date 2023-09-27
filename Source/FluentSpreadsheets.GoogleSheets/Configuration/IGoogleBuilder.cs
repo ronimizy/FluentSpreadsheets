@@ -2,5 +2,5 @@ namespace FluentSpreadsheets.GoogleSheets.Configuration;
 
 public interface IGoogleBuilder
 {
-    IGoogleBuilder UseBatching();
+    IGoogleBuilder UseBatching(Action<GoogleSheetsBatchingConfiguration>? configuration = null);
 }

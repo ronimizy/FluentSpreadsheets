@@ -4,7 +4,12 @@
 
 ### FluentSpreadsheets.ClosedXML [![badge](https://img.shields.io/nuget/vpre/FluentSpreadsheets.ClosedXML?style=flat-square)](https://www.nuget.org/packages/FluentSpreadsheets.ClosedXML/)
 
+- [Configuration](#configuration)
+
 ### FluentSpreadsheets.GoogleSheets [![badge](https://img.shields.io/nuget/vpre/FluentSpreadsheets.GoogleSheets?style=flat-square)](https://www.nuget.org/packages/FluentSpreadsheets.GoogleSheets/)
+
+- [Batching](#batching)
+- [Configuration](#configuration-1)
 
 ## Overview
 
@@ -340,3 +345,51 @@ Label(_ => $"# - {studentNameLabel.Label.Range}")
 
 When you apply index label on components that has size larger than (1, 1) after scaling, 
 the top left index will be assigned to the index label
+
+## FluentSpreadsheets.ClosedXML
+
+### Configuration
+
+Use service collection extension methods to configure ClosedXML driver.
+
+```csharp
+services
+    .AddFluentSpreadsheets()
+    .AddClosedXml();
+```
+
+## FluentSpreadsheets.GoogleSheets
+
+### Configuration
+
+Use service collection extension methods to configure GoogleSheets driver.
+
+```csharp
+services
+    .AddFluentSpreadsheets()
+    .AddGoogleSheets(options => options.UseBatching(batchingOptions => batchingOptions.SimultaneousRequestCount = 200);
+```
+
+### Batching
+
+When rendering different components on same spreadsheet you can use batching api to reduce api calls.
+
+Use `ISheetsServiceBatchScopeFactory` interface and it's `CreateScope` method to define batching scope.
+
+```csharp
+public async Task ExecuteRenders(ISheetsServiceBatchScopeFactory scopeFactory)
+{
+    await using var scope = scopeFactory.CreateScope();
+    
+    // some rendering logic here
+}
+```
+
+While the scope is not disposed, all render requests will be batched, only on scope disposal all the necessary
+GoogleSheets API calls will be executed.
+
+As GoogleSheets API only allow to batch requests by spreadsheet, using batching api will result in any efficiency 
+increase only when you render multiple components on same spreadsheet's sheet(s).
+
+Batching API calls for rendering on different spreadsheets will only result in deferred execution 
+(you might gain some "performance" due to all request being executed simultaneously, reducing sequential wait time). 
