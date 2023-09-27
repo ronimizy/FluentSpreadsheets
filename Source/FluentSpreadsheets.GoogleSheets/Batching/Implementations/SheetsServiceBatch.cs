@@ -11,11 +11,13 @@ internal class SheetsServiceBatch : ISheetsServiceBatch, ISheetsServiceBatchScop
 
     private readonly SheetsService _service;
     private readonly Action _onDisposed;
+    private readonly IBatchingSemaphore _semaphore;
 
-    public SheetsServiceBatch(SheetsService service, Action onDisposed)
+    public SheetsServiceBatch(SheetsService service, Action onDisposed, IBatchingSemaphore semaphore)
     {
         _service = service;
         _onDisposed = onDisposed;
+        _semaphore = semaphore;
 
         _valueCommands = new List<ValueUpdateCommand>();
         _spreadsheetCommands = new List<SpreadsheetUpdateCommand>();
@@ -43,10 +45,10 @@ internal class SheetsServiceBatch : ISheetsServiceBatch, ISheetsServiceBatchScop
     {
         _onDisposed.Invoke();
 
-        IEnumerable<SpreadsheetsResource.ValuesResource.BatchUpdateRequest> valueRequests = _valueCommands
+        IEnumerable<Task> valueTasks = _valueCommands
             .Where(x => x.CancellationToken.IsCancellationRequested is false)
             .GroupBy(x => x.SpreadsheetId)
-            .Select(grouping =>
+            .Select(async grouping =>
             {
                 var request = new BatchUpdateValuesRequest
                 {
@@ -54,24 +56,43 @@ internal class SheetsServiceBatch : ISheetsServiceBatch, ISheetsServiceBatchScop
                     ValueInputOption = ValueInputOption.UserEntered,
                 };
 
-                return _service.Spreadsheets.Values.BatchUpdate(request, grouping.Key);
+                await _semaphore.WaitAsync(default);
+
+
+                try
+                {
+                    var batchRequest = _service.Spreadsheets.Values.BatchUpdate(request, grouping.Key);
+                    await batchRequest.ExecuteAsync();
+                }
+                finally
+                {
+                    _semaphore.Release();
+                }
             });
 
-        IEnumerable<SpreadsheetsResource.BatchUpdateRequest> spreadsheetRequests = _spreadsheetCommands
+        IEnumerable<Task> spreadsheetTasks = _spreadsheetCommands
             .Where(x => x.CancellationToken.IsCancellationRequested is false)
             .GroupBy(x => x.SpreadsheetId)
-            .Select(grouping =>
+            .Select(async grouping =>
             {
                 var request = new BatchUpdateSpreadsheetRequest
                 {
                     Requests = grouping.SelectMany(x => x.Requests).ToArray(),
                 };
 
-                return _service.Spreadsheets.BatchUpdate(request, grouping.Key);
+                await _semaphore.WaitAsync(default);
+
+                try
+                {
+                    var batchRequest = _service.Spreadsheets.BatchUpdate(request, grouping.Key);
+                    await batchRequest.ExecuteAsync();
+                }
+                finally
+                {
+                    _semaphore.Release();
+                }
             });
 
-        IEnumerable<Task> valueTasks = valueRequests.Select(x => x.ExecuteAsync());
-        IEnumerable<Task> spreadsheetTasks = spreadsheetRequests.Select(x => x.ExecuteAsync());
 
         IEnumerable<Task> tasks = valueTasks.Concat(spreadsheetTasks);
 
