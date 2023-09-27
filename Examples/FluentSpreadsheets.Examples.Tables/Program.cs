@@ -2,9 +2,11 @@
 using System.Globalization;
 using ClosedXML.Excel;
 using FluentSpreadsheets;
+using FluentSpreadsheets.ClosedXML.Extensions;
 using FluentSpreadsheets.ClosedXML.Rendering;
 using FluentSpreadsheets.Styles;
 using FluentSpreadsheets.Tables;
+using Microsoft.Extensions.DependencyInjection;
 using static FluentSpreadsheets.ComponentFactory;
 
 CartItem[] items =
@@ -24,10 +26,18 @@ var tableComponent = table.Render(model);
 var workbook = new XLWorkbook();
 var worksheet = workbook.AddWorksheet("Cart");
 
-var renderer = new ClosedXmlComponentRenderer();
-var renderCommand = new ClosedXmlRenderCommand(worksheet, tableComponent);
+var collection = new ServiceCollection();
 
-await renderer.RenderAsync(renderCommand);
+collection
+    .AddFluentSpreadsheets()
+    .AddClosedXml();
+
+var provider = collection.BuildServiceProvider();
+using var scope = provider.CreateScope();
+
+var renderer = scope.ServiceProvider.GetRequiredService<IClosedXmlComponentRenderer>();
+
+await renderer.RenderAsync(tableComponent, worksheet, default);
 
 workbook.SaveAs("cart.xlsx");
 
