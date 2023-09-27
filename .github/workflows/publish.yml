@@ -28,7 +28,7 @@ jobs:
       - name: Create cache keys
         id: create-cache-keys
         run: |
-          echo cache-key=${{ runner.os }}-${{ hashFiles('src/**') }}-packages >> "$GITHUB_OUTPUT"
+          echo cache-key=${{ runner.os }}-${{ hashFiles('Source/**') }}-packages >> "$GITHUB_OUTPUT"
 
       - name: cache packages
         id: cache-packages
