@@ -4,7 +4,7 @@ on:
   push:
     branches: [ master ]
     paths:
-      - 'src/**'
+      - 'Source/**'
       - '.github/workflows/publish.yml'
       - '*.props'
 
