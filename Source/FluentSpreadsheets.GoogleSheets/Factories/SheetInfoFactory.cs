@@ -1,36 +1,35 @@
-﻿using FluentSpreadsheets.GoogleSheets.Rendering;
+﻿using FluentSpreadsheets.GoogleSheets.Models;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
 
 namespace FluentSpreadsheets.GoogleSheets.Factories;
 
-public class RenderCommandFactory : IRenderCommandFactory
+public class SheetInfoFactory : ISheetInfoFactory
 {
     private readonly SheetsService _sheetsService;
 
-    public RenderCommandFactory(SheetsService sheetsService)
+    public SheetInfoFactory(SheetsService sheetsService)
     {
         _sheetsService = sheetsService;
     }
 
-    public async Task<GoogleSheetRenderCommand> CreateAsync(
+    public async Task<SheetInfo> GetAsync(
         string spreadsheetId,
         string title,
-        IComponent component,
         CancellationToken cancellationToken = default)
     {
         var id = await GetSheetId(spreadsheetId, title, cancellationToken);
-        return new GoogleSheetRenderCommand(spreadsheetId, id, title, component);
+        return new SheetInfo(spreadsheetId, id, title);
     }
 
-    public async Task<GoogleSheetRenderCommand> CreateAsync(
+    public async Task<SheetInfo> GetAsync(
         string spreadsheetId,
         int id,
         IComponent component,
         CancellationToken cancellationToken = default)
     {
         var title = await GetSheetTitle(spreadsheetId, id, cancellationToken);
-        return new GoogleSheetRenderCommand(spreadsheetId, id, title, component);
+        return new SheetInfo(spreadsheetId, id, title);
     }
 
     private async Task<int> GetSheetId(string spreadsheetId, string title, CancellationToken cancellationToken)

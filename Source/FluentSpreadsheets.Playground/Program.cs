@@ -2,6 +2,7 @@
 using ClosedXML.Excel;
 using FluentSpreadsheets;
 using FluentSpreadsheets.ClosedXML.Rendering;
+using FluentSpreadsheets.GoogleSheets.Batching.Implementations;
 using FluentSpreadsheets.GoogleSheets.Factories;
 using FluentSpreadsheets.GoogleSheets.Rendering;
 using FluentSpreadsheets.Labels;
@@ -65,15 +66,15 @@ async Task RenderGoogleSheets()
     var service = new SheetsService(initializer);
     const string spreadsheetId = "";
 
-    var renderer = new GoogleSheetComponentRenderer(service);
+    var renderer = new GoogleSheetComponentRenderer(new InstantSheetsServiceExecutor(service));
 
     const string title = "New Sheet Name";
 
-    var renderCommandFactory = new RenderCommandFactory(service);
+    var sheetInfoFactory = new SheetInfoFactory(service);
 
-    var renderCommand = await renderCommandFactory.CreateAsync(spreadsheetId, title, sheet);
+    var sheetInfo = await sheetInfoFactory.GetAsync(spreadsheetId, title);
 
-    await renderer.RenderAsync(renderCommand);
+    await renderer.RenderAsync(sheet, sheetInfo, default);
 }
 
 async Task RenderXlsx()
@@ -82,9 +83,8 @@ async Task RenderXlsx()
     var worksheet = workbook.AddWorksheet("Student Progress");
 
     var renderer = new ClosedXmlComponentRenderer();
-    var renderCommand = new ClosedXmlRenderCommand(worksheet, sheet);
 
-    await renderer.RenderAsync(renderCommand);
+    await renderer.RenderAsync(sheet, worksheet, default);
 
     workbook.SaveAs("student-progress.xlsx");
 }

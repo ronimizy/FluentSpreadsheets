@@ -17,11 +17,10 @@ public class LabelTests
         using var workbook = new XLWorkbook();
         var worksheet = workbook.AddWorksheet("test");
 
-        var command = new ClosedXmlRenderCommand(worksheet, component);
         var renderer = new ClosedXmlComponentRenderer();
 
         // Act
-        await renderer.RenderAsync(command);
+        await renderer.RenderAsync(component, worksheet, default);
 
         // Assert
         label.Index.Should().BeEquivalentTo(new Index(1, 1));
@@ -38,11 +37,10 @@ public class LabelTests
         using var workbook = new XLWorkbook();
         var worksheet = workbook.AddWorksheet("test");
 
-        var command = new ClosedXmlRenderCommand(worksheet, component);
         var renderer = new ClosedXmlComponentRenderer();
 
         // Act
-        await renderer.RenderAsync(command);
+        await renderer.RenderAsync(component, worksheet, default);
 
         // Assert
         label.Index.Should().BeEquivalentTo(new Index(1, 1));
@@ -59,11 +57,10 @@ public class LabelTests
         using var workbook = new XLWorkbook();
         var worksheet = workbook.AddWorksheet("test");
 
-        var command = new ClosedXmlRenderCommand(worksheet, component);
         var renderer = new ClosedXmlComponentRenderer();
 
         // Act
-        await renderer.RenderAsync(command);
+        await renderer.RenderAsync(component, worksheet, default);
 
         // Assert
         label.Range.Should().BeEquivalentTo(new IndexRange(new Index(1, 1), new Size(2, 1)));
@@ -79,11 +76,10 @@ public class LabelTests
         using var workbook = new XLWorkbook();
         var worksheet = workbook.AddWorksheet("test");
 
-        var command = new ClosedXmlRenderCommand(worksheet, component);
         var renderer = new ClosedXmlComponentRenderer();
 
         // Act
-        await renderer.RenderAsync(command);
+        await renderer.RenderAsync(component, worksheet, default);
 
         // Assert
         label.Range.Should().BeEquivalentTo(new IndexRange(new Index(1, 1), new Size(1, 1)));

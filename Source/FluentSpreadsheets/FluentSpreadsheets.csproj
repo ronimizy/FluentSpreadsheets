@@ -22,9 +22,9 @@
 
     <PropertyGroup>
         <PatchVersion>0</PatchVersion>
-        <Version>1.5.$(PatchVersion)</Version>
+        <Version>1.6.$(PatchVersion)</Version>
         <PackageReleaseNotes>
-            Added index labels
+            Removed general renderer abstractions
         </PackageReleaseNotes>
     </PropertyGroup>
 
@@ -33,5 +33,10 @@
         <None Include="..\..\LICENSE.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
+
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+    </ItemGroup>
 
 </Project>

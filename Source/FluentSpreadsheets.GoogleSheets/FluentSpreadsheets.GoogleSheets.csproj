@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
-        <LangVersion>10</LangVersion>
+        <LangVersion>11</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
@@ -22,9 +22,9 @@
 
     <PropertyGroup>
         <PatchVersion>0</PatchVersion>
-        <Version>1.5.$(PatchVersion)</Version>
+        <Version>1.6.$(PatchVersion)</Version>
         <PackageReleaseNotes>
-            Added index lables
+            Added specific renderer; added batching
         </PackageReleaseNotes>
     </PropertyGroup>
 
@@ -39,6 +39,11 @@
 
     <ItemGroup>
         <PackageReference Include="Google.Apis.Sheets.v4" Version="1.57.0.2727"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="FluentSpreadsheets.Test"/>
+        <InternalsVisibleTo Include="FluentSpreadsheets.Playground"/>
     </ItemGroup>
 
 </Project>

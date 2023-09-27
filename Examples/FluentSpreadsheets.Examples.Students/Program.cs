@@ -2,9 +2,11 @@
 using System.Globalization;
 using ClosedXML.Excel;
 using FluentSpreadsheets;
+using FluentSpreadsheets.ClosedXML.Extensions;
 using FluentSpreadsheets.ClosedXML.Rendering;
 using FluentSpreadsheets.Styles;
 using FluentSpreadsheets.Tables;
+using Microsoft.Extensions.DependencyInjection;
 using static FluentSpreadsheets.ComponentFactory;
 
 var studentA = new Student("Student 1");
@@ -46,10 +48,18 @@ var sheet = table.Render(sheetData);
 var workbook = new XLWorkbook();
 var worksheet = workbook.AddWorksheet("Student Progress");
 
-var renderer = new ClosedXmlComponentRenderer();
-var renderCommand = new ClosedXmlRenderCommand(worksheet, sheet);
+var collection = new ServiceCollection();
 
-await renderer.RenderAsync(renderCommand);
+collection
+    .AddFluentSpreadsheets()
+    .AddClosedXml();
+
+var provider = collection.BuildServiceProvider();
+using var scope = provider.CreateScope();
+
+var renderer = scope.ServiceProvider.GetRequiredService<IClosedXmlComponentRenderer>();
+
+await renderer.RenderAsync(sheet, worksheet, default);
 
 workbook.SaveAs("student-progress.xlsx");
 

@@ -1,75 +1,46 @@
-﻿using FluentSpreadsheets.GoogleSheets.Handlers;
+﻿using FluentSpreadsheets.GoogleSheets.Batching;
+using FluentSpreadsheets.GoogleSheets.Handlers;
 using FluentSpreadsheets.GoogleSheets.Models;
-using FluentSpreadsheets.Rendering;
 using FluentSpreadsheets.Visitors;
-using Google.Apis.Sheets.v4;
-using Google.Apis.Sheets.v4.Data;
 
 namespace FluentSpreadsheets.GoogleSheets.Rendering;
 
-public class GoogleSheetComponentRenderer : IComponentRenderer<GoogleSheetRenderCommand>
+internal class GoogleSheetComponentRenderer : IGoogleSheetsComponentRenderer
 {
-    private readonly SheetsService _sheetsService;
+    private readonly ISheetsServiceExecutor _executor;
 
-    public GoogleSheetComponentRenderer(SheetsService sheetsService)
+    public GoogleSheetComponentRenderer(ISheetsServiceExecutor executor)
     {
-        _sheetsService = sheetsService;
+        _executor = executor;
     }
 
-    public Task RenderAsync(GoogleSheetRenderCommand command, CancellationToken cancellationToken = default)
+    public async Task RenderAsync(
+        IComponent component,
+        SheetInfo sheetInfo,
+        Index startIndex,
+        CancellationToken cancellationToken)
     {
-        var (spreadsheetId, id, title, component) = command;
-        var index = new Index(1, 1);
+        var (spreadsheetId, sheetId, sheetTitle) = sheetInfo;
 
         // Empty handler run is needed to compute labels
         var emptyHandler = new EmptyVisitorHandler();
-        var emptyVisitor = new ComponentVisitor<EmptyVisitorHandler>(index, emptyHandler);
+        var emptyVisitor = new ComponentVisitor<EmptyVisitorHandler>(startIndex, emptyHandler);
 
-        var handler = new GoogleSheetHandler(id, title);
-        var visitor = new ComponentVisitor<GoogleSheetHandler>(new Index(1, 1), handler);
+        var handler = new GoogleSheetHandler(sheetId, sheetTitle);
+        var visitor = new ComponentVisitor<GoogleSheetHandler>(startIndex, handler);
 
-        command.Component.Accept(emptyVisitor);
+        component.Accept(emptyVisitor);
         component.Accept(visitor);
 
-        return Task.WhenAll(
-            UpdateStylesAsync(spreadsheetId, handler.StyleRequests, cancellationToken),
-            UpdateValueRangesAsync(spreadsheetId, handler.ValueRanges, cancellationToken));
+        await _executor.ExecuteValueUpdatesAsync(spreadsheetId, handler.ValueRanges, cancellationToken);
+        await _executor.ExecuteSpreadsheetUpdatesAsync(spreadsheetId, handler.StyleRequests, cancellationToken);
     }
 
-    private async Task UpdateValueRangesAsync(
-        string spreadsheetId,
-        IList<ValueRange> valueRanges,
+    public Task RenderAsync(
+        IComponent component,
+        SheetInfo sheetInfo,
         CancellationToken cancellationToken)
     {
-        if (valueRanges.Count is 0)
-            return;
-
-        var updateRequest = new BatchUpdateValuesRequest
-        {
-            Data = valueRanges,
-            ValueInputOption = ValueInputOption.UserEntered,
-        };
-
-        await _sheetsService.Spreadsheets.Values
-            .BatchUpdate(updateRequest, spreadsheetId)
-            .ExecuteAsync(cancellationToken);
-    }
-
-    private async Task UpdateStylesAsync(
-        string spreadsheetId,
-        IList<Request> updateRequests,
-        CancellationToken cancellationToken)
-    {
-        if (updateRequests.Count is 0)
-            return;
-
-        var batchUpdateRequest = new BatchUpdateSpreadsheetRequest
-        {
-            Requests = updateRequests,
-        };
-
-        await _sheetsService.Spreadsheets
-            .BatchUpdate(batchUpdateRequest, spreadsheetId)
-            .ExecuteAsync(cancellationToken);
+        return RenderAsync(component, sheetInfo, new Index(1, 1), cancellationToken);
     }
 }

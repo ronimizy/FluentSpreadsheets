@@ -22,9 +22,9 @@
 
     <PropertyGroup>
         <PatchVersion>0</PatchVersion>
-        <Version>1.5.$(PatchVersion)</Version>
+        <Version>1.6.$(PatchVersion)</Version>
         <PackageReleaseNotes>
-            Added index labels
+            Added specific renderer
         </PackageReleaseNotes>
     </PropertyGroup>
 
@@ -39,6 +39,11 @@
 
     <ItemGroup>
         <PackageReference Include="ClosedXML" Version="0.96.0"/>
+    </ItemGroup>
+    
+    <ItemGroup>
+        <InternalsVisibleTo Include="FluentSpreadsheets.Test"/>
+        <InternalsVisibleTo Include="FluentSpreadsheets.Playground"/>
     </ItemGroup>
 
 </Project>

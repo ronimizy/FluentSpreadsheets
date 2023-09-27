@@ -1,16 +1,15 @@
-﻿using FluentSpreadsheets.GoogleSheets.Rendering;
+﻿using FluentSpreadsheets.GoogleSheets.Models;
 
 namespace FluentSpreadsheets.GoogleSheets.Factories;
 
-public interface IRenderCommandFactory
+public interface ISheetInfoFactory
 {
-    Task<GoogleSheetRenderCommand> CreateAsync(
+    Task<SheetInfo> GetAsync(
         string spreadsheetId,
         string title,
-        IComponent component,
         CancellationToken cancellationToken = default);
 
-    Task<GoogleSheetRenderCommand> CreateAsync(
+    Task<SheetInfo> GetAsync(
         string spreadsheetId,
         int id,
         IComponent component,
