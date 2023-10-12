@@ -2,6 +2,7 @@ using FluentSpreadsheets.Configuration;
 using FluentSpreadsheets.GoogleSheets.Batching;
 using FluentSpreadsheets.GoogleSheets.Batching.Implementations;
 using FluentSpreadsheets.GoogleSheets.Configuration;
+using FluentSpreadsheets.GoogleSheets.Factories;
 using FluentSpreadsheets.GoogleSheets.Rendering;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,6 +16,7 @@ public static class ServiceCollectionExtensions
     {
         builder.Services.AddScoped<ISheetsServiceExecutor, InstantSheetsServiceExecutor>();
         builder.Services.AddScoped<IGoogleSheetsComponentRenderer, GoogleSheetComponentRenderer>();
+        builder.Services.AddScoped<ISheetInfoFactory, SheetInfoFactory>();
         
         var googleBuilder = new GoogleBuilder(builder.Services);
         configuration?.Invoke(googleBuilder);

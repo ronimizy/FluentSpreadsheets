@@ -4,7 +4,7 @@ using Google.Apis.Sheets.v4.Data;
 
 namespace FluentSpreadsheets.GoogleSheets.Factories;
 
-public class SheetInfoFactory : ISheetInfoFactory
+internal class SheetInfoFactory : ISheetInfoFactory
 {
     private readonly SheetsService _sheetsService;
 
