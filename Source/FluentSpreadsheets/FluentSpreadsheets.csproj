@@ -24,7 +24,7 @@
         <PatchVersion>0</PatchVersion>
         <Version>1.6.$(PatchVersion)</Version>
         <PackageReleaseNotes>
-            Removed general renderer abstractions
+            Added CustomRowComponent
         </PackageReleaseNotes>
     </PropertyGroup>
 
