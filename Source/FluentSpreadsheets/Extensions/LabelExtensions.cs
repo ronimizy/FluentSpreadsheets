@@ -1,43 +1,40 @@
 using FluentSpreadsheets.Implementations;
 using FluentSpreadsheets.Labels;
 using FluentSpreadsheets.Labels.Implementations;
-using FluentSpreadsheets.Wrappables;
 
 namespace FluentSpreadsheets;
 
 public static class LabelExtensions
 {
-    public static T WithIndexLabel<T>(this T component, out IComponentIndexLabel label) where T : IWrappable<T>
+    public static IComponent WithIndexLabel(this IComponent component, out IComponentIndexLabel label)
     {
         var concreteLabel = new ComponentLabel();
         label = concreteLabel;
 
-        return component.WrappedInto(c => new IndexLabelComponent(c, concreteLabel));
+        return new IndexLabelComponent(component, concreteLabel);
     }
 
-    public static T WithIndexLabel<T>(this T component, IComponentIndexLabelProxy proxy) where T : IWrappable<T>
+    public static IComponent WithIndexLabel(this IComponent component, IComponentIndexLabelProxy proxy)
     {
         var label = new ComponentLabel();
         proxy.AssignLabel(label);
 
-        return component.WrappedInto(c => new IndexLabelComponent(c, label));
+        return new IndexLabelComponent(component, label);
     }
 
-    public static T WithIndexRangeLabel<T>(this T component, out IComponentIndexRangeLabel label)
-        where T : IWrappable<T>
+    public static IComponent WithIndexRangeLabel(this IComponent component, out IComponentIndexRangeLabel label)
     {
         var concreteLabel = new ComponentLabel();
         label = concreteLabel;
 
-        return component.WrappedInto(c => new IndexLabelComponent(c, concreteLabel));
+        return new IndexLabelComponent(component, concreteLabel);
     }
 
-    public static T WithIndexRangeLabel<T>(this T component, IComponentIndexRangeLabelProxy proxy)
-        where T : IWrappable<T>
+    public static IComponent WithIndexRangeLabel(this IComponent component, IComponentIndexRangeLabelProxy proxy)
     {
         var label = new ComponentLabel();
         proxy.AssignLabel(label);
 
-        return component.WrappedInto(c => new IndexLabelComponent(c, label));
+        return new IndexLabelComponent(component, label);
     }
 }

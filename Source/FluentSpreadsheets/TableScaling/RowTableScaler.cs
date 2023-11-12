@@ -13,7 +13,7 @@ internal class RowTableScaler : Scaler
         if (component.Size.Width.Equals(customizedComponent.Size.Width))
             return;
 
-        throw new InvalidCustomizationException("Customized component width must be equal to the component height");
+        throw new InvalidCustomizationException("Customized component width must be equal to the component width");
     }
 
     protected override Axis GetAxis()

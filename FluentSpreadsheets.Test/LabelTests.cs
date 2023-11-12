@@ -47,6 +47,27 @@ public class LabelTests
     }
 
     [Fact]
+    public async Task WithIndexLabel_ShouldSetTopLeftIndex_WhenAppliedToHStackComponent()
+    {
+        // Arrange
+        var component = HStack(
+                Label("first"),
+                Label("second"))
+            .WithIndexLabel(out var label);
+
+        using var workbook = new XLWorkbook();
+        var worksheet = workbook.AddWorksheet("test");
+
+        var renderer = new ClosedXmlComponentRenderer();
+
+        // Act
+        await renderer.RenderAsync(component, worksheet, default);
+
+        // Assert
+        label.Index.Should().BeEquivalentTo(new Index(1, 1));
+    }
+
+    [Fact]
     public async Task WithIndexRangeLabel_ShouldSetCorrectIndexRange()
     {
         // Arrange
@@ -65,7 +86,7 @@ public class LabelTests
         // Assert
         label.Range.Should().BeEquivalentTo(new IndexRange(new Index(1, 1), new Size(2, 1)));
     }
-    
+
     [Fact]
     public async Task WithIndexRangeLabel_ShouldSetCorrectIndex_WhenComponentIsNotScaled()
     {
