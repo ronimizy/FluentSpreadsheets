@@ -5,11 +5,11 @@ namespace FluentSpreadsheets;
 public readonly record struct Index(int Row, int Column)
 {
     public string ColumnString => GetColumnIndex(Column);
-    
+
     public static Index FromSpan(ReadOnlySpan<char> value)
     {
-        var columnCharactersCount = CountColumnCharactersCount(value);
-        var rowCharactersCount = value.Length - columnCharactersCount;
+        int columnCharactersCount = CountColumnCharactersCount(value);
+        int rowCharactersCount = value.Length - columnCharactersCount;
 
         ReadOnlySpan<char> column = value[..columnCharactersCount];
         ReadOnlySpan<char> row = value.Slice(columnCharactersCount, rowCharactersCount);
@@ -32,8 +32,8 @@ public readonly record struct Index(int Row, int Column)
 
         while (value > 0)
         {
-            var mod = (value - 1) % 26;
-            builder.Append((char)('A' + mod));
+            int mod = (value - 1) % 26;
+            builder.Insert(0, (char)('A' + mod));
 
             value = (value - mod) / 26;
         }
@@ -47,11 +47,14 @@ public readonly record struct Index(int Row, int Column)
         // represented by English alphabet
 
         var result = 0;
+        int factor = str.Length - 1;
 
-        for (var i = str.Length - 1; i >= 0; i--)
+        foreach (char c in str)
         {
-            var symbol = char.ToUpper(str[i]);
-            result += (int)Math.Pow(26, i) * (symbol - 'A' + 1);
+            var symbol = char.ToUpper(c);
+            result += (int)Math.Pow(26, factor) * (symbol - 'A' + 1);
+
+            factor--;
         }
 
         return result;
@@ -61,7 +64,7 @@ public readonly record struct Index(int Row, int Column)
     {
         var count = 0;
 
-        foreach (var c in value)
+        foreach (char c in value)
         {
             if (char.ToUpper(c) is >= 'A' and <= 'Z')
             {
